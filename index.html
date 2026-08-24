@@ -697,6 +697,7 @@
   }
   .map-head h2{ margin:0; font-size:19px; color:var(--brass-bright); }
   .map-head p{ margin:2px 0 0; font-size:13.5px; color:var(--ink-dim); max-width:52ch; }
+  .map-head p.region-tagline{ font-style:italic; margin-top:4px; }
   .map-scroll{ overflow-x:auto; margin-top:10px; -webkit-overflow-scrolling:touch; }
   .map-svg{ width:100%; min-width:600px; height:auto; display:block; }
   .map-edge{ stroke:var(--line); stroke-width:2; fill:none; stroke-linecap:round; }
@@ -739,6 +740,10 @@
   .shrine-panel p{ margin:0 0 12px; font-size:13.5px; color:var(--ink-dim); }
   .shrine-choices{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .shrine-choices button{ width:auto; min-width:150px; }
+  .champion-intro{ border-color:var(--ember); }
+  .champion-intro h3{ color:var(--ember); font-family:'Cinzel',serif; letter-spacing:.04em; text-transform:uppercase; font-size:12.5px; }
+  .champion-intro .champion-name{ font-family:'Cinzel',serif; font-size:19px; color:var(--ink); margin:0 0 10px; }
+  .champion-intro .champion-quote{ font-style:italic; font-size:15px; color:var(--ink-dim); max-width:40ch; margin:0 auto 16px; line-height:1.5; }
 
   /* ---------- Sidebar ---------- */
   .sidebar{ display:flex; flex-direction:column; gap:2px; }
@@ -814,6 +819,7 @@
   .log p:last-child{ border-bottom:none; }
   .log .dmg{ color:var(--ember); font-family:'JetBrains Mono',monospace; }
   .log .heal{ color:var(--sage); font-family:'JetBrains Mono',monospace; }
+  .log .quote{ color:var(--brass-bright); font-style:italic; }
 
   button.action{
     width:100%;
@@ -858,6 +864,7 @@
   }
   .banner h2{ margin:0 0 6px; font-size:22px; }
   .banner p{ margin:0 0 14px; color:var(--ink-dim); }
+  .banner p.run-stats{ margin:-8px 0 14px; font-size:12.5px; font-family:'JetBrains Mono',monospace; letter-spacing:.02em; }
   .banner button{ max-width:220px; margin:0 auto; }
   .dedication-banner{
     background:
@@ -1030,7 +1037,8 @@
     <div id="view-map" hidden>
       <div class="map-wrap">
         <div class="map-head">
-          <h2>Region <span id="region-num" class="mono">1</span></h2>
+          <h2>Region <span id="region-num" class="mono">1</span>: <span id="region-name">The Broken Gate</span></h2>
+          <p id="region-tagline" class="region-tagline">Where the road out of the ruin begins.</p>
           <p>Choose your path. Each waypoint is a fight, a rest, or a shrine's blessing. The road forks, and once you move on there's no going back.</p>
         </div>
         <div class="map-scroll"><svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg></div>
@@ -1312,22 +1320,178 @@
     wayfarer: { icon:'❢', label:'Wayfarer' },
     boss:     { icon:'♚', label:'Boss' },
   };
-  const CHAMPION_NAMES = [
-    'Thorne the Unyielding','Vesk the Hollow Blade','Maren of the Broken Rank',
-    'Cael Ashguard','Ysolt the Pale Rider','Drevan Ninefingers',
-    'Sable Wren','Korrath the Anvil','Illyn of the Last Gate','Bram Wolfmarch'
+  // The campaign's five regions, in order. Each region's boss is a fixed, named
+  // character (not drawn from the elite pool) so the story has a consistent cast.
+  const REGIONS = [
+    {
+      name:'The Broken Gate', tagline:'Where the road out of the ruin begins.',
+      battleFlavor:'A patrol blocks the gate road.',
+      eliteFlavor:'{name} holds the gate with a hardened company.',
+      clearFlavor:'The gate falls open. Nothing guards the road behind it now.',
+      boss:'Thorne the Unyielding', bossTitle:'Warden of the Broken Gate',
+      bossFlavor:'{name} takes the field, and the gate itself seems to lean in to watch.',
+      bossQuote:'None pass the gate. Not living, not dead, not you.',
+    },
+    {
+      name:'The Salt Marches', tagline:'Flooded fields where the old cavalry drowned.',
+      battleFlavor:'A company wades out of the reeds to meet you.',
+      eliteFlavor:'{name} commands the marsh from a rise of dry ground.',
+      clearFlavor:'The marches go quiet. Somewhere under the water, the old cavalry finally rests.',
+      boss:'Ysolt the Pale Rider', bossTitle:'Last Rider of the Marches',
+      bossFlavor:'{name} takes the field on foot. There has been no horse for a long time.',
+      bossQuote:'I rode faster than the fall. It caught me anyway.',
+    },
+    {
+      name:'The Ember Wastes', tagline:"Ash fields where the court's magic finally broke.",
+      battleFlavor:'Figures move through the ash haze, closing in.',
+      eliteFlavor:'{name} stands where the fire burned hottest.',
+      clearFlavor:'The ash settles. Halfway through the ruin, and the company is still standing.',
+      boss:'Vesk the Hollow Blade', bossTitle:'Ashbound Battlemage',
+      bossFlavor:'{name} takes the field, and the air around them still tastes of old fire.',
+      bossQuote:'Power was supposed to save us. Ask the ash how that went.',
+    },
+    {
+      name:'The Drowned Court', tagline:'The throne room, filled to the windows with grey water.',
+      battleFlavor:'A company forms up between the flooded columns.',
+      eliteFlavor:'{name} guards a stairway that no longer leads anywhere dry.',
+      clearFlavor:'The water stills. Somewhere above it, the last stretch of road waits.',
+      boss:'Maren of the Broken Rank', bossTitle:'Keeper of the Drowned Court',
+      bossFlavor:'{name} takes the field between the flooded pillars of a throne room with no throne.',
+      bossQuote:'I healed kings until there were none left to heal.',
+    },
+    {
+      name:"The Ruin's Heart", tagline:'What is left of the Sovereign who let it all fall.',
+      battleFlavor:'The last of the loyal guard forms a line, more out of habit than hope.',
+      eliteFlavor:'{name} fights for a throne that no longer exists.',
+      clearFlavor:'',
+      boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin',
+      bossFlavor:'{name} takes the field at last, alone, exactly as it wanted.',
+      bossQuote:'Sit the throne if you want it. See how long you last.',
+    },
+  ];
+  const FINAL_REGION = REGIONS.length;
+  // Past the authored campaign (region > FINAL_REGION), the codex promises the run
+  // "continues indefinitely as a personal high-score". These entries are synthesized
+  // once per depth and cached, so the endless mode still has a name, a boss, and a line.
+  const ENDLESS_TITLES = ['Warlord of the Deep Ruin','Nameless Sovereign','The Last Echo','Keeper of Nothing'];
+  const ENDLESS_QUOTES = [
+    'There is no more story here. Only the fight.',
+    'The ruin does not end. Neither will this.',
+    'You have gone further than the road remembers.',
+    'Nobody names what comes after the end.',
+  ];
+  const regionInfoCache = {};
+  function regionInfo(r){
+    if(r>=1 && r<=REGIONS.length) return REGIONS[r-1];
+    if(regionInfoCache[r]) return regionInfoCache[r];
+    const depth = r - REGIONS.length;
+    const info = {
+      name:`Beyond the Ruin, Depth ${depth}`,
+      tagline:"Nothing this far out has a name anymore.",
+      battleFlavor:'A company forms up out of the grey, indistinct.',
+      eliteFlavor:'{name} leads them, for no reason anyone remembers.',
+      clearFlavor:'The company presses on, past where the map used to end.',
+      boss: ELITE_NAMES[Math.floor(Math.random()*ELITE_NAMES.length)],
+      bossTitle: ENDLESS_TITLES[Math.floor(Math.random()*ENDLESS_TITLES.length)],
+      bossFlavor:'{name} takes the field, one more nameless line in an endless one.',
+      bossQuote: ENDLESS_QUOTES[Math.floor(Math.random()*ENDLESS_QUOTES.length)],
+    };
+    regionInfoCache[r] = info;
+    return info;
+  }
+  const ELITE_NAMES = [
+    'Cael Ashguard','Drevan Ninefingers','Sable Wren','Korrath the Anvil',
+    'Illyn of the Last Gate','Bram Wolfmarch','Petra Stormglass','Uldric the Undone',
+    'Fenwick Grave','Nyra Halfshadow','Old Corrin','Wrenna Duskfield',
+  ];
+  const ELITE_TAUNTS = [
+    'Turn back. There is nothing left here worth the fight.',
+    'Another company for the ruin to swallow.',
+    'Hold the line. Let them break on it.',
+    'I have buried better companies than this one.',
+    'The ruin does not care who wins. Fight anyway.',
+    'Every company that comes this way says the same prayers.',
   ];
   const RELICS = [
     { key:'whetstone', name:'Whetstone', flavor:'a worn stone that keeps an edge sharp', apply:u=>{ u.atk+=2; } },
     { key:'shard', name:'Aegis Shard', flavor:'a fragment of a shield that never broke', apply:u=>{ u.def+=2; } },
     { key:'core', name:'Vital Core', flavor:'a stone that beats faintly, like a second heart', apply:u=>{ u.maxHp+=6; u.hp=Math.min(u.maxHp,u.hp+6); } },
+    { key:'coin', name:'Blackened Coin', flavor:'a coin spent in a kingdom that no longer exists', apply:u=>{ u.atk+=1; u.def+=1; } },
+    { key:'hourglass', name:'Cracked Hourglass', flavor:'time enough for one more fight', apply:u=>{ u.maxHp+=8; u.hp=Math.min(u.maxHp,u.hp+8); } },
+    { key:'tooth', name:"Wolf's Tooth", flavor:'sharp, but it leaves the hand exposed', apply:u=>{ u.atk+=4; u.def=Math.max(1,u.def-1); } },
+    { key:'standard', name:'Old Standard', flavor:'a banner no one marches under anymore', apply:u=>{ u.def+=2; u.maxHp+=3; u.hp=Math.min(u.maxHp,u.hp+3); } },
+  ];
+  // Wayfarer waypoints roll one of these vignettes at random each time they're reached.
+  const WAYFARER_EVENTS = [
+    {
+      key:'trial', title:'A wayfarer on the road',
+      prompt:"They offer to test your strongest piece. Most who accept come away stronger. Some come away wounded.",
+      acceptLabel:'Take the Trial', declineLabel:'Walk Past',
+      resolve(accept, party){
+        if(!accept){ log('The company walks past the wayfarer without a word.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const champion = alive.reduce((best,u)=> (u.atk>best.atk? u : best), alive[0]);
+        if(Math.random()<0.6){
+          champion.atk += 2; champion.def += 2;
+          log(`${CLASSES[champion.type].name} passes the wayfarer's trial and grows stronger.`, 'heal');
+        } else {
+          const dmg = Math.max(1, Math.round(champion.maxHp*0.25));
+          champion.hp = Math.max(1, champion.hp - dmg);
+          log(`${CLASSES[champion.type].name} fails the wayfarer's trial and is left wounded, <span class="dmg">${dmg}</span> harm.`);
+        }
+      }
+    },
+    {
+      key:'peddler', title:'A peddler picks through the ruin',
+      prompt:"They offer a trade. A portion of the company's strength now, for one piece's lasting resolve.",
+      acceptLabel:'Make the Trade', declineLabel:'Refuse',
+      resolve(accept, party){
+        if(!accept){ log('The company leaves the peddler to their scavenging.'); return; }
+        party.forEach(u=>{ u.maxHp = Math.max(1, u.maxHp-1); u.hp = Math.min(u.hp, u.maxHp); });
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const target = alive[Math.floor(Math.random()*alive.length)];
+        target.def += 3;
+        log(`The company trades a little vigor for the peddler's charm. ${CLASSES[target.type].name} feels steadier, <span class="heal">+3 Guard</span>.`);
+      }
+    },
+    {
+      key:'hermit', title:"A hermit watches from the ruin's edge",
+      prompt:'They do not ask for anything. They only offer to share what they remember of the old drills.',
+      acceptLabel:'Hear Them Out', declineLabel:'Move On',
+      resolve(accept, party){
+        if(!accept){ log('The company moves on. The hermit does not seem to mind.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const target = alive[Math.floor(Math.random()*alive.length)];
+        target.atk += 1; target.def += 1; target.maxHp += 2; target.hp = Math.min(target.maxHp, target.hp+2);
+        log(`The hermit's drills sink in. ${CLASSES[target.type].name} stands a little sharper for it.`, 'heal');
+      }
+    },
+    {
+      key:'gambler', title:'A gambler deals cards on an overturned shield',
+      prompt:'One draw. Win, and the whole company fights sharper. Lose, and it fights hungrier.',
+      acceptLabel:'Draw the Card', declineLabel:'Keep Walking',
+      resolve(accept, party){
+        if(!accept){ log('The company keeps walking. Some risks are not worth it.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        if(Math.random()<0.5){
+          party.forEach(u=>{ u.atk += 1; });
+          log("The draw comes up in the company's favor. Every piece fights sharper now.", 'heal');
+        } else {
+          alive.forEach(u=>{ u.hp = Math.max(1, u.hp - Math.round(u.maxHp*0.1)); });
+          log('The draw comes up against the company. Every piece fights hungrier now.');
+        }
+      }
+    },
   ];
   const MAP_LAYERS = [3,3,3,3,3,1]; // node count per layer; last layer is the boss
   let map = null;            // { layers:[[node,...],...], byId:{} }
   let currentNodeId = null;  // last cleared node, or null before the region starts
   let activeNode = null;     // node currently being fought
   let pendingShrine = null;  // node awaiting a blessing choice
-  let pendingWayfarer = null; // node awaiting a wayfarer choice
+  let pendingWayfarer = null; // {node, event} awaiting a wayfarer choice
+  let pendingIntro = null;   // {node, name, title, quote} awaiting the "begin battle" click
+  let regionDeaths = 0;      // player pieces lost in the current region, for the Flawless achievement
+  let runStats = { kills:0 };
 
   function shuffle(arr){
     const a=[...arr];
@@ -1336,6 +1500,7 @@
   }
 
   function generateMap(){
+    regionDeaths = 0;
     let idc = 0;
     const layers = MAP_LAYERS.map((count, L)=>{
       const arr = [];
@@ -1350,7 +1515,8 @@
                : roll<0.80 ? 'shrine' : roll<0.92 ? 'cache' : 'wayfarer';
         }
         const node = { id:'n'+(idc++), layer:L, index:i, type, cleared:false, next:[] };
-        if(type==='elite' || type==='boss') node.championName = CHAMPION_NAMES[Math.floor(Math.random()*CHAMPION_NAMES.length)];
+        if(type==='elite') node.championName = ELITE_NAMES[Math.floor(Math.random()*ELITE_NAMES.length)];
+        if(type==='boss') node.championName = regionInfo(region).boss;
         arr.push(node);
       }
       return arr;
@@ -1402,6 +1568,7 @@
 
   function handleNodeClick(node){
     if(gameOver) return;
+    if(pendingShrine || pendingWayfarer || pendingIntro) return;
     if(!availableNodeIds().includes(node.id) || node.cleared) return;
     if(node.type==='rest'){
       persistedParty.forEach(u=>{ u.hp = u.maxHp; });
@@ -1420,7 +1587,16 @@
       markNodeCleared(node);
       renderMap();
     } else if(node.type==='wayfarer'){
-      pendingWayfarer = node;
+      pendingWayfarer = { node, event: WAYFARER_EVENTS[Math.floor(Math.random()*WAYFARER_EVENTS.length)] };
+      renderMap();
+    } else if(node.type==='elite' || node.type==='boss'){
+      const rg = regionInfo(region);
+      pendingIntro = {
+        node,
+        name: node.championName,
+        title: node.type==='boss' ? rg.bossTitle : 'Elite Champion',
+        quote: node.type==='boss' ? rg.bossQuote : ELITE_TAUNTS[Math.floor(Math.random()*ELITE_TAUNTS.length)],
+      };
       renderMap();
     } else {
       startBattle(node);
@@ -1428,21 +1604,8 @@
   }
 
   function resolveWayfarer(accept){
-    const node = pendingWayfarer;
-    if(accept){
-      const alive = persistedParty.filter(u=>u.alive!==false && u.hp>0);
-      const champion = alive.reduce((best,u)=> (u.atk>best.atk? u : best), alive[0]);
-      if(Math.random()<0.6){
-        champion.atk += 2; champion.def += 2;
-        log(`${CLASSES[champion.type].name} passes the wayfarer's trial and grows stronger.`, 'heal');
-      } else {
-        const dmg = Math.max(1, Math.round(champion.maxHp*0.25));
-        champion.hp = Math.max(1, champion.hp - dmg);
-        log(`${CLASSES[champion.type].name} fails the wayfarer's trial and is left wounded, <span class="dmg">${dmg}</span> harm.`);
-      }
-    } else {
-      log('The company walks past the wayfarer without a word.');
-    }
+    const { node, event } = pendingWayfarer;
+    event.resolve(accept, persistedParty);
     markNodeCleared(node);
     pendingWayfarer = null;
     renderMap();
@@ -1451,13 +1614,15 @@
   /* ---------------- Hall of Champions (per-viewer, local only) ---------------- */
   const HALL_KEY = 'checkmateAndRuinHall';
   const SAVE_KEY = 'checkmateAndRuinSave';
-  const FINAL_REGION = 3;
   const ACHIEVEMENTS = {
-    first_blood:    { name:'First Blood',    desc:'Defeat an enemy piece for the first time.' },
-    ascendant:      { name:'Ascendant',      desc:'Bring a piece to its ascension at level five.' },
-    giant_slayer:   { name:'Giant Slayer',   desc:'Defeat an elite waypoint.' },
-    deep_delver:    { name:'Deep Delver',    desc:'Reach Region 2.' },
-    ruin_conqueror: { name:'Ruin Conqueror', desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.' },
+    first_blood:      { name:'First Blood',      desc:'Defeat an enemy piece for the first time.' },
+    ascendant:        { name:'Ascendant',        desc:'Bring a piece to its ascension at level five.' },
+    giant_slayer:     { name:'Giant Slayer',     desc:'Defeat an elite waypoint.' },
+    deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.' },
+    ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.' },
+    drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.' },
+    flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.' },
+    ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.' },
   };
 
   function loadHall(){
@@ -1490,7 +1655,7 @@
     if(!persistedParty || !map) return;
     try{
       const nodes = map.nodes.map(n=>({ id:n.id, layer:n.layer, index:n.index, type:n.type, cleared:n.cleared, next:n.next, championName:n.championName||null }));
-      const payload = { v:1, region, currentNodeId, nodes, party: persistedParty.map(u=>({...u})), difficulty: settings.difficulty };
+      const payload = { v:1, region, currentNodeId, nodes, party: persistedParty.map(u=>({...u})), difficulty: settings.difficulty, regionDeaths, runStats };
       localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
     }catch(e){ /* per-viewer convenience only */ }
   }
@@ -1512,6 +1677,8 @@
     nodes.forEach(n=>{ (layers[n.layer] = layers[n.layer] || []).push(n); });
     map = { nodes, layers, byId: Object.fromEntries(nodes.map(n=>[n.id, n])) };
     if(save.difficulty) settings.difficulty = save.difficulty;
+    regionDeaths = save.regionDeaths || 0;
+    runStats = save.runStats || { kills:0 };
     showMap();
     return true;
   }
@@ -1559,6 +1726,8 @@
 
   function renderMap(){
     document.getElementById('region-num').textContent = region;
+    document.getElementById('region-name').textContent = regionInfo(region).name;
+    document.getElementById('region-tagline').textContent = regionInfo(region).tagline;
     const svg = document.getElementById('map-svg');
     const W=870, H=380, marginX=70, xGap=(W-marginX*2)/(map.layers.length-1);
     const avail = availableNodeIds();
@@ -1610,7 +1779,21 @@
     });
 
     const shrineSlot = document.getElementById('shrine-slot');
-    if(pendingShrine){
+    if(pendingIntro){
+      shrineSlot.innerHTML = `<div class="shrine-panel champion-intro">
+        <h3>${pendingIntro.title}</h3>
+        <p class="champion-name">${pendingIntro.name}</p>
+        <p class="champion-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+        <div class="shrine-choices">
+          <button class="action" id="begin-battle-btn">Begin the Battle</button>
+        </div>
+      </div>`;
+      document.getElementById('begin-battle-btn').addEventListener('click', ()=>{
+        const node = pendingIntro.node;
+        pendingIntro = null;
+        startBattle(node);
+      });
+    } else if(pendingShrine){
       shrineSlot.innerHTML = `<div class="shrine-panel">
         <h3>A shrine awaits</h3>
         <p>Choose one blessing for the whole company.</p>
@@ -1624,12 +1807,13 @@
         btn.addEventListener('click', ()=>applyBlessing(btn.dataset.b));
       });
     } else if(pendingWayfarer){
+      const ev = pendingWayfarer.event;
       shrineSlot.innerHTML = `<div class="shrine-panel">
-        <h3>A wayfarer on the road</h3>
-        <p>They offer to test your strongest piece. Most who accept come away stronger. Some come away wounded.</p>
+        <h3>${ev.title}</h3>
+        <p>${ev.prompt}</p>
         <div class="shrine-choices">
-          <button class="action" data-w="accept">Take the Trial</button>
-          <button class="action ghost" data-w="decline">Walk Past</button>
+          <button class="action" data-w="accept">${ev.acceptLabel}</button>
+          <button class="action ghost" data-w="decline">${ev.declineLabel}</button>
         </div>
       </div>`;
       shrineSlot.querySelectorAll('[data-w]').forEach(btn=>{
@@ -1718,12 +1902,15 @@
     units = [];
     for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){ if(board[r][c]) units.push(board[r][c]); }
 
+    const rg = regionInfo(region);
+    const fill = (tpl, name) => tpl.replace('{name}', name);
     const openers = {
-      battle: 'A patrol blocks the road.',
-      elite: `${node.championName || 'A named champion'} leads an elite company onto the field.`,
-      boss: `Region ${region}: ${node.championName || "the region's champion"} takes the field.`,
+      battle: rg.battleFlavor,
+      elite: fill(rg.eliteFlavor, node.championName || 'A named champion'),
+      boss: fill(rg.bossFlavor, node.championName || "the region's champion"),
     };
     log(openers[node.type] || 'The enemy company forms up.');
+    if(node.type==='boss') log(`"${rg.bossQuote}"`, 'quote');
     render();
   }
 
@@ -1875,6 +2062,7 @@
 
   function removeUnit(u){
     u.alive = false;
+    if(u.team==='player') regionDeaths += 1;
     board[u.r][u.c] = null;
     units = units.filter(x=>x!==u);
   }
@@ -1906,7 +2094,7 @@
       target.hp=0;
       log(`${sideLabel(target)} ${CLASSES[target.type].name} falls.`, 'dmg');
       removeUnit(target);
-      if(att.team==='player'){ grantXP(att, xpMultiplier()*(8 + target.level*3)); unlockAchievement('first_blood'); }
+      if(att.team==='player'){ grantXP(att, xpMultiplier()*(8 + target.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
       // attacker occupies the square
       board[att.r][att.c]=null;
       place(target.r, target.c, att);
@@ -1923,7 +2111,7 @@
           att.hp=0;
           log(`${sideLabel(att)} ${CLASSES[att.type].name} falls to the counter.`, 'dmg');
           removeUnit(att);
-          if(target.team==='player'){ grantXP(target, xpMultiplier()*(8 + att.level*3)); unlockAchievement('first_blood'); }
+          if(target.team==='player'){ grantXP(target, xpMultiplier()*(8 + att.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
         }
       }
     }
@@ -2139,17 +2327,21 @@
     }
   }
 
+  const MILESTONE_ACH = { 2:'deep_delver', 3:'ash_walker', 4:'drowned_survivor' };
+
   function showBanner(kind){
     const slot = document.getElementById('banner-slot');
     if(kind==='victory'){
       persistedParty = units.filter(u=>u.team==='player');
       const isBoss = activeNode && activeNode.type==='boss';
+      if(isBoss && regionDeaths===0) unlockAchievement('flawless_region');
       if(isBoss && region===FINAL_REGION){
         unlockAchievement('ruin_conqueror');
         playSfx('victory');
         slot.innerHTML = `<div class="banner dedication-banner">
           <h2>The Ruin Is Conquered</h2>
-          <p>Region ${FINAL_REGION}'s champion falls, and the board finally falls quiet. The campaign that began with a single company crossing an empty board ends here, in victory.</p>
+          <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The campaign that began with a single company crossing an empty board ends here, in victory.</p>
+          <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
           <blockquote class="dedication">thank you for always and forever ...</blockquote>
           <button class="action" id="next-region">Continue the Campaign</button>
         </div>`;
@@ -2160,10 +2352,11 @@
         });
       } else if(isBoss){
         playSfx('victory');
-        if(region+1===2) unlockAchievement('deep_delver');
+        const milestone = MILESTONE_ACH[region+1];
+        if(milestone) unlockAchievement(milestone);
         slot.innerHTML = `<div class="banner">
-          <h2>The region's champion falls</h2>
-          <p>Region ${region} is cleared. The road opens onto Region ${region+1}.</p>
+          <h2>${regionInfo(region).bossTitle} falls</h2>
+          <p>${regionInfo(region).clearFlavor} The road opens onto Region ${region+1}: ${regionInfo(region+1).name}.</p>
           <button class="action" id="next-region">Descend to Region ${region+1}</button>
         </div>`;
         document.getElementById('next-region').addEventListener('click', ()=>{
@@ -2188,7 +2381,8 @@
       playSfx('defeat');
       slot.innerHTML = `<div class="banner">
         <h2>Your Sovereign has fallen</h2>
-        <p>The company is broken in Region ${region}. This is campaign ${hall.runs}; the deepest any company has reached is Region ${hall.bestRegion}.</p>
+        <p>The company is broken in Region ${region}: ${regionInfo(region).name}. This is campaign ${hall.runs}; the deepest any company has reached is Region ${hall.bestRegion}.</p>
+        <p class="run-stats">${runStats.kills} enemy pieces fell before the end.</p>
         <button class="action" id="restart">Return to the Hall</button>
       </div>`;
       document.getElementById('restart').addEventListener('click', ()=>{
@@ -2204,7 +2398,7 @@
 
   document.getElementById('begin-campaign').addEventListener('click', ()=>{
     clearSave();
-    region = 1; persistedParty = null; activeNode = null;
+    region = 1; persistedParty = null; activeNode = null; runStats = { kills:0 };
     generateMap();
     showMap();
   });
