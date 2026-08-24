@@ -23,6 +23,12 @@
     --sq-line:#8a7548;
     --player:#3a5a8c;
     --enemy:#a13f28;
+    --player-hi:#bcd6f5;
+    --player-lo:#243c5c;
+    --enemy-hi:#e6a37e;
+    --enemy-lo:#5c1f11;
+    --sage-deep:#2f4a2b;
+    --ember-deep:#6f2414;
     --shadow: 0 8px 24px rgba(43,38,32,.18), inset 0 0 0 1px var(--line);
     --shadow-lift: 0 1px 0 rgba(255,255,255,.4) inset, 0 14px 30px -12px rgba(43,38,32,.28);
     --shadow-deep: 0 24px 60px -16px rgba(43,38,32,.38), 0 2px 0 rgba(255,255,255,.35) inset;
@@ -46,6 +52,12 @@
       --sq-line:#57452a;
       --player:#7ea3d6;
       --enemy:#d16a4d;
+      --player-hi:#d7e6f9;
+      --player-lo:#3e6394;
+      --enemy-hi:#f4c3a4;
+      --enemy-lo:#8f4326;
+      --sage-deep:#436c3e;
+      --ember-deep:#8f4326;
       --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--line);
       --shadow-lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 16px 34px -14px rgba(0,0,0,.55);
       --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.06) inset;
@@ -69,6 +81,12 @@
     --sq-line:#57452a;
     --player:#7ea3d6;
     --enemy:#d16a4d;
+    --player-hi:#d7e6f9;
+    --player-lo:#3e6394;
+    --enemy-hi:#f4c3a4;
+    --enemy-lo:#8f4326;
+    --sage-deep:#436c3e;
+    --ember-deep:#8f4326;
     --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--line);
     --shadow-lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 16px 34px -14px rgba(0,0,0,.55);
     --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.06) inset;
@@ -217,8 +235,16 @@
   .segmented button:focus-visible{ outline:2px solid var(--brass-bright); outline-offset:-2px; }
   .settings-note{ flex-basis:100%; margin:0; font-size:12.5px; color:var(--ink-dim); font-style:italic; }
   .settings-panel .action{ width:auto; margin:0 0 0 auto; }
+  @media (max-width:480px){
+    .settings-panel{ padding:12px 14px 16px; gap:12px; }
+    .settings-row{ width:100%; justify-content:space-between; }
+    .segmented{ flex:1; }
+    .segmented button{ flex:1; padding:6px 4px; text-align:center; }
+    .settings-panel .action{ width:100%; margin:4px 0 0; }
+  }
 
   section[hidden]{ display:none !important; }
+  .settings-panel[hidden]{ display:none !important; }
 
   /* ---------- Battle layout ---------- */
   .battle-grid{
@@ -239,6 +265,9 @@
     box-shadow:var(--shadow);
   }
   .sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
     padding:18px 18px 18px 22px;
     border-left:1px solid var(--line);
   }
@@ -252,6 +281,7 @@
     gap:4px;
   }
   .board-frame{
+    position:relative;
     grid-column:2;
     grid-row:1;
     border:10px solid var(--brass);
@@ -263,6 +293,30 @@
       inset 0 2px 4px rgba(0,0,0,.35),
       0 18px 40px -14px rgba(20,16,10,.5);
   }
+  .board-frame::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:5;
+    mix-blend-mode:overlay;
+    background:
+      radial-gradient(ellipse 130% 85% at 18% 6%, rgba(255,255,255,.16), transparent 55%),
+      radial-gradient(ellipse 120% 90% at 85% 100%, rgba(0,0,0,.22), transparent 60%);
+  }
+  .rivet{
+    position:absolute;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #f6e2a8, #a9812f 65%, #5a4213 100%);
+    box-shadow:0 1px 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.35);
+    z-index:6;
+    pointer-events:none;
+  }
+  .rivet-tl{ top:3px; left:3px; }
+  .rivet-tr{ top:3px; right:3px; }
+  .rivet-bl{ bottom:3px; left:3px; }
+  .rivet-br{ bottom:3px; right:3px; }
   .ranks{
     grid-column:1;
     grid-row:1;
@@ -309,31 +363,40 @@
       var(--sq-dark);
   }
   .sq.selectable{ cursor:pointer; }
+  .sq.selectable:hover{ box-shadow:inset 0 0 0 999px rgba(255,255,255,.06); }
   .sq.move-hint::after{
     content:"";
     position:absolute;
-    width:22%; height:22%;
+    width:24%; height:24%;
     border-radius:50%;
-    background:var(--sage);
-    opacity:.65;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.6), var(--sage) 55%, var(--sage-deep) 100%);
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
+    opacity:.9;
   }
   .sq.atk-hint::after{
     content:"";
     position:absolute;
-    inset:8%;
-    border:3px solid var(--ember);
-    border-radius:6px;
-    opacity:.85;
+    inset:11%;
+    border:2px solid var(--ember);
+    border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.28), inset 0 0 0 1px rgba(0,0,0,.15);
+    opacity:.92;
   }
   .sq.heal-hint::after{
     content:"";
     position:absolute;
-    inset:8%;
-    border:3px dashed var(--sage);
-    border-radius:6px;
-    opacity:.85;
+    inset:11%;
+    border:2px dashed var(--sage);
+    border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+    opacity:.92;
   }
-  .sq.selected{ outline:3px solid var(--brass-bright); outline-offset:-3px; z-index:2;}
+  .sq.selected{
+    outline:2px solid var(--brass-bright);
+    outline-offset:-2px;
+    box-shadow:inset 0 0 0 5px rgba(0,0,0,.10);
+    z-index:2;
+  }
   .sq.acted{ filter:saturate(.55) brightness(.92); }
   .sq.impact::before{
     content:"";
@@ -424,7 +487,6 @@
   .piece{
     font-size:clamp(20px,3.4vw,34px);
     line-height:1;
-    filter:drop-shadow(0 3px 2px rgba(0,0,0,.4)) drop-shadow(0 1px 0 rgba(255,255,255,.15));
     position:relative;
     display:flex;
     flex-direction:column;
@@ -435,25 +497,61 @@
   .piece::before{
     content:"";
     position:absolute;
-    bottom:-2px;
+    bottom:-3px;
     left:50%;
     transform:translateX(-50%);
-    width:52%;
-    height:22%;
-    background:radial-gradient(ellipse, rgba(0,0,0,.28), transparent 70%);
+    width:58%;
+    height:24%;
+    background:radial-gradient(ellipse, rgba(0,0,0,.34) 0%, rgba(0,0,0,.16) 48%, transparent 74%);
     z-index:-1;
   }
-  .piece .glyph.player{ color:var(--player); }
-  .piece .glyph.enemy{ color:var(--enemy); }
+  .piece::after{
+    content:"";
+    position:absolute;
+    bottom:-1px;
+    left:50%;
+    transform:translateX(-50%);
+    width:44%;
+    height:2px;
+    border-radius:50%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.4) 50%, transparent);
+    opacity:.55;
+    z-index:-1;
+  }
+  .piece.ascended::after{
+    background:linear-gradient(90deg, transparent, var(--brass-bright) 50%, transparent);
+    opacity:.9;
+    height:2.5px;
+    box-shadow:0 0 5px var(--brass-bright);
+  }
+  .piece .glyph{
+    display:inline-block;
+    filter:drop-shadow(0 2px 1px rgba(15,12,8,.55)) drop-shadow(0 -1px 0 rgba(255,255,255,.16));
+  }
+  .piece .glyph.player{
+    background:linear-gradient(155deg, var(--player-hi) 0%, var(--player) 45%, var(--player-lo) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .piece .glyph.enemy{
+    background:linear-gradient(155deg, var(--enemy-hi) 0%, var(--enemy) 45%, var(--enemy-lo) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .piece.ascended .glyph{ text-shadow:0 0 7px var(--brass-bright); }
   .hp-bar{
     width:72%;
     height:5px;
-    background:rgba(0,0,0,.25);
+    background:rgba(0,0,0,.28);
     border-radius:3px;
     overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.35);
   }
-  .hp-bar > i{ display:block; height:100%; background:var(--sage); }
-  .hp-bar.low > i{ background:var(--ember); }
+  .hp-bar > i{
+    display:block;
+    height:100%;
+    background:linear-gradient(180deg, rgba(255,255,255,.32), transparent 45%), var(--sage);
+    transition:width .3s ease;
+  }
+  .hp-bar.low > i{ background:linear-gradient(180deg, rgba(255,255,255,.28), transparent 45%), var(--ember); }
 
   .board-caption{
     display:flex;
@@ -538,9 +636,11 @@
     border-right:2px solid var(--brass-bright);
     opacity:.85;
   }
-  .crest{ width:96px; height:96px; margin:0 auto 18px; display:block; }
+  .crest{ width:96px; height:96px; margin:0 auto 18px; display:block; filter:drop-shadow(0 6px 12px rgba(20,16,10,.35)); }
+  .crest-ring-outer{ fill:none; stroke:var(--line); stroke-width:1; opacity:.7; }
   .crest-ring{ fill:none; stroke:var(--brass); stroke-width:2; }
   .crest-ring-inner{ fill:var(--panel-2); stroke:var(--line); stroke-width:1.5; }
+  .crest-sheen{ fill:none; stroke:rgba(255,255,255,.3); stroke-width:1; opacity:.6; }
   .crest-glyph{ font-family:'Cinzel',serif; font-size:40px; fill:var(--brass-bright); text-anchor:middle; }
   .crest-small{ font-family:'Cinzel',serif; font-size:18px; fill:var(--ink-dim); text-anchor:middle; }
   .title-wrap h2{ margin:0 0 10px; font-size:clamp(24px,4vw,30px); color:var(--brass-bright); }
@@ -600,16 +700,27 @@
   }
   .map-head h2{ margin:0; font-size:19px; color:var(--brass-bright); }
   .map-head p{ margin:2px 0 0; font-size:13.5px; color:var(--ink-dim); max-width:52ch; }
-  .map-svg{ width:100%; height:auto; display:block; margin-top:10px; }
-  .map-edge{ stroke:var(--line); stroke-width:2; fill:none; }
+  .map-head p.region-tagline{ font-style:italic; margin-top:4px; }
+  .map-scroll{ overflow-x:auto; margin-top:10px; -webkit-overflow-scrolling:touch; }
+  .map-svg{ width:100%; min-width:600px; height:auto; display:block; }
+  .map-edge{ stroke:var(--line); stroke-width:2; fill:none; stroke-linecap:round; }
   .map-edge.reachable{ stroke:var(--brass); stroke-width:2.5; stroke-dasharray:7 5; }
   .map-edge.cleared{ stroke:var(--sage); stroke-width:2.5; }
-  .map-node circle.disc{ fill:var(--panel-2); stroke:var(--line); stroke-width:2; }
+  .map-node{ transition:filter .12s ease; }
+  .map-node circle.disc-rim{ fill:var(--line); }
+  .map-node circle.disc{ fill:var(--panel-2); stroke:var(--line); stroke-width:1.5; }
+  .map-node circle.disc-sheen{ fill:rgba(255,255,255,.14); pointer-events:none; }
   .map-node.clickable{ cursor:pointer; }
-  .map-node.clickable circle.disc{ stroke:var(--brass); stroke-width:2.5; }
-  .map-node.current circle.disc{ stroke:var(--brass-bright); stroke-width:3.5; }
-  .map-node.cleared circle.disc{ fill:var(--sage); opacity:.32; stroke:var(--sage); }
-  .map-node.locked circle.disc{ opacity:.55; }
+  .map-node.clickable circle.disc-rim{ fill:var(--brass); }
+  .map-node.clickable circle.disc{ stroke:var(--brass); stroke-width:2; }
+  .map-node.clickable:hover, .map-node.clickable:focus-visible{ filter:brightness(1.1); }
+  .map-node.current circle.disc-rim{ fill:var(--brass-bright); }
+  .map-node.current circle.disc{ stroke:var(--brass-bright); stroke-width:2.5; }
+  .map-node.cleared circle.disc{ fill:var(--sage); opacity:.34; stroke:var(--sage); }
+  .map-node.cleared circle.disc-rim{ fill:var(--sage); opacity:.5; }
+  .map-node.cleared circle.disc-sheen{ display:none; }
+  .map-node.locked circle.disc-rim, .map-node.locked circle.disc{ opacity:.5; }
+  .map-node.locked circle.disc-sheen{ display:none; }
   .map-node text.icon{ font-size:19px; fill:var(--ink-dim); text-anchor:middle; dominant-baseline:central; pointer-events:none; }
   .map-node.clickable text.icon{ fill:var(--brass-bright); }
   .map-node.cleared text.icon{ fill:var(--ink-dim); }
@@ -632,9 +743,40 @@
   .shrine-panel p{ margin:0 0 12px; font-size:13.5px; color:var(--ink-dim); }
   .shrine-choices{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .shrine-choices button{ width:auto; min-width:150px; }
+  .champion-intro{
+    border-color:var(--ember);
+    text-align:left;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:16px 18px;
+  }
+  .champion-medallion{
+    width:64px; height:64px; border-radius:50%; flex:none;
+    background:
+      radial-gradient(circle at 32% 26%, rgba(255,255,255,.12), transparent 55%),
+      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1px solid var(--line);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.3), inset 0 -1px 0 rgba(255,255,255,.06);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .champion-medallion .glyph{
+    font-size:32px; line-height:1;
+    background:linear-gradient(155deg, var(--enemy-hi) 0%, var(--enemy) 45%, var(--enemy-lo) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 2px 1px rgba(15,8,6,.5));
+  }
+  .champion-text{ flex:1; min-width:180px; }
+  .champion-intro h3{ color:var(--ember); font-family:'Cinzel',serif; letter-spacing:.04em; text-transform:uppercase; font-size:12.5px; margin:0 0 4px; }
+  .champion-intro .champion-name{ font-family:'Cinzel',serif; font-size:19px; color:var(--ink); margin:0 0 8px; }
+  .champion-intro .champion-quote{ font-style:italic; font-size:15px; color:var(--ink-dim); margin:0; line-height:1.5; }
+  .champion-intro .shrine-choices{ flex-basis:100%; justify-content:flex-start; }
+  @media (max-width:480px){
+    .champion-intro{ text-align:center; justify-content:center; }
+    .champion-intro .shrine-choices{ justify-content:center; }
+  }
 
   /* ---------- Sidebar ---------- */
-  .sidebar{ display:flex; flex-direction:column; gap:2px; }
   .panel{
     background:transparent;
     border:none;
@@ -666,13 +808,30 @@
     padding:8px 6px;
     border-radius:6px;
     border:1px solid transparent;
+    transition:background .15s ease;
   }
   .unit-card + .unit-card{ border-top:1px solid var(--line); }
   .unit-card.dead{ opacity:.35; }
   .unit-card.acted{ opacity:.55; }
-  .unit-card .g{ font-size:22px; text-align:center; color:var(--player); }
-  .unit-card .g.ascended{ text-shadow:0 0 6px var(--brass-bright); }
-  #selected-info .g.ascended{ text-shadow:0 0 6px var(--brass-bright); }
+  .unit-card:hover, .unit-card:focus-visible{ background:var(--panel-2); }
+  .unit-card .g, #selected-info .g, .class-card .g{
+    font-size:18px;
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 28%, rgba(255,255,255,.16), transparent 55%),
+      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1px solid var(--line);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.28), inset 0 -1px 0 rgba(255,255,255,.06);
+    color:var(--player);
+  }
+  .class-card .g{ color:var(--brass-bright); font-size:20px; }
+  .unit-card .g.ascended, #selected-info .g.ascended{
+    border-color:var(--brass-bright);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.28), 0 0 6px rgba(201,162,75,.5);
+    text-shadow:0 0 6px var(--brass-bright);
+  }
   .unit-card .name{ font-weight:600; font-size:14px; }
   .unit-card .cls{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.05em; }
   .unit-card .stats{ font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--ink-dim); text-align:right; }
@@ -690,6 +849,7 @@
   .log p:last-child{ border-bottom:none; }
   .log .dmg{ color:var(--ember); font-family:'JetBrains Mono',monospace; }
   .log .heal{ color:var(--sage); font-family:'JetBrains Mono',monospace; }
+  .log .quote{ color:var(--brass-bright); font-style:italic; }
 
   button.action{
     width:100%;
@@ -707,9 +867,13 @@
     box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 1px 3px rgba(0,0,0,.25);
     transition:transform .08s ease, box-shadow .08s ease, filter .12s ease;
   }
-  button.action:hover{ filter:brightness(1.06); }
-  button.action:active{ transform:translateY(1px); box-shadow:0 1px 2px rgba(0,0,0,.2) inset; }
-  button.action:disabled{ filter:grayscale(.4) brightness(.85); cursor:default; transform:none; }
+  button.action:hover{
+    filter:brightness(1.06);
+    transform:translateY(-1px);
+    box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 4px 10px -2px rgba(20,16,10,.35);
+  }
+  button.action:active{ transform:translateY(1px); box-shadow:0 1px 2px rgba(0,0,0,.2) inset; filter:brightness(1); }
+  button.action:disabled{ filter:grayscale(.4) brightness(.85); cursor:default; transform:none; box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 1px 3px rgba(0,0,0,.25); }
   button.action:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
   button.action.ghost{
     background:transparent;
@@ -730,6 +894,7 @@
   }
   .banner h2{ margin:0 0 6px; font-size:22px; }
   .banner p{ margin:0 0 14px; color:var(--ink-dim); }
+  .banner p.run-stats{ margin:-8px 0 14px; font-size:12.5px; font-family:'JetBrains Mono',monospace; letter-spacing:.02em; }
   .banner button{ max-width:220px; margin:0 auto; }
   .dedication-banner{
     background:
@@ -780,13 +945,15 @@
     border-left:3px solid var(--brass);
     border-radius:2px;
     padding:12px 14px;
+    transition:box-shadow .15s ease, border-color .15s ease;
   }
   .class-card .h{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
-  .class-card .g{ font-size:24px; color:var(--brass-bright); }
+  .class-card:hover{ border-left-color:var(--brass-bright); box-shadow:var(--shadow-contact); }
   .class-card .n{ font-family:'Cinzel',serif; font-size:14px; letter-spacing:.02em; }
   .class-card .piece-of{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.04em; }
   .class-card p{ font-size:13.5px; margin:0; color:var(--ink-dim); }
-  .codex table{ width:100%; border-collapse:collapse; font-size:13.5px; margin:8px 0 18px; }
+  .table-scroll{ overflow-x:auto; margin:8px 0 18px; -webkit-overflow-scrolling:touch; }
+  .codex table{ width:100%; min-width:480px; border-collapse:collapse; font-size:13.5px; margin:0; }
   .codex th,.codex td{ text-align:left; padding:6px 10px; border-bottom:1px solid var(--line); }
   .codex th{ font-family:'Cinzel',serif; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-dim); }
 
@@ -881,8 +1048,10 @@
       <div class="title-wrap">
         <div class="corner-br" aria-hidden="true"></div>
         <svg class="crest" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="57" class="crest-ring-outer"></circle>
           <circle cx="60" cy="60" r="54" class="crest-ring"></circle>
           <circle cx="60" cy="60" r="44" class="crest-ring-inner"></circle>
+          <circle cx="60" cy="60" r="44" class="crest-sheen"></circle>
           <text x="60" y="70" class="crest-glyph">♚</text>
           <text x="34" y="46" class="crest-small">♞</text>
           <text x="86" y="46" class="crest-small">♞</text>
@@ -898,10 +1067,11 @@
     <div id="view-map" hidden>
       <div class="map-wrap">
         <div class="map-head">
-          <h2>Region <span id="region-num" class="mono">1</span></h2>
+          <h2>Region <span id="region-num" class="mono">1</span>: <span id="region-name">The Broken Gate</span></h2>
+          <p id="region-tagline" class="region-tagline">Where the road out of the ruin begins.</p>
           <p>Choose your path. Each waypoint is a fight, a rest, or a shrine's blessing. The road forks, and once you move on there's no going back.</p>
         </div>
-        <svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg>
+        <div class="map-scroll"><svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg></div>
         <div class="map-legend">
           <span><i style="background:var(--panel-2)"></i>Battle</span>
           <span><i style="background:var(--ember);opacity:.5"></i>Elite</span>
@@ -920,7 +1090,13 @@
         <div class="board-wrap">
           <div class="board-coords">
             <div class="ranks"><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
-            <div class="board-frame"><div class="board" id="board"></div></div>
+            <div class="board-frame">
+              <span class="rivet rivet-tl" aria-hidden="true"></span>
+              <span class="rivet rivet-tr" aria-hidden="true"></span>
+              <span class="rivet rivet-bl" aria-hidden="true"></span>
+              <span class="rivet rivet-br" aria-hidden="true"></span>
+              <div class="board" id="board"></div>
+            </div>
             <div class="files"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
           </div>
           <div class="board-caption">
@@ -981,6 +1157,7 @@
       <p>Clearing a region's boss advances the company to the next region, where a freshly generated map awaits and enemy companies field more pieces at higher levels. The run ends when your Sovereign falls, or continues indefinitely as a personal high-score of how many regions the company can clear.</p>
 
       <h3>Quick Reference</h3>
+      <div class="table-scroll">
       <table>
         <thead><tr><th>Rule</th><th>Chess</th><th>Checkmate &amp; Ruin</th></tr></thead>
         <tbody>
@@ -991,6 +1168,7 @@
           <tr><td>Progression</td><td>None: each game stands alone</td><td>Levels, relics, blessings, and a branching region map persist across battles</td></tr>
         </tbody>
       </table>
+      </div>
     </div>
   </section>
 </div>
@@ -1172,22 +1350,179 @@
     wayfarer: { icon:'❢', label:'Wayfarer' },
     boss:     { icon:'♚', label:'Boss' },
   };
-  const CHAMPION_NAMES = [
-    'Thorne the Unyielding','Vesk the Hollow Blade','Maren of the Broken Rank',
-    'Cael Ashguard','Ysolt the Pale Rider','Drevan Ninefingers',
-    'Sable Wren','Korrath the Anvil','Illyn of the Last Gate','Bram Wolfmarch'
+  // The campaign's five regions, in order. Each region's boss is a fixed, named
+  // character (not drawn from the elite pool) so the story has a consistent cast.
+  const REGIONS = [
+    {
+      name:'The Broken Gate', tagline:'Where the road out of the ruin begins.',
+      battleFlavor:'A patrol blocks the gate road.',
+      eliteFlavor:'{name} holds the gate with a hardened company.',
+      clearFlavor:'The gate falls open. Nothing guards the road behind it now.',
+      boss:'Thorne the Unyielding', bossTitle:'Warden of the Broken Gate', bossGlyph:'♜',
+      bossFlavor:'{name} takes the field, and the gate itself seems to lean in to watch.',
+      bossQuote:'None pass the gate. Not living, not dead, not you.',
+    },
+    {
+      name:'The Salt Marches', tagline:'Flooded fields where the old cavalry drowned.',
+      battleFlavor:'A company wades out of the reeds to meet you.',
+      eliteFlavor:'{name} commands the marsh from a rise of dry ground.',
+      clearFlavor:'The marches go quiet. Somewhere under the water, the old cavalry finally rests.',
+      boss:'Ysolt the Pale Rider', bossTitle:'Last Rider of the Marches', bossGlyph:'♞',
+      bossFlavor:'{name} takes the field on foot. There has been no horse for a long time.',
+      bossQuote:'I rode faster than the fall. It caught me anyway.',
+    },
+    {
+      name:'The Ember Wastes', tagline:"Ash fields where the court's magic finally broke.",
+      battleFlavor:'Figures move through the ash haze, closing in.',
+      eliteFlavor:'{name} stands where the fire burned hottest.',
+      clearFlavor:'The ash settles. Halfway through the ruin, and the company is still standing.',
+      boss:'Vesk the Hollow Blade', bossTitle:'Ashbound Battlemage', bossGlyph:'♛',
+      bossFlavor:'{name} takes the field, and the air around them still tastes of old fire.',
+      bossQuote:'Power was supposed to save us. Ask the ash how that went.',
+    },
+    {
+      name:'The Drowned Court', tagline:'The throne room, filled to the windows with grey water.',
+      battleFlavor:'A company forms up between the flooded columns.',
+      eliteFlavor:'{name} guards a stairway that no longer leads anywhere dry.',
+      clearFlavor:'The water stills. Somewhere above it, the last stretch of road waits.',
+      boss:'Maren of the Broken Rank', bossTitle:'Keeper of the Drowned Court', bossGlyph:'♝',
+      bossFlavor:'{name} takes the field between the flooded pillars of a throne room with no throne.',
+      bossQuote:'I healed kings until there were none left to heal.',
+    },
+    {
+      name:"The Ruin's Heart", tagline:'What is left of the Sovereign who let it all fall.',
+      battleFlavor:'The last of the loyal guard forms a line, more out of habit than hope.',
+      eliteFlavor:'{name} fights for a throne that no longer exists.',
+      clearFlavor:'',
+      boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin', bossGlyph:'♚',
+      bossFlavor:'{name} takes the field at last, alone, exactly as it wanted.',
+      bossQuote:'Sit the throne if you want it. See how long you last.',
+    },
+  ];
+  const FINAL_REGION = REGIONS.length;
+  // Past the authored campaign (region > FINAL_REGION), the codex promises the run
+  // "continues indefinitely as a personal high-score". These entries are synthesized
+  // once per depth and cached, so the endless mode still has a name, a boss, and a line.
+  const ENDLESS_TITLES = ['Warlord of the Deep Ruin','Nameless Sovereign','The Last Echo','Keeper of Nothing'];
+  const ENDLESS_QUOTES = [
+    'There is no more story here. Only the fight.',
+    'The ruin does not end. Neither will this.',
+    'You have gone further than the road remembers.',
+    'Nobody names what comes after the end.',
+  ];
+  const regionInfoCache = {};
+  function regionInfo(r){
+    if(r>=1 && r<=REGIONS.length) return REGIONS[r-1];
+    if(regionInfoCache[r]) return regionInfoCache[r];
+    const depth = r - REGIONS.length;
+    const info = {
+      name:`Beyond the Ruin, Depth ${depth}`,
+      tagline:"Nothing this far out has a name anymore.",
+      battleFlavor:'A company forms up out of the grey, indistinct.',
+      eliteFlavor:'{name} leads them, for no reason anyone remembers.',
+      clearFlavor:'The company presses on, past where the map used to end.',
+      boss: ELITE_NAMES[Math.floor(Math.random()*ELITE_NAMES.length)],
+      bossTitle: ENDLESS_TITLES[Math.floor(Math.random()*ENDLESS_TITLES.length)],
+      bossGlyph: ['♚','♛','♜','♝','♞'][Math.floor(Math.random()*5)],
+      bossFlavor:'{name} takes the field, one more nameless line in an endless one.',
+      bossQuote: ENDLESS_QUOTES[Math.floor(Math.random()*ENDLESS_QUOTES.length)],
+    };
+    regionInfoCache[r] = info;
+    return info;
+  }
+  const ELITE_NAMES = [
+    'Cael Ashguard','Drevan Ninefingers','Sable Wren','Korrath the Anvil',
+    'Illyn of the Last Gate','Bram Wolfmarch','Petra Stormglass','Uldric the Undone',
+    'Fenwick Grave','Nyra Halfshadow','Old Corrin','Wrenna Duskfield',
+  ];
+  const ELITE_TAUNTS = [
+    'Turn back. There is nothing left here worth the fight.',
+    'Another company for the ruin to swallow.',
+    'Hold the line. Let them break on it.',
+    'I have buried better companies than this one.',
+    'The ruin does not care who wins. Fight anyway.',
+    'Every company that comes this way says the same prayers.',
   ];
   const RELICS = [
     { key:'whetstone', name:'Whetstone', flavor:'a worn stone that keeps an edge sharp', apply:u=>{ u.atk+=2; } },
     { key:'shard', name:'Aegis Shard', flavor:'a fragment of a shield that never broke', apply:u=>{ u.def+=2; } },
     { key:'core', name:'Vital Core', flavor:'a stone that beats faintly, like a second heart', apply:u=>{ u.maxHp+=6; u.hp=Math.min(u.maxHp,u.hp+6); } },
+    { key:'coin', name:'Blackened Coin', flavor:'a coin spent in a kingdom that no longer exists', apply:u=>{ u.atk+=1; u.def+=1; } },
+    { key:'hourglass', name:'Cracked Hourglass', flavor:'time enough for one more fight', apply:u=>{ u.maxHp+=8; u.hp=Math.min(u.maxHp,u.hp+8); } },
+    { key:'tooth', name:"Wolf's Tooth", flavor:'sharp, but it leaves the hand exposed', apply:u=>{ u.atk+=4; u.def=Math.max(1,u.def-1); } },
+    { key:'standard', name:'Old Standard', flavor:'a banner no one marches under anymore', apply:u=>{ u.def+=2; u.maxHp+=3; u.hp=Math.min(u.maxHp,u.hp+3); } },
+  ];
+  // Wayfarer waypoints roll one of these vignettes at random each time they're reached.
+  const WAYFARER_EVENTS = [
+    {
+      key:'trial', title:'A wayfarer on the road',
+      prompt:"They offer to test your strongest piece. Most who accept come away stronger. Some come away wounded.",
+      acceptLabel:'Take the Trial', declineLabel:'Walk Past',
+      resolve(accept, party){
+        if(!accept){ log('The company walks past the wayfarer without a word.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const champion = alive.reduce((best,u)=> (u.atk>best.atk? u : best), alive[0]);
+        if(Math.random()<0.6){
+          champion.atk += 2; champion.def += 2;
+          log(`${CLASSES[champion.type].name} passes the wayfarer's trial and grows stronger.`, 'heal');
+        } else {
+          const dmg = Math.max(1, Math.round(champion.maxHp*0.25));
+          champion.hp = Math.max(1, champion.hp - dmg);
+          log(`${CLASSES[champion.type].name} fails the wayfarer's trial and is left wounded, <span class="dmg">${dmg}</span> harm.`);
+        }
+      }
+    },
+    {
+      key:'peddler', title:'A peddler picks through the ruin',
+      prompt:"They offer a trade. A portion of the company's strength now, for one piece's lasting resolve.",
+      acceptLabel:'Make the Trade', declineLabel:'Refuse',
+      resolve(accept, party){
+        if(!accept){ log('The company leaves the peddler to their scavenging.'); return; }
+        party.forEach(u=>{ u.maxHp = Math.max(1, u.maxHp-1); u.hp = Math.min(u.hp, u.maxHp); });
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const target = alive[Math.floor(Math.random()*alive.length)];
+        target.def += 3;
+        log(`The company trades a little vigor for the peddler's charm. ${CLASSES[target.type].name} feels steadier, <span class="heal">+3 Guard</span>.`);
+      }
+    },
+    {
+      key:'hermit', title:"A hermit watches from the ruin's edge",
+      prompt:'They do not ask for anything. They only offer to share what they remember of the old drills.',
+      acceptLabel:'Hear Them Out', declineLabel:'Move On',
+      resolve(accept, party){
+        if(!accept){ log('The company moves on. The hermit does not seem to mind.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const target = alive[Math.floor(Math.random()*alive.length)];
+        target.atk += 1; target.def += 1; target.maxHp += 2; target.hp = Math.min(target.maxHp, target.hp+2);
+        log(`The hermit's drills sink in. ${CLASSES[target.type].name} stands a little sharper for it.`, 'heal');
+      }
+    },
+    {
+      key:'gambler', title:'A gambler deals cards on an overturned shield',
+      prompt:'One draw. Win, and the whole company fights sharper. Lose, and it fights hungrier.',
+      acceptLabel:'Draw the Card', declineLabel:'Keep Walking',
+      resolve(accept, party){
+        if(!accept){ log('The company keeps walking. Some risks are not worth it.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        if(Math.random()<0.5){
+          party.forEach(u=>{ u.atk += 1; });
+          log("The draw comes up in the company's favor. Every piece fights sharper now.", 'heal');
+        } else {
+          alive.forEach(u=>{ u.hp = Math.max(1, u.hp - Math.round(u.maxHp*0.1)); });
+          log('The draw comes up against the company. Every piece fights hungrier now.');
+        }
+      }
+    },
   ];
   const MAP_LAYERS = [3,3,3,3,3,1]; // node count per layer; last layer is the boss
   let map = null;            // { layers:[[node,...],...], byId:{} }
   let currentNodeId = null;  // last cleared node, or null before the region starts
   let activeNode = null;     // node currently being fought
   let pendingShrine = null;  // node awaiting a blessing choice
-  let pendingWayfarer = null; // node awaiting a wayfarer choice
+  let pendingWayfarer = null; // {node, event} awaiting a wayfarer choice
+  let pendingIntro = null;   // {node, name, title, quote} awaiting the "begin battle" click
+  let regionDeaths = 0;      // player pieces lost in the current region, for the Flawless achievement
+  let runStats = { kills:0 };
 
   function shuffle(arr){
     const a=[...arr];
@@ -1196,6 +1531,7 @@
   }
 
   function generateMap(){
+    regionDeaths = 0;
     let idc = 0;
     const layers = MAP_LAYERS.map((count, L)=>{
       const arr = [];
@@ -1210,7 +1546,8 @@
                : roll<0.80 ? 'shrine' : roll<0.92 ? 'cache' : 'wayfarer';
         }
         const node = { id:'n'+(idc++), layer:L, index:i, type, cleared:false, next:[] };
-        if(type==='elite' || type==='boss') node.championName = CHAMPION_NAMES[Math.floor(Math.random()*CHAMPION_NAMES.length)];
+        if(type==='elite') node.championName = ELITE_NAMES[Math.floor(Math.random()*ELITE_NAMES.length)];
+        if(type==='boss') node.championName = regionInfo(region).boss;
         arr.push(node);
       }
       return arr;
@@ -1262,6 +1599,7 @@
 
   function handleNodeClick(node){
     if(gameOver) return;
+    if(pendingShrine || pendingWayfarer || pendingIntro) return;
     if(!availableNodeIds().includes(node.id) || node.cleared) return;
     if(node.type==='rest'){
       persistedParty.forEach(u=>{ u.hp = u.maxHp; });
@@ -1280,7 +1618,18 @@
       markNodeCleared(node);
       renderMap();
     } else if(node.type==='wayfarer'){
-      pendingWayfarer = node;
+      pendingWayfarer = { node, event: WAYFARER_EVENTS[Math.floor(Math.random()*WAYFARER_EVENTS.length)] };
+      renderMap();
+    } else if(node.type==='elite' || node.type==='boss'){
+      const rg = regionInfo(region);
+      const eliteGlyphs = ['♞','♝','♜'];
+      pendingIntro = {
+        node,
+        name: node.championName,
+        title: node.type==='boss' ? rg.bossTitle : 'Elite Champion',
+        quote: node.type==='boss' ? rg.bossQuote : ELITE_TAUNTS[Math.floor(Math.random()*ELITE_TAUNTS.length)],
+        glyph: node.type==='boss' ? rg.bossGlyph : eliteGlyphs[Math.floor(Math.random()*eliteGlyphs.length)],
+      };
       renderMap();
     } else {
       startBattle(node);
@@ -1288,21 +1637,8 @@
   }
 
   function resolveWayfarer(accept){
-    const node = pendingWayfarer;
-    if(accept){
-      const alive = persistedParty.filter(u=>u.alive!==false && u.hp>0);
-      const champion = alive.reduce((best,u)=> (u.atk>best.atk? u : best), alive[0]);
-      if(Math.random()<0.6){
-        champion.atk += 2; champion.def += 2;
-        log(`${CLASSES[champion.type].name} passes the wayfarer's trial and grows stronger.`, 'heal');
-      } else {
-        const dmg = Math.max(1, Math.round(champion.maxHp*0.25));
-        champion.hp = Math.max(1, champion.hp - dmg);
-        log(`${CLASSES[champion.type].name} fails the wayfarer's trial and is left wounded, <span class="dmg">${dmg}</span> harm.`);
-      }
-    } else {
-      log('The company walks past the wayfarer without a word.');
-    }
+    const { node, event } = pendingWayfarer;
+    event.resolve(accept, persistedParty);
     markNodeCleared(node);
     pendingWayfarer = null;
     renderMap();
@@ -1311,13 +1647,15 @@
   /* ---------------- Hall of Champions (per-viewer, local only) ---------------- */
   const HALL_KEY = 'checkmateAndRuinHall';
   const SAVE_KEY = 'checkmateAndRuinSave';
-  const FINAL_REGION = 3;
   const ACHIEVEMENTS = {
-    first_blood:    { name:'First Blood',    desc:'Defeat an enemy piece for the first time.' },
-    ascendant:      { name:'Ascendant',      desc:'Bring a piece to its ascension at level five.' },
-    giant_slayer:   { name:'Giant Slayer',   desc:'Defeat an elite waypoint.' },
-    deep_delver:    { name:'Deep Delver',    desc:'Reach Region 2.' },
-    ruin_conqueror: { name:'Ruin Conqueror', desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.' },
+    first_blood:      { name:'First Blood',      desc:'Defeat an enemy piece for the first time.' },
+    ascendant:        { name:'Ascendant',        desc:'Bring a piece to its ascension at level five.' },
+    giant_slayer:     { name:'Giant Slayer',     desc:'Defeat an elite waypoint.' },
+    deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.' },
+    ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.' },
+    drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.' },
+    flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.' },
+    ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.' },
   };
 
   function loadHall(){
@@ -1350,7 +1688,7 @@
     if(!persistedParty || !map) return;
     try{
       const nodes = map.nodes.map(n=>({ id:n.id, layer:n.layer, index:n.index, type:n.type, cleared:n.cleared, next:n.next, championName:n.championName||null }));
-      const payload = { v:1, region, currentNodeId, nodes, party: persistedParty.map(u=>({...u})), difficulty: settings.difficulty };
+      const payload = { v:1, region, currentNodeId, nodes, party: persistedParty.map(u=>({...u})), difficulty: settings.difficulty, regionDeaths, runStats };
       localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
     }catch(e){ /* per-viewer convenience only */ }
   }
@@ -1372,6 +1710,8 @@
     nodes.forEach(n=>{ (layers[n.layer] = layers[n.layer] || []).push(n); });
     map = { nodes, layers, byId: Object.fromEntries(nodes.map(n=>[n.id, n])) };
     if(save.difficulty) settings.difficulty = save.difficulty;
+    regionDeaths = save.regionDeaths || 0;
+    runStats = save.runStats || { kills:0 };
     showMap();
     return true;
   }
@@ -1419,6 +1759,8 @@
 
   function renderMap(){
     document.getElementById('region-num').textContent = region;
+    document.getElementById('region-name').textContent = regionInfo(region).name;
+    document.getElementById('region-tagline').textContent = regionInfo(region).tagline;
     const svg = document.getElementById('map-svg');
     const W=870, H=380, marginX=70, xGap=(W-marginX*2)/(map.layers.length-1);
     const avail = availableNodeIds();
@@ -1455,7 +1797,9 @@
       const title = node.championName ? `${t.label}: ${node.championName}` : t.label;
       svgHtml += `<g class="${cls}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
         <title>${title}</title>
-        <circle class="disc" cx="${x}" cy="${y}" r="24"></circle>
+        <circle class="disc-rim" cx="${x}" cy="${y}" r="25"></circle>
+        <circle class="disc" cx="${x}" cy="${y}" r="21"></circle>
+        <circle class="disc-sheen" cx="${x-7}" cy="${y-9}" r="9"></circle>
         <text class="icon" x="${x}" y="${y-2}">${t.icon}</text>
         <text class="label" x="${x}" y="${y+22}">${t.label}</text>
       </g>`;
@@ -1468,7 +1812,24 @@
     });
 
     const shrineSlot = document.getElementById('shrine-slot');
-    if(pendingShrine){
+    if(pendingIntro){
+      shrineSlot.innerHTML = `<div class="shrine-panel champion-intro">
+        <div class="champion-medallion"><span class="glyph">${pendingIntro.glyph}</span></div>
+        <div class="champion-text">
+          <h3>${pendingIntro.title}</h3>
+          <p class="champion-name">${pendingIntro.name}</p>
+          <p class="champion-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+        </div>
+        <div class="shrine-choices">
+          <button class="action" id="begin-battle-btn">Begin the Battle</button>
+        </div>
+      </div>`;
+      document.getElementById('begin-battle-btn').addEventListener('click', ()=>{
+        const node = pendingIntro.node;
+        pendingIntro = null;
+        startBattle(node);
+      });
+    } else if(pendingShrine){
       shrineSlot.innerHTML = `<div class="shrine-panel">
         <h3>A shrine awaits</h3>
         <p>Choose one blessing for the whole company.</p>
@@ -1482,12 +1843,13 @@
         btn.addEventListener('click', ()=>applyBlessing(btn.dataset.b));
       });
     } else if(pendingWayfarer){
+      const ev = pendingWayfarer.event;
       shrineSlot.innerHTML = `<div class="shrine-panel">
-        <h3>A wayfarer on the road</h3>
-        <p>They offer to test your strongest piece. Most who accept come away stronger. Some come away wounded.</p>
+        <h3>${ev.title}</h3>
+        <p>${ev.prompt}</p>
         <div class="shrine-choices">
-          <button class="action" data-w="accept">Take the Trial</button>
-          <button class="action ghost" data-w="decline">Walk Past</button>
+          <button class="action" data-w="accept">${ev.acceptLabel}</button>
+          <button class="action ghost" data-w="decline">${ev.declineLabel}</button>
         </div>
       </div>`;
       shrineSlot.querySelectorAll('[data-w]').forEach(btn=>{
@@ -1576,12 +1938,15 @@
     units = [];
     for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){ if(board[r][c]) units.push(board[r][c]); }
 
+    const rg = regionInfo(region);
+    const fill = (tpl, name) => tpl.replace('{name}', name);
     const openers = {
-      battle: 'A patrol blocks the road.',
-      elite: `${node.championName || 'A named champion'} leads an elite company onto the field.`,
-      boss: `Region ${region}: ${node.championName || "the region's champion"} takes the field.`,
+      battle: rg.battleFlavor,
+      elite: fill(rg.eliteFlavor, node.championName || 'A named champion'),
+      boss: fill(rg.bossFlavor, node.championName || "the region's champion"),
     };
     log(openers[node.type] || 'The enemy company forms up.');
+    if(node.type==='boss') log(`"${rg.bossQuote}"`, 'quote');
     render();
   }
 
@@ -1733,6 +2098,7 @@
 
   function removeUnit(u){
     u.alive = false;
+    if(u.team==='player') regionDeaths += 1;
     board[u.r][u.c] = null;
     units = units.filter(x=>x!==u);
   }
@@ -1764,7 +2130,7 @@
       target.hp=0;
       log(`${sideLabel(target)} ${CLASSES[target.type].name} falls.`, 'dmg');
       removeUnit(target);
-      if(att.team==='player'){ grantXP(att, xpMultiplier()*(8 + target.level*3)); unlockAchievement('first_blood'); }
+      if(att.team==='player'){ grantXP(att, xpMultiplier()*(8 + target.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
       // attacker occupies the square
       board[att.r][att.c]=null;
       place(target.r, target.c, att);
@@ -1781,7 +2147,7 @@
           att.hp=0;
           log(`${sideLabel(att)} ${CLASSES[att.type].name} falls to the counter.`, 'dmg');
           removeUnit(att);
-          if(target.team==='player'){ grantXP(target, xpMultiplier()*(8 + att.level*3)); unlockAchievement('first_blood'); }
+          if(target.team==='player'){ grantXP(target, xpMultiplier()*(8 + att.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
         }
       }
     }
@@ -1997,17 +2363,21 @@
     }
   }
 
+  const MILESTONE_ACH = { 2:'deep_delver', 3:'ash_walker', 4:'drowned_survivor' };
+
   function showBanner(kind){
     const slot = document.getElementById('banner-slot');
     if(kind==='victory'){
       persistedParty = units.filter(u=>u.team==='player');
       const isBoss = activeNode && activeNode.type==='boss';
+      if(isBoss && regionDeaths===0) unlockAchievement('flawless_region');
       if(isBoss && region===FINAL_REGION){
         unlockAchievement('ruin_conqueror');
         playSfx('victory');
         slot.innerHTML = `<div class="banner dedication-banner">
           <h2>The Ruin Is Conquered</h2>
-          <p>Region ${FINAL_REGION}'s champion falls, and the board finally falls quiet. The campaign that began with a single company crossing an empty board ends here, in victory.</p>
+          <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The campaign that began with a single company crossing an empty board ends here, in victory.</p>
+          <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
           <blockquote class="dedication">thank you for always and forever ...</blockquote>
           <button class="action" id="next-region">Continue the Campaign</button>
         </div>`;
@@ -2018,10 +2388,11 @@
         });
       } else if(isBoss){
         playSfx('victory');
-        if(region+1===2) unlockAchievement('deep_delver');
+        const milestone = MILESTONE_ACH[region+1];
+        if(milestone) unlockAchievement(milestone);
         slot.innerHTML = `<div class="banner">
-          <h2>The region's champion falls</h2>
-          <p>Region ${region} is cleared. The road opens onto Region ${region+1}.</p>
+          <h2>${regionInfo(region).bossTitle} falls</h2>
+          <p>${regionInfo(region).clearFlavor} The road opens onto Region ${region+1}: ${regionInfo(region+1).name}.</p>
           <button class="action" id="next-region">Descend to Region ${region+1}</button>
         </div>`;
         document.getElementById('next-region').addEventListener('click', ()=>{
@@ -2046,7 +2417,8 @@
       playSfx('defeat');
       slot.innerHTML = `<div class="banner">
         <h2>Your Sovereign has fallen</h2>
-        <p>The company is broken in Region ${region}. This is campaign ${hall.runs}; the deepest any company has reached is Region ${hall.bestRegion}.</p>
+        <p>The company is broken in Region ${region}: ${regionInfo(region).name}. This is campaign ${hall.runs}; the deepest any company has reached is Region ${hall.bestRegion}.</p>
+        <p class="run-stats">${runStats.kills} enemy pieces fell before the end.</p>
         <button class="action" id="restart">Return to the Hall</button>
       </div>`;
       document.getElementById('restart').addEventListener('click', ()=>{
@@ -2062,7 +2434,7 @@
 
   document.getElementById('begin-campaign').addEventListener('click', ()=>{
     clearSave();
-    region = 1; persistedParty = null; activeNode = null;
+    region = 1; persistedParty = null; activeNode = null; runStats = { kills:0 };
     generateMap();
     showMap();
   });
