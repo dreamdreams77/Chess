@@ -292,6 +292,7 @@
   }
 
   .board-wrap{
+    position:relative;
     background:var(--wood-grain-fine), var(--panel);
     background-size:120px 60px, auto;
     background-blend-mode:multiply, normal;
@@ -299,6 +300,16 @@
     border-radius:8px;
     padding:16px;
     box-shadow:var(--shadow);
+  }
+  .board-wrap::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:8px;
+    background:radial-gradient(ellipse 70% 55% at 50% 0%, var(--region-accent, transparent), transparent 72%);
+    opacity:.12;
+    pointer-events:none;
   }
   .sidebar{
     display:flex;
@@ -751,16 +762,38 @@
     box-shadow: inset 0 0 60px 10px rgba(20,16,10,.14);
     pointer-events:none;
   }
+  .map-wrap::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:6px;
+    background:radial-gradient(ellipse 75% 60% at 50% 8%, var(--region-accent, transparent), transparent 72%);
+    opacity:.18;
+    pointer-events:none;
+  }
   .map-head{
     display:flex;
     justify-content:space-between;
-    align-items:baseline;
+    align-items:center;
     flex-wrap:wrap;
-    gap:10px;
+    gap:14px 10px;
     margin-bottom:6px;
   }
+  .map-head-title{ flex:1 1 auto; min-width:0; }
   .map-head h2{ margin:0; font-size:19px; color:var(--brass-bright); }
   .map-head p{ margin:2px 0 0; font-size:13.5px; color:var(--ink-dim); max-width:52ch; }
+  .region-sigil{
+    width:44px; height:44px; flex:none; border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 26%, rgba(255,255,255,.14), transparent 55%),
+      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1.5px solid var(--region-accent, var(--brass));
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.3), inset 0 -1px 0 rgba(255,255,255,.06), 0 0 12px -3px var(--region-accent, transparent);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--region-accent, var(--brass-bright));
+  }
+  .region-sigil svg{ width:24px; height:24px; }
   .map-head p.region-tagline{ font-style:italic; margin-top:4px; }
   .map-scroll{ overflow-x:auto; margin-top:10px; -webkit-overflow-scrolling:touch; }
   .map-svg{ width:100%; min-width:600px; height:auto; display:block; }
@@ -873,7 +906,7 @@
   .unit-card.dead{ opacity:.35; }
   .unit-card.acted{ opacity:.55; }
   .unit-card:hover, .unit-card:focus-visible{ background:var(--panel-2); }
-  .unit-card .g, #selected-info .g, .class-card .g{
+  .unit-card .g, #selected-info .g, .class-card .g, .promo-choice .g{
     width:34px; height:34px;
     display:flex; align-items:center; justify-content:center;
     border-radius:50%;
@@ -883,8 +916,25 @@
     border:1px solid var(--line);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.28), inset 0 -1px 0 rgba(255,255,255,.06);
   }
-  .unit-card .g .glyph-svg, #selected-info .g .glyph-svg{ width:20px; height:20px; }
+  .unit-card .g .glyph-svg, #selected-info .g .glyph-svg, .promo-choice .g .glyph-svg{ width:20px; height:20px; }
   .class-card .g .glyph-svg{ width:22px; height:22px; }
+  .promo-choices{ display:flex; gap:8px; }
+  .promo-choice{
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:10px 4px;
+    cursor:pointer;
+    font-family:'Cinzel',serif;
+    font-size:11.5px;
+    color:var(--ink);
+    transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;
+  }
+  .promo-choice:hover{ border-color:var(--brass-bright); box-shadow:var(--shadow-contact); transform:translateY(-1px); }
+  .promo-choice:active{ transform:translateY(1px); }
+  .promo-choice:focus-visible{ outline:2px solid var(--brass-bright); outline-offset:2px; }
   .unit-card .g.ascended, #selected-info .g.ascended{
     border-color:var(--brass-bright);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.28), 0 0 6px rgba(201,162,75,.5);
@@ -992,6 +1042,12 @@
   }
   .codex h2{ font-size:22px; color:var(--brass-bright); margin:28px 0 8px; }
   .codex h2:first-child{ margin-top:0; }
+  .codex h2.codex-title{
+    font-size:clamp(28px,4.5vw,38px);
+    text-align:center;
+    margin:0 0 18px;
+    letter-spacing:.01em;
+  }
   .codex h3{ font-size:16px; margin:18px 0 6px; color:var(--ink); }
   .codex p{ line-height:1.65; margin:0 0 10px; }
   .codex .lede{ font-style:italic; color:var(--ink-dim); font-size:17px; border-left:3px solid var(--brass); padding-left:14px; }
@@ -1132,6 +1188,47 @@
     <symbol id="pc-pawn" viewBox="0 0 45 45">
       <path stroke-linecap="round" stroke-width="1.5" d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47 1.47-1.19 2.41-3 2.41-5.03 0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4z"/>
     </symbol>
+
+    <!-- Region sigils: simple engraved line marks, not illustrations, tinted per region via currentColor. -->
+    <symbol id="sigil-gate" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 26V10M23 26V10M9 10a7 7 0 0 1 14 0"/>
+        <path d="M16 10l-2 6 4 4-3 6"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-marsh" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 11q4-3 8 0t8 0t8 0M4 17q4-3 8 0t8 0t8 0M4 23q4-3 8 0t8 0t8 0"/>
+        <path d="M11 23 10 6M19 23l1-15"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-ember" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 17 10 7M16 17l6-11M16 17l10-2M16 17l7 9M16 17 7 24M16 17 5 13"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-drowned" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 6v20M16 6v20M23 6v20M6 6h6M13 6h6M20 6h6"/>
+        <path d="M3 18q5-3 10 0t10 0t6 0"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-throne" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 26V8h12v18M10 18h12M7 26h18"/>
+        <path d="M11 8V4l2 2 2-3 2 3 2-2 2 2 2-2v4"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-void" viewBox="0 0 32 32">
+      <g fill="currentColor">
+        <circle cx="8" cy="10" r="1.1"/>
+        <circle cx="21" cy="7" r="1.3"/>
+        <circle cx="14" cy="18" r=".9"/>
+        <circle cx="25" cy="22" r="1.1"/>
+        <circle cx="6" cy="24" r="1"/>
+        <circle cx="18" cy="26" r="1.2"/>
+      </g>
+    </symbol>
   </defs>
 </svg>
 
@@ -1203,8 +1300,11 @@
     <div id="view-map" hidden>
       <div class="map-wrap">
         <div class="map-head">
-          <h2>Region <span id="region-num" class="mono">1</span>: <span id="region-name">The Broken Gate</span></h2>
-          <p id="region-tagline" class="region-tagline">Where the road out of the ruin begins.</p>
+          <div class="region-sigil" id="region-sigil" aria-hidden="true"><svg viewBox="0 0 32 32"><use id="region-sigil-use" href="#sigil-gate"></use></svg></div>
+          <div class="map-head-title">
+            <h2>Region <span id="region-num" class="mono">1</span>: <span id="region-name">The Broken Gate</span></h2>
+            <p id="region-tagline" class="region-tagline">Where the road out of the ruin begins.</p>
+          </div>
           <p>Choose your path. Each waypoint is a fight, a rest, or a shrine's blessing. The road forks, and once you move on there's no going back.</p>
         </div>
         <div class="map-scroll"><svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg></div>
@@ -1267,7 +1367,7 @@
 
   <section id="view-codex" hidden>
     <div class="codex">
-      <h2>What This Is</h2>
+      <h2 class="codex-title">Checkmate &amp; Ruin</h2>
       <p class="lede">Chess supplies the board and the geometry of movement. The RPG supplies everything chess refuses to have: hit points, growth, and consequence that isn't instant. A capture in chess removes a piece forever, in one motion, with no in-between. Here, every attack is a fight: pieces have health, deal damage ranges, sometimes miss their kill, and sometimes survive to fight again next round.</p>
 
       <h2>How a Round Works</h2>
@@ -1501,6 +1601,7 @@
   const REGIONS = [
     {
       name:'The Broken Gate', tagline:'Where the road out of the ruin begins.',
+      accent:'#8a7a52', sigil:'gate',
       battleFlavor:'A patrol blocks the gate road.',
       eliteFlavor:'{name} holds the gate with a hardened company.',
       clearFlavor:'The gate falls open. Nothing guards the road behind it now.',
@@ -1510,6 +1611,7 @@
     },
     {
       name:'The Salt Marches', tagline:'Flooded fields where the old cavalry drowned.',
+      accent:'#3f6b6a', sigil:'marsh',
       battleFlavor:'A company wades out of the reeds to meet you.',
       eliteFlavor:'{name} commands the marsh from a rise of dry ground.',
       clearFlavor:'The marches go quiet. Somewhere under the water, the old cavalry finally rests.',
@@ -1519,6 +1621,7 @@
     },
     {
       name:'The Ember Wastes', tagline:"Ash fields where the court's magic finally broke.",
+      accent:'#b8541f', sigil:'ember',
       battleFlavor:'Figures move through the ash haze, closing in.',
       eliteFlavor:'{name} stands where the fire burned hottest.',
       clearFlavor:'The ash settles. Halfway through the ruin, and the company is still standing.',
@@ -1528,6 +1631,7 @@
     },
     {
       name:'The Drowned Court', tagline:'The throne room, filled to the windows with grey water.',
+      accent:'#2f4a68', sigil:'drowned',
       battleFlavor:'A company forms up between the flooded columns.',
       eliteFlavor:'{name} guards a stairway that no longer leads anywhere dry.',
       clearFlavor:'The water stills. Somewhere above it, the last stretch of road waits.',
@@ -1537,6 +1641,7 @@
     },
     {
       name:"The Ruin's Heart", tagline:'What is left of the Sovereign who let it all fall.',
+      accent:'#7a3a5c', sigil:'throne',
       battleFlavor:'The last of the loyal guard forms a line, more out of habit than hope.',
       eliteFlavor:'{name} fights for a throne that no longer exists.',
       clearFlavor:'',
@@ -1564,6 +1669,7 @@
     const info = {
       name:`Beyond the Ruin, Depth ${depth}`,
       tagline:"Nothing this far out has a name anymore.",
+      accent:'#5a5248', sigil:'void',
       battleFlavor:'A company forms up out of the grey, indistinct.',
       eliteFlavor:'{name} leads them, for no reason anyone remembers.',
       clearFlavor:'The company presses on, past where the map used to end.',
@@ -1904,9 +2010,12 @@
   }
 
   function renderMap(){
+    const rgInfo = regionInfo(region);
     document.getElementById('region-num').textContent = region;
-    document.getElementById('region-name').textContent = regionInfo(region).name;
-    document.getElementById('region-tagline').textContent = regionInfo(region).tagline;
+    document.getElementById('region-name').textContent = rgInfo.name;
+    document.getElementById('region-tagline').textContent = rgInfo.tagline;
+    document.documentElement.style.setProperty('--region-accent', rgInfo.accent);
+    document.getElementById('region-sigil-use').setAttribute('href', '#sigil-'+rgInfo.sigil);
     const svg = document.getElementById('map-svg');
     const W=870, H=380, marginX=70, xGap=(W-marginX*2)/(map.layers.length-1);
     const avail = availableNodeIds();
@@ -2714,11 +2823,11 @@
     // promotion prompt
     if(awaitingPromotion){
       const u = awaitingPromotion;
-      info.innerHTML = `<p style="font-size:13px;margin:0 0 8px;">A Recruit has reached the far rank. Choose its Order:</p>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <button class="action" data-p="knight">Ranger</button>
-          <button class="action" data-p="bishop">Cleric</button>
-          <button class="action" data-p="rook">Warden</button>
+      info.innerHTML = `<p style="font-size:13px;margin:0 0 10px;">A Recruit has reached the far rank. Choose its Order:</p>
+        <div class="promo-choices">
+          <button class="promo-choice" data-p="knight"><span class="g">${pieceIconHTML('knight','player')}</span><span class="promo-label">Ranger</span></button>
+          <button class="promo-choice" data-p="bishop"><span class="g">${pieceIconHTML('bishop','player')}</span><span class="promo-label">Cleric</span></button>
+          <button class="promo-choice" data-p="rook"><span class="g">${pieceIconHTML('rook','player')}</span><span class="promo-label">Warden</span></button>
         </div>`;
       info.querySelectorAll('[data-p]').forEach(btn=>{
         btn.addEventListener('click', ()=>{
