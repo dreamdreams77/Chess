@@ -23,6 +23,12 @@
     --sq-line:#8a7548;
     --player:#3a5a8c;
     --enemy:#a13f28;
+    --player-hi:#bcd6f5;
+    --player-lo:#243c5c;
+    --enemy-hi:#e6a37e;
+    --enemy-lo:#5c1f11;
+    --sage-deep:#2f4a2b;
+    --ember-deep:#6f2414;
     --shadow: 0 8px 24px rgba(43,38,32,.18), inset 0 0 0 1px var(--line);
     --shadow-lift: 0 1px 0 rgba(255,255,255,.4) inset, 0 14px 30px -12px rgba(43,38,32,.28);
     --shadow-deep: 0 24px 60px -16px rgba(43,38,32,.38), 0 2px 0 rgba(255,255,255,.35) inset;
@@ -46,6 +52,12 @@
       --sq-line:#57452a;
       --player:#7ea3d6;
       --enemy:#d16a4d;
+      --player-hi:#d7e6f9;
+      --player-lo:#3e6394;
+      --enemy-hi:#f4c3a4;
+      --enemy-lo:#8f4326;
+      --sage-deep:#436c3e;
+      --ember-deep:#8f4326;
       --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--line);
       --shadow-lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 16px 34px -14px rgba(0,0,0,.55);
       --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.06) inset;
@@ -69,6 +81,12 @@
     --sq-line:#57452a;
     --player:#7ea3d6;
     --enemy:#d16a4d;
+    --player-hi:#d7e6f9;
+    --player-lo:#3e6394;
+    --enemy-hi:#f4c3a4;
+    --enemy-lo:#8f4326;
+    --sage-deep:#436c3e;
+    --ember-deep:#8f4326;
     --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--line);
     --shadow-lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 16px 34px -14px rgba(0,0,0,.55);
     --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.06) inset;
@@ -217,8 +235,16 @@
   .segmented button:focus-visible{ outline:2px solid var(--brass-bright); outline-offset:-2px; }
   .settings-note{ flex-basis:100%; margin:0; font-size:12.5px; color:var(--ink-dim); font-style:italic; }
   .settings-panel .action{ width:auto; margin:0 0 0 auto; }
+  @media (max-width:480px){
+    .settings-panel{ padding:12px 14px 16px; gap:12px; }
+    .settings-row{ width:100%; justify-content:space-between; }
+    .segmented{ flex:1; }
+    .segmented button{ flex:1; padding:6px 4px; text-align:center; }
+    .settings-panel .action{ width:100%; margin:4px 0 0; }
+  }
 
   section[hidden]{ display:none !important; }
+  .settings-panel[hidden]{ display:none !important; }
 
   /* ---------- Battle layout ---------- */
   .battle-grid{
@@ -252,6 +278,7 @@
     gap:4px;
   }
   .board-frame{
+    position:relative;
     grid-column:2;
     grid-row:1;
     border:10px solid var(--brass);
@@ -263,6 +290,30 @@
       inset 0 2px 4px rgba(0,0,0,.35),
       0 18px 40px -14px rgba(20,16,10,.5);
   }
+  .board-frame::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:5;
+    mix-blend-mode:overlay;
+    background:
+      radial-gradient(ellipse 130% 85% at 18% 6%, rgba(255,255,255,.16), transparent 55%),
+      radial-gradient(ellipse 120% 90% at 85% 100%, rgba(0,0,0,.22), transparent 60%);
+  }
+  .rivet{
+    position:absolute;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #f6e2a8, #a9812f 65%, #5a4213 100%);
+    box-shadow:0 1px 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.35);
+    z-index:6;
+    pointer-events:none;
+  }
+  .rivet-tl{ top:3px; left:3px; }
+  .rivet-tr{ top:3px; right:3px; }
+  .rivet-bl{ bottom:3px; left:3px; }
+  .rivet-br{ bottom:3px; right:3px; }
   .ranks{
     grid-column:1;
     grid-row:1;
@@ -309,31 +360,40 @@
       var(--sq-dark);
   }
   .sq.selectable{ cursor:pointer; }
+  .sq.selectable:hover{ box-shadow:inset 0 0 0 999px rgba(255,255,255,.06); }
   .sq.move-hint::after{
     content:"";
     position:absolute;
-    width:22%; height:22%;
+    width:24%; height:24%;
     border-radius:50%;
-    background:var(--sage);
-    opacity:.65;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.6), var(--sage) 55%, var(--sage-deep) 100%);
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
+    opacity:.9;
   }
   .sq.atk-hint::after{
     content:"";
     position:absolute;
-    inset:8%;
-    border:3px solid var(--ember);
-    border-radius:6px;
-    opacity:.85;
+    inset:11%;
+    border:2px solid var(--ember);
+    border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.28), inset 0 0 0 1px rgba(0,0,0,.15);
+    opacity:.92;
   }
   .sq.heal-hint::after{
     content:"";
     position:absolute;
-    inset:8%;
-    border:3px dashed var(--sage);
-    border-radius:6px;
-    opacity:.85;
+    inset:11%;
+    border:2px dashed var(--sage);
+    border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+    opacity:.92;
   }
-  .sq.selected{ outline:3px solid var(--brass-bright); outline-offset:-3px; z-index:2;}
+  .sq.selected{
+    outline:2px solid var(--brass-bright);
+    outline-offset:-2px;
+    box-shadow:inset 0 0 0 5px rgba(0,0,0,.10);
+    z-index:2;
+  }
   .sq.acted{ filter:saturate(.55) brightness(.92); }
   .sq.impact::before{
     content:"";
@@ -424,7 +484,6 @@
   .piece{
     font-size:clamp(20px,3.4vw,34px);
     line-height:1;
-    filter:drop-shadow(0 3px 2px rgba(0,0,0,.4)) drop-shadow(0 1px 0 rgba(255,255,255,.15));
     position:relative;
     display:flex;
     flex-direction:column;
@@ -435,25 +494,61 @@
   .piece::before{
     content:"";
     position:absolute;
-    bottom:-2px;
+    bottom:-3px;
     left:50%;
     transform:translateX(-50%);
-    width:52%;
-    height:22%;
-    background:radial-gradient(ellipse, rgba(0,0,0,.28), transparent 70%);
+    width:58%;
+    height:24%;
+    background:radial-gradient(ellipse, rgba(0,0,0,.34) 0%, rgba(0,0,0,.16) 48%, transparent 74%);
     z-index:-1;
   }
-  .piece .glyph.player{ color:var(--player); }
-  .piece .glyph.enemy{ color:var(--enemy); }
+  .piece::after{
+    content:"";
+    position:absolute;
+    bottom:-1px;
+    left:50%;
+    transform:translateX(-50%);
+    width:44%;
+    height:2px;
+    border-radius:50%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.4) 50%, transparent);
+    opacity:.55;
+    z-index:-1;
+  }
+  .piece.ascended::after{
+    background:linear-gradient(90deg, transparent, var(--brass-bright) 50%, transparent);
+    opacity:.9;
+    height:2.5px;
+    box-shadow:0 0 5px var(--brass-bright);
+  }
+  .piece .glyph{
+    display:inline-block;
+    filter:drop-shadow(0 2px 1px rgba(15,12,8,.55)) drop-shadow(0 -1px 0 rgba(255,255,255,.16));
+  }
+  .piece .glyph.player{
+    background:linear-gradient(155deg, var(--player-hi) 0%, var(--player) 45%, var(--player-lo) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .piece .glyph.enemy{
+    background:linear-gradient(155deg, var(--enemy-hi) 0%, var(--enemy) 45%, var(--enemy-lo) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .piece.ascended .glyph{ text-shadow:0 0 7px var(--brass-bright); }
   .hp-bar{
     width:72%;
     height:5px;
-    background:rgba(0,0,0,.25);
+    background:rgba(0,0,0,.28);
     border-radius:3px;
     overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.35);
   }
-  .hp-bar > i{ display:block; height:100%; background:var(--sage); }
-  .hp-bar.low > i{ background:var(--ember); }
+  .hp-bar > i{
+    display:block;
+    height:100%;
+    background:linear-gradient(180deg, rgba(255,255,255,.32), transparent 45%), var(--sage);
+    transition:width .3s ease;
+  }
+  .hp-bar.low > i{ background:linear-gradient(180deg, rgba(255,255,255,.28), transparent 45%), var(--ember); }
 
   .board-caption{
     display:flex;
@@ -538,9 +633,11 @@
     border-right:2px solid var(--brass-bright);
     opacity:.85;
   }
-  .crest{ width:96px; height:96px; margin:0 auto 18px; display:block; }
+  .crest{ width:96px; height:96px; margin:0 auto 18px; display:block; filter:drop-shadow(0 6px 12px rgba(20,16,10,.35)); }
+  .crest-ring-outer{ fill:none; stroke:var(--line); stroke-width:1; opacity:.7; }
   .crest-ring{ fill:none; stroke:var(--brass); stroke-width:2; }
   .crest-ring-inner{ fill:var(--panel-2); stroke:var(--line); stroke-width:1.5; }
+  .crest-sheen{ fill:none; stroke:rgba(255,255,255,.3); stroke-width:1; opacity:.6; }
   .crest-glyph{ font-family:'Cinzel',serif; font-size:40px; fill:var(--brass-bright); text-anchor:middle; }
   .crest-small{ font-family:'Cinzel',serif; font-size:18px; fill:var(--ink-dim); text-anchor:middle; }
   .title-wrap h2{ margin:0 0 10px; font-size:clamp(24px,4vw,30px); color:var(--brass-bright); }
@@ -600,16 +697,26 @@
   }
   .map-head h2{ margin:0; font-size:19px; color:var(--brass-bright); }
   .map-head p{ margin:2px 0 0; font-size:13.5px; color:var(--ink-dim); max-width:52ch; }
-  .map-svg{ width:100%; height:auto; display:block; margin-top:10px; }
-  .map-edge{ stroke:var(--line); stroke-width:2; fill:none; }
+  .map-scroll{ overflow-x:auto; margin-top:10px; -webkit-overflow-scrolling:touch; }
+  .map-svg{ width:100%; min-width:600px; height:auto; display:block; }
+  .map-edge{ stroke:var(--line); stroke-width:2; fill:none; stroke-linecap:round; }
   .map-edge.reachable{ stroke:var(--brass); stroke-width:2.5; stroke-dasharray:7 5; }
   .map-edge.cleared{ stroke:var(--sage); stroke-width:2.5; }
-  .map-node circle.disc{ fill:var(--panel-2); stroke:var(--line); stroke-width:2; }
+  .map-node{ transition:filter .12s ease; }
+  .map-node circle.disc-rim{ fill:var(--line); }
+  .map-node circle.disc{ fill:var(--panel-2); stroke:var(--line); stroke-width:1.5; }
+  .map-node circle.disc-sheen{ fill:rgba(255,255,255,.14); pointer-events:none; }
   .map-node.clickable{ cursor:pointer; }
-  .map-node.clickable circle.disc{ stroke:var(--brass); stroke-width:2.5; }
-  .map-node.current circle.disc{ stroke:var(--brass-bright); stroke-width:3.5; }
-  .map-node.cleared circle.disc{ fill:var(--sage); opacity:.32; stroke:var(--sage); }
-  .map-node.locked circle.disc{ opacity:.55; }
+  .map-node.clickable circle.disc-rim{ fill:var(--brass); }
+  .map-node.clickable circle.disc{ stroke:var(--brass); stroke-width:2; }
+  .map-node.clickable:hover, .map-node.clickable:focus-visible{ filter:brightness(1.1); }
+  .map-node.current circle.disc-rim{ fill:var(--brass-bright); }
+  .map-node.current circle.disc{ stroke:var(--brass-bright); stroke-width:2.5; }
+  .map-node.cleared circle.disc{ fill:var(--sage); opacity:.34; stroke:var(--sage); }
+  .map-node.cleared circle.disc-rim{ fill:var(--sage); opacity:.5; }
+  .map-node.cleared circle.disc-sheen{ display:none; }
+  .map-node.locked circle.disc-rim, .map-node.locked circle.disc{ opacity:.5; }
+  .map-node.locked circle.disc-sheen{ display:none; }
   .map-node text.icon{ font-size:19px; fill:var(--ink-dim); text-anchor:middle; dominant-baseline:central; pointer-events:none; }
   .map-node.clickable text.icon{ fill:var(--brass-bright); }
   .map-node.cleared text.icon{ fill:var(--ink-dim); }
@@ -666,13 +773,30 @@
     padding:8px 6px;
     border-radius:6px;
     border:1px solid transparent;
+    transition:background .15s ease;
   }
   .unit-card + .unit-card{ border-top:1px solid var(--line); }
   .unit-card.dead{ opacity:.35; }
   .unit-card.acted{ opacity:.55; }
-  .unit-card .g{ font-size:22px; text-align:center; color:var(--player); }
-  .unit-card .g.ascended{ text-shadow:0 0 6px var(--brass-bright); }
-  #selected-info .g.ascended{ text-shadow:0 0 6px var(--brass-bright); }
+  .unit-card:hover, .unit-card:focus-visible{ background:var(--panel-2); }
+  .unit-card .g, #selected-info .g, .class-card .g{
+    font-size:18px;
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 28%, rgba(255,255,255,.16), transparent 55%),
+      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1px solid var(--line);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.28), inset 0 -1px 0 rgba(255,255,255,.06);
+    color:var(--player);
+  }
+  .class-card .g{ color:var(--brass-bright); font-size:20px; }
+  .unit-card .g.ascended, #selected-info .g.ascended{
+    border-color:var(--brass-bright);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.28), 0 0 6px rgba(201,162,75,.5);
+    text-shadow:0 0 6px var(--brass-bright);
+  }
   .unit-card .name{ font-weight:600; font-size:14px; }
   .unit-card .cls{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.05em; }
   .unit-card .stats{ font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--ink-dim); text-align:right; }
@@ -707,9 +831,13 @@
     box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 1px 3px rgba(0,0,0,.25);
     transition:transform .08s ease, box-shadow .08s ease, filter .12s ease;
   }
-  button.action:hover{ filter:brightness(1.06); }
-  button.action:active{ transform:translateY(1px); box-shadow:0 1px 2px rgba(0,0,0,.2) inset; }
-  button.action:disabled{ filter:grayscale(.4) brightness(.85); cursor:default; transform:none; }
+  button.action:hover{
+    filter:brightness(1.06);
+    transform:translateY(-1px);
+    box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 4px 10px -2px rgba(20,16,10,.35);
+  }
+  button.action:active{ transform:translateY(1px); box-shadow:0 1px 2px rgba(0,0,0,.2) inset; filter:brightness(1); }
+  button.action:disabled{ filter:grayscale(.4) brightness(.85); cursor:default; transform:none; box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 1px 3px rgba(0,0,0,.25); }
   button.action:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
   button.action.ghost{
     background:transparent;
@@ -782,11 +910,13 @@
     padding:12px 14px;
   }
   .class-card .h{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
-  .class-card .g{ font-size:24px; color:var(--brass-bright); }
+  .class-card{ transition:box-shadow .15s ease, border-color .15s ease; }
+  .class-card:hover{ border-left-color:var(--brass-bright); box-shadow:var(--shadow-contact); }
   .class-card .n{ font-family:'Cinzel',serif; font-size:14px; letter-spacing:.02em; }
   .class-card .piece-of{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.04em; }
   .class-card p{ font-size:13.5px; margin:0; color:var(--ink-dim); }
-  .codex table{ width:100%; border-collapse:collapse; font-size:13.5px; margin:8px 0 18px; }
+  .table-scroll{ overflow-x:auto; margin:8px 0 18px; -webkit-overflow-scrolling:touch; }
+  .codex table{ width:100%; min-width:480px; border-collapse:collapse; font-size:13.5px; margin:0; }
   .codex th,.codex td{ text-align:left; padding:6px 10px; border-bottom:1px solid var(--line); }
   .codex th{ font-family:'Cinzel',serif; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-dim); }
 
@@ -881,8 +1011,10 @@
       <div class="title-wrap">
         <div class="corner-br" aria-hidden="true"></div>
         <svg class="crest" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="57" class="crest-ring-outer"></circle>
           <circle cx="60" cy="60" r="54" class="crest-ring"></circle>
           <circle cx="60" cy="60" r="44" class="crest-ring-inner"></circle>
+          <circle cx="60" cy="60" r="44" class="crest-sheen"></circle>
           <text x="60" y="70" class="crest-glyph">♚</text>
           <text x="34" y="46" class="crest-small">♞</text>
           <text x="86" y="46" class="crest-small">♞</text>
@@ -901,7 +1033,7 @@
           <h2>Region <span id="region-num" class="mono">1</span></h2>
           <p>Choose your path. Each waypoint is a fight, a rest, or a shrine's blessing. The road forks, and once you move on there's no going back.</p>
         </div>
-        <svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg>
+        <div class="map-scroll"><svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg></div>
         <div class="map-legend">
           <span><i style="background:var(--panel-2)"></i>Battle</span>
           <span><i style="background:var(--ember);opacity:.5"></i>Elite</span>
@@ -920,7 +1052,13 @@
         <div class="board-wrap">
           <div class="board-coords">
             <div class="ranks"><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
-            <div class="board-frame"><div class="board" id="board"></div></div>
+            <div class="board-frame">
+              <span class="rivet rivet-tl" aria-hidden="true"></span>
+              <span class="rivet rivet-tr" aria-hidden="true"></span>
+              <span class="rivet rivet-bl" aria-hidden="true"></span>
+              <span class="rivet rivet-br" aria-hidden="true"></span>
+              <div class="board" id="board"></div>
+            </div>
             <div class="files"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
           </div>
           <div class="board-caption">
@@ -981,6 +1119,7 @@
       <p>Clearing a region's boss advances the company to the next region, where a freshly generated map awaits and enemy companies field more pieces at higher levels. The run ends when your Sovereign falls, or continues indefinitely as a personal high-score of how many regions the company can clear.</p>
 
       <h3>Quick Reference</h3>
+      <div class="table-scroll">
       <table>
         <thead><tr><th>Rule</th><th>Chess</th><th>Checkmate &amp; Ruin</th></tr></thead>
         <tbody>
@@ -991,6 +1130,7 @@
           <tr><td>Progression</td><td>None: each game stands alone</td><td>Levels, relics, blessings, and a branching region map persist across battles</td></tr>
         </tbody>
       </table>
+      </div>
     </div>
   </section>
 </div>
@@ -1455,7 +1595,9 @@
       const title = node.championName ? `${t.label}: ${node.championName}` : t.label;
       svgHtml += `<g class="${cls}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
         <title>${title}</title>
-        <circle class="disc" cx="${x}" cy="${y}" r="24"></circle>
+        <circle class="disc-rim" cx="${x}" cy="${y}" r="25"></circle>
+        <circle class="disc" cx="${x}" cy="${y}" r="21"></circle>
+        <circle class="disc-sheen" cx="${x-7}" cy="${y-9}" r="9"></circle>
         <text class="icon" x="${x}" y="${y-2}">${t.icon}</text>
         <text class="label" x="${x}" y="${y+22}">${t.label}</text>
       </g>`;
