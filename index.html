@@ -718,6 +718,9 @@
   .title-wrap .action:last-of-type{ margin-bottom:0; }
   .ach-list{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; }
   .ach-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
     font-family:'Cinzel',serif;
     font-size:10.5px;
     letter-spacing:.03em;
@@ -725,9 +728,17 @@
     border:1px solid var(--brass);
     color:var(--brass-bright);
     border-radius:999px;
-    padding:4px 10px;
+    padding:4px 12px 4px 6px;
     cursor:default;
   }
+  .ach-icon{
+    width:18px; height:18px; flex:none; border-radius:50%;
+    background:radial-gradient(circle at 35% 28%, rgba(255,255,255,.16), transparent 55%), var(--panel);
+    border:1px solid var(--brass);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--brass-bright);
+  }
+  .ach-icon svg{ width:11px; height:11px; }
   .ach-empty{ margin:10px 0 0; font-style:italic; }
   .hall{
     margin-top:22px;
@@ -1228,6 +1239,26 @@
         <circle cx="6" cy="24" r="1"/>
         <circle cx="18" cy="26" r="1.2"/>
       </g>
+    </symbol>
+
+    <!-- Achievement icons: same engraved line-mark language as the region sigils. -->
+    <symbol id="ach-firstblood" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M16 6c5 7 8 11 8 15a8 8 0 1 1-16 0c0-4 3-8 8-15z"/>
+    </symbol>
+    <symbol id="ach-ascendant" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M16 4l3.5 9H29l-7.5 5.5L24 28l-8-5.7L8 28l2.5-9.5L3 13h9.5z"/>
+    </symbol>
+    <symbol id="ach-giantslayer" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 7l18 18M7 10V7h3M25 22v3h-3"/>
+        <path d="M25 7l-18 18M25 10V7h-3M7 22v3h3"/>
+      </g>
+    </symbol>
+    <symbol id="ach-flawless" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M16 4l10 4v8c0 7-4.5 11-10 12-5.5-1-10-5-10-12V8z"/>
+    </symbol>
+    <symbol id="ach-conqueror" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 25h22l-2-12-6 6-3-10-3 10-6-6z"/>
     </symbol>
   </defs>
 </svg>
@@ -1844,6 +1875,7 @@
       if(kind==='guard'){ u.def += 1; }
     });
     log(`A shrine blesses the company with ${labels[kind]}.`, 'heal');
+    playSfx('heal');
     markNodeCleared(pendingShrine);
     pendingShrine = null;
     renderMap();
@@ -1856,10 +1888,12 @@
     if(node.type==='rest'){
       persistedParty.forEach(u=>{ u.hp = u.maxHp; });
       log('The company rests. Every wound is healed.', 'heal');
+      playSfx('heal');
       markNodeCleared(node);
       renderMap();
     } else if(node.type==='shrine'){
       pendingShrine = node;
+      playSfx('click');
       renderMap();
     } else if(node.type==='cache'){
       const alive = persistedParty.filter(u=>u.alive!==false && u.hp>0);
@@ -1867,12 +1901,15 @@
       const relic = RELICS[Math.floor(Math.random()*RELICS.length)];
       relic.apply(target);
       log(`The company finds the ${relic.name}, ${relic.flavor}. ${CLASSES[target.type].name} carries it now.`, 'heal');
+      playSfx('heal');
       markNodeCleared(node);
       renderMap();
     } else if(node.type==='wayfarer'){
       pendingWayfarer = { node, event: WAYFARER_EVENTS[Math.floor(Math.random()*WAYFARER_EVENTS.length)] };
+      playSfx('click');
       renderMap();
     } else if(node.type==='elite' || node.type==='boss'){
+      playSfx('click');
       const rg = regionInfo(region);
       const eliteGlyphs = ['knight','bishop','rook'];
       pendingIntro = {
@@ -1890,6 +1927,7 @@
 
   function resolveWayfarer(accept){
     const { node, event } = pendingWayfarer;
+    playSfx('click');
     event.resolve(accept, persistedParty);
     markNodeCleared(node);
     pendingWayfarer = null;
@@ -1900,14 +1938,14 @@
   const HALL_KEY = 'checkmateAndRuinHall';
   const SAVE_KEY = 'checkmateAndRuinSave';
   const ACHIEVEMENTS = {
-    first_blood:      { name:'First Blood',      desc:'Defeat an enemy piece for the first time.' },
-    ascendant:        { name:'Ascendant',        desc:'Bring a piece to its ascension at level five.' },
-    giant_slayer:     { name:'Giant Slayer',     desc:'Defeat an elite waypoint.' },
-    deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.' },
-    ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.' },
-    drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.' },
-    flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.' },
-    ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.' },
+    first_blood:      { name:'First Blood',      desc:'Defeat an enemy piece for the first time.', icon:'ach-firstblood' },
+    ascendant:        { name:'Ascendant',        desc:'Bring a piece to its ascension at level five.', icon:'ach-ascendant' },
+    giant_slayer:     { name:'Giant Slayer',     desc:'Defeat an elite waypoint.', icon:'ach-giantslayer' },
+    deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.', icon:'sigil-marsh' },
+    ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.', icon:'sigil-ember' },
+    drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.', icon:'sigil-drowned' },
+    flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.', icon:'ach-flawless' },
+    ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.', icon:'ach-conqueror' },
   };
 
   function loadHall(){
@@ -1977,7 +2015,7 @@
     const readout = document.getElementById('hall-readout');
     const earned = (hall.achievements||[]).map(id=>ACHIEVEMENTS[id]).filter(Boolean);
     const achLine = earned.length
-      ? `<div class="ach-list">${earned.map(a=>`<span class="ach-badge tooltip" data-tip="${a.desc}">${a.name}</span>`).join('')}</div>`
+      ? `<div class="ach-list">${earned.map(a=>`<span class="ach-badge tooltip" data-tip="${a.desc}"><span class="ach-icon"><svg viewBox="0 0 32 32"><use href="#${a.icon}"></use></svg></span>${a.name}</span>`).join('')}</div>`
       : `<p class="ach-empty">No achievements unlocked yet.</p>`;
     if(hall.runs>0){
       readout.innerHTML = `<span class="hall-title">Hall of Champions</span>${hall.runs} campaign${hall.runs===1?'':'s'} run &middot; deepest reach, Region ${hall.bestRegion}${achLine}`;
@@ -2080,6 +2118,7 @@
         </div>
       </div>`;
       document.getElementById('begin-battle-btn').addEventListener('click', ()=>{
+        playSfx('click');
         const node = pendingIntro.node;
         pendingIntro = null;
         startBattle(node);
