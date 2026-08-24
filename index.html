@@ -466,6 +466,11 @@
     box-shadow:inset 0 0 0 5px rgba(0,0,0,.10);
     z-index:2;
   }
+  .sq:focus-visible{
+    outline:2px solid var(--brass-bright);
+    outline-offset:-2px;
+    z-index:3;
+  }
   .sq.acted{ filter:saturate(.55) brightness(.92); }
   .sq.impact::before{
     content:"";
@@ -1366,7 +1371,7 @@
               <span class="rivet rivet-bl" aria-hidden="true"></span>
               <span class="rivet rivet-br" aria-hidden="true"></span>
               <div class="board-frame">
-                <div class="board" id="board"></div>
+                <div class="board" id="board" role="group" aria-label="Chess board, 8 by 8"></div>
               </div>
             </div>
             <div class="files"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
@@ -2811,7 +2816,26 @@
             sq.appendChild(fn);
           });
         }
+        const coord = String.fromCharCode(97+c) + (8-r);
+        let label = coord;
+        if(u){
+          label += `, ${u.team==='player'?'your':'enemy'} ${CLASSES[u.type].name}, ${Math.max(0,u.hp)} of ${u.maxHp} health`;
+          if(u.acted) label += ', already acted';
+        } else {
+          label += ', empty';
+        }
+        if(move){
+          label += move.type==='attack' ? ', attack' : move.type==='heal' ? ', heal' : ', move here';
+        } else if(u && u.team==='player' && side==='player' && !u.acted && !gameOver){
+          label += ', select';
+        }
+        sq.setAttribute('role','button');
+        sq.setAttribute('tabindex','0');
+        sq.setAttribute('aria-label', label);
         sq.addEventListener('click', ()=>onSquareClick(r,c));
+        sq.addEventListener('keydown', e=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); onSquareClick(r,c); }
+        });
         boardEl.appendChild(sq);
       }
     }
