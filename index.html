@@ -1102,6 +1102,38 @@
   .class-card .n{ font-family:'Cinzel',serif; font-size:14px; letter-spacing:.02em; }
   .class-card .piece-of{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.04em; }
   .class-card p{ font-size:13.5px; margin:0; color:var(--ink-dim); }
+  .chronicle-entry{
+    border:1px solid var(--line);
+    border-left:3px solid var(--brass);
+    border-radius:2px;
+    background:var(--panel-2);
+    padding:16px 18px;
+    margin:0 0 14px;
+  }
+  .chronicle-head{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .chronicle-sigil{
+    width:38px; height:38px; border-radius:50%; flex:none;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.14), transparent 55%), var(--panel);
+    border:1px solid var(--brass); display:flex; align-items:center; justify-content:center;
+  }
+  .chronicle-sigil svg{ width:20px; height:20px; }
+  .chronicle-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); }
+  .chronicle-entry h3{ margin:2px 0 0; font-size:17px; color:var(--ink); }
+  .chronicle-tagline{ font-style:italic; color:var(--ink-dim); font-size:13px; margin:2px 0 0; }
+  .chronicle-entry .establishing{ font-size:13.5px; color:var(--ink-dim); margin:10px 0 12px; line-height:1.6; }
+  .chronicle-boss{ display:flex; align-items:center; gap:12px; padding-top:10px; border-top:1px solid var(--line); }
+  .chronicle-boss .medallion{
+    width:44px; height:44px; border-radius:50%; flex:none;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.12), transparent 55%), radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  }
+  .chronicle-boss .medallion .glyph-svg{ width:24px; height:24px; }
+  .chronicle-boss .boss-title{ font-family:'Cinzel',serif; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ember); margin:0; }
+  .chronicle-boss .boss-name{ font-family:'Cinzel',serif; font-size:14.5px; color:var(--ink); margin:1px 0 3px; }
+  .chronicle-boss .boss-quote{ font-style:italic; font-size:12.5px; color:var(--ink-dim); margin:0; }
+  .chronicle-entry.locked{ opacity:.65; }
+  .chronicle-entry.locked .chronicle-sigil{ color:var(--ink-dim); }
+  .chronicle-entry.locked h3{ color:var(--ink-dim); }
   .table-scroll{ overflow-x:auto; margin:8px 0 18px; -webkit-overflow-scrolling:touch; }
   .codex table{ width:100%; min-width:480px; border-collapse:collapse; font-size:13.5px; margin:0; }
   .codex .credits{ margin:18px 0 0; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink-dim); }
@@ -1261,6 +1293,22 @@
         <circle cx="18" cy="26" r="1.2"/>
       </g>
     </symbol>
+    <symbol id="sigil-undercroft" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 15a10 9 0 0 1 20 0"/>
+        <path d="M8 15v3h4v3h4v3h4v3h4"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-edge" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 27 15 9M21 27 17 9M13 9h4"/>
+      </g>
+      <g fill="currentColor">
+        <circle cx="23" cy="8" r="1"/>
+        <circle cx="27" cy="14" r=".8"/>
+        <circle cx="25" cy="21" r="1.1"/>
+      </g>
+    </symbol>
 
     <!-- Achievement icons: same engraved line-mark language as the region sigils. -->
     <symbol id="ach-firstblood" viewBox="0 0 32 32">
@@ -1292,6 +1340,7 @@
     </div>
     <div class="tabs" role="tablist" aria-label="View">
       <button class="tab-btn" id="tab-battle" role="tab" aria-selected="true" aria-controls="view-battle">Battle</button>
+      <button class="tab-btn" id="tab-chronicle" role="tab" aria-selected="false" aria-controls="view-chronicle">Chronicle</button>
       <button class="tab-btn" id="tab-codex" role="tab" aria-selected="false" aria-controls="view-codex">Codex</button>
       <button class="tab-btn ghost-tab" id="sound-toggle" aria-pressed="false">Sound On</button>
       <button class="tab-btn ghost-tab" id="settings-toggle" aria-haspopup="true" aria-expanded="false">Settings</button>
@@ -1463,6 +1512,14 @@
       <p class="credits">Piece artwork: the "cburnett" chess set by <a href="https://en.wikipedia.org/wiki/User:Cburnett" target="_blank" rel="noopener">Colin M.L. Burnett</a>, used under <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank" rel="noopener">GPLv2+</a> as published by <a href="https://github.com/lichess-org/lila" target="_blank" rel="noopener">lichess.org</a>.</p>
     </div>
   </section>
+
+  <section id="view-chronicle" hidden>
+    <div class="codex chronicle">
+      <h2 class="codex-title">The Ruin Campaign</h2>
+      <p class="lede">Who guards each stretch of road, and what they say before the fight. Entries reveal themselves as the company presses further in.</p>
+      <div id="chronicle-list"></div>
+    </div>
+  </section>
 </div>
 
 <div id="tutorial-backdrop" class="tutorial-backdrop" hidden>
@@ -1508,6 +1565,42 @@
       </div>`).join('');
   }
   renderCodexClasses();
+
+  // Reveals one entry per authored region, gated by how far this viewer has actually
+  // gotten (the current save's region, or the deepest a past run reached). Region 1 is
+  // always shown since it's the very first thing a new company sees.
+  function renderChronicle(){
+    const list = document.getElementById('chronicle-list');
+    const hall = loadHall();
+    const save = loadSave();
+    const depth = Math.max(hall.bestRegion||0, save ? save.region : 0, 1);
+    list.innerHTML = REGIONS.map((rg,i)=>{
+      const num = i+1;
+      if(num > depth){
+        return `<div class="chronicle-entry locked">
+          <div class="chronicle-head">
+            <div class="chronicle-sigil"><svg viewBox="0 0 32 32"><use href="#sigil-void"></use></svg></div>
+            <div><div class="chronicle-eyebrow">Region ${num}</div><h3>Not yet reached</h3></div>
+          </div>
+        </div>`;
+      }
+      return `<div class="chronicle-entry">
+        <div class="chronicle-head">
+          <div class="chronicle-sigil" style="color:${rg.accent}"><svg viewBox="0 0 32 32"><use href="#sigil-${rg.sigil}"></use></svg></div>
+          <div><div class="chronicle-eyebrow">Region ${num}</div><h3>${rg.name}</h3><p class="chronicle-tagline">${rg.tagline}</p></div>
+        </div>
+        <p class="establishing">${rg.establishing}</p>
+        <div class="chronicle-boss">
+          <div class="medallion">${pieceIconHTML(rg.bossGlyph,'enemy')}</div>
+          <div>
+            <p class="boss-title">${rg.bossTitle}</p>
+            <p class="boss-name">${rg.boss}</p>
+            <p class="boss-quote">&ldquo;${rg.bossQuote}&rdquo;</p>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
 
   /* ---------------- Settings ---------------- */
   const SETTINGS_KEY = 'checkmateAndRuinSettings';
@@ -1628,17 +1721,22 @@
 
   /* ---------------- Tabs ---------------- */
   const tabBattle = document.getElementById('tab-battle');
+  const tabChronicle = document.getElementById('tab-chronicle');
   const tabCodex  = document.getElementById('tab-codex');
   const viewBattle = document.getElementById('view-battle');
+  const viewChronicle = document.getElementById('view-chronicle');
   const viewCodex  = document.getElementById('view-codex');
   function selectTab(which){
-    const isBattle = which==='battle';
-    tabBattle.setAttribute('aria-selected', isBattle);
-    tabCodex.setAttribute('aria-selected', !isBattle);
-    viewBattle.hidden = !isBattle;
-    viewCodex.hidden = isBattle;
+    tabBattle.setAttribute('aria-selected', which==='battle');
+    tabChronicle.setAttribute('aria-selected', which==='chronicle');
+    tabCodex.setAttribute('aria-selected', which==='codex');
+    viewBattle.hidden = which!=='battle';
+    viewChronicle.hidden = which!=='chronicle';
+    viewCodex.hidden = which!=='codex';
+    if(which==='chronicle') renderChronicle();
   }
   tabBattle.addEventListener('click', ()=>selectTab('battle'));
+  tabChronicle.addEventListener('click', ()=>selectTab('chronicle'));
   tabCodex.addEventListener('click', ()=>selectTab('codex'));
 
   /* ---------------- Game state ---------------- */
@@ -1671,6 +1769,7 @@
     {
       name:'The Broken Gate', tagline:'Where the road out of the ruin begins.',
       accent:'#8a7a52', sigil:'gate',
+      establishing:'A gatehouse built to keep something out, now only keeping count of what gets through. Wagon ruts run under the arch and stop, mid-track, the way everything in the ruin stops mid-motion. Thorne has held this post since before anyone thought to ask him to stop.',
       battleFlavor:'A patrol blocks the gate road.',
       eliteFlavor:'{name} holds the gate with a hardened company.',
       clearFlavor:'The gate falls open. Nothing guards the road behind it now.',
@@ -1681,6 +1780,7 @@
     {
       name:'The Salt Marches', tagline:'Flooded fields where the old cavalry drowned.',
       accent:'#3f6b6a', sigil:'marsh',
+      establishing:'Ground that used to be a road is now a suggestion. The company wades more than it walks, and every splash sounds like a warning. Ysolt still rides here, or walks where a horse would drown, patrolling a border that stopped mattering years ago.',
       battleFlavor:'A company wades out of the reeds to meet you.',
       eliteFlavor:'{name} commands the marsh from a rise of dry ground.',
       clearFlavor:'The marches go quiet. Somewhere under the water, the old cavalry finally rests.',
@@ -1691,6 +1791,7 @@
     {
       name:'The Ember Wastes', tagline:"Ash fields where the court's magic finally broke.",
       accent:'#b8541f', sigil:'ember',
+      establishing:"This is where the old kingdom's last working spell went off, and it is still going off, in a way, every time the wind moves the ash into new shapes. Vesk stands at the center of it because Vesk was standing at the center of it when it happened, and never quite left.",
       battleFlavor:'Figures move through the ash haze, closing in.',
       eliteFlavor:'{name} stands where the fire burned hottest.',
       clearFlavor:'The ash settles. Halfway through the ruin, and the company is still standing.',
@@ -1701,6 +1802,7 @@
     {
       name:'The Drowned Court', tagline:'The throne room, filled to the windows with grey water.',
       accent:'#2f4a68', sigil:'drowned',
+      establishing:'Water found the lowest point in the old capital and stayed there, which happened to be the throne room. Maren still keeps the appointments she used to keep, tending patients who are no longer here, in a room that no longer has a king to report to.',
       battleFlavor:'A company forms up between the flooded columns.',
       eliteFlavor:'{name} guards a stairway that no longer leads anywhere dry.',
       clearFlavor:'The water stills. Somewhere above it, the last stretch of road waits.',
@@ -1711,12 +1813,35 @@
     {
       name:"The Ruin's Heart", tagline:'What is left of the Sovereign who let it all fall.',
       accent:'#7a3a5c', sigil:'throne',
+      establishing:'There is no more court here, no more gate, no more water to wade through. Just a throne, a King who never left it, and a company that has walked the length of a fallen kingdom to reach one occupied chair.',
       battleFlavor:'The last of the loyal guard forms a line, more out of habit than hope.',
       eliteFlavor:'{name} fights for a throne that no longer exists.',
-      clearFlavor:'',
+      clearFlavor:'The throne room empties out. It should feel like the end of something.',
       boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin', bossGlyph:'king',
       bossFlavor:'{name} takes the field at last, alone, exactly as it wanted.',
       bossQuote:'Sit the throne if you want it. See how long you last.',
+    },
+    {
+      name:'The Undercroft', tagline:'Beneath the throne, a stair no one admitted was there.',
+      accent:'#6b6b78', sigil:'undercroft',
+      establishing:'Beneath the throne room is a stair the old maps never marked, and a door that opened days ago for the first time in longer than anyone kept records for. Osric has been down here the whole time, writing everything down, waiting for someone to finally read it.',
+      battleFlavor:'A company rises from the dark stair to meet you, pale, like they have not seen the field above in years.',
+      eliteFlavor:'{name} has guarded this stair longer than the throne room above remembers having one.',
+      clearFlavor:'The undercroft empties out. Whatever this place was keeping, it is not keeping it anymore.',
+      boss:'Osric the Unwritten', bossTitle:'Keeper of the Undercroft', bossGlyph:'pawn',
+      bossFlavor:'{name} takes the field surrounded by shelves of records no living hand has touched in years.',
+      bossQuote:'Every story needs an ending. No one gave me permission to write one.',
+    },
+    {
+      name:'The Last Mile', tagline:'Where the map runs out and the road becomes a guess.',
+      accent:'#5f6a78', sigil:'edge',
+      establishing:'Past the undercroft, the ground stops matching any map the company carried in. Wren drew as much of it as anyone ever dared, then stopped drawing and stayed here instead, at the exact point where the ink runs out.',
+      battleFlavor:'A company forms up at the very edge of anything mapped, unsure it should exist here at all.',
+      eliteFlavor:"{name} holds a line that, by any honest map, should not be here to hold.",
+      clearFlavor:'',
+      boss:'Wren the Last Cartographer', bossTitle:"Keeper of the Map's End", bossGlyph:'queen',
+      bossFlavor:'{name} takes the field where the last ink on the last map runs dry.',
+      bossQuote:'I drew as far as I dared. Past here, you are drawing for yourself.',
     },
   ];
   const FINAL_REGION = REGIONS.length;
@@ -1755,6 +1880,8 @@
     'Cael Ashguard','Drevan Ninefingers','Sable Wren','Korrath the Anvil',
     'Illyn of the Last Gate','Bram Wolfmarch','Petra Stormglass','Uldric the Undone',
     'Fenwick Grave','Nyra Halfshadow','Old Corrin','Wrenna Duskfield',
+    'Garrek Stonejaw','Mireille Ashcloak','Tobar the Unbowed','Kessa Nightward',
+    'Thane Emberlow','Vashti Coldwell',
   ];
   const ELITE_TAUNTS = [
     'Turn back. There is nothing left here worth the fight.',
@@ -1763,6 +1890,10 @@
     'I have buried better companies than this one.',
     'The ruin does not care who wins. Fight anyway.',
     'Every company that comes this way says the same prayers.',
+    'You picked a poor day to test the ruin.',
+    'I have seen better companies turn back at the sight of me.',
+    'This road remembers every company that tried it.',
+    'Fight if you must. The ruin keeps score either way.',
   ];
   const RELICS = [
     { key:'whetstone', name:'Whetstone', flavor:'a worn stone that keeps an edge sharp', apply:u=>{ u.atk+=2; } },
@@ -1772,6 +1903,9 @@
     { key:'hourglass', name:'Cracked Hourglass', flavor:'time enough for one more fight', apply:u=>{ u.maxHp+=8; u.hp=Math.min(u.maxHp,u.hp+8); } },
     { key:'tooth', name:"Wolf's Tooth", flavor:'sharp, but it leaves the hand exposed', apply:u=>{ u.atk+=4; u.def=Math.max(1,u.def-1); } },
     { key:'standard', name:'Old Standard', flavor:'a banner no one marches under anymore', apply:u=>{ u.def+=2; u.maxHp+=3; u.hp=Math.min(u.maxHp,u.hp+3); } },
+    { key:'lantern', name:'Guttering Lantern', flavor:'it has not gone out, though by now it really should have', apply:u=>{ u.def+=1; u.maxHp+=4; u.hp=Math.min(u.maxHp,u.hp+4); } },
+    { key:'signet', name:'Broken Signet', flavor:'a ring stamped with a house no one remembers anymore', apply:u=>{ u.atk+=3; } },
+    { key:'flask', name:"Field Medic's Flask", flavor:'half empty, and somehow still enough', apply:u=>{ u.maxHp+=2; u.hp=u.maxHp; } },
   ];
   // Wayfarer waypoints roll one of these vignettes at random each time they're reached.
   const WAYFARER_EVENTS = [
@@ -1832,6 +1966,28 @@
           alive.forEach(u=>{ u.hp = Math.max(1, u.hp - Math.round(u.maxHp*0.1)); });
           log('The draw comes up against the company. Every piece fights hungrier now.');
         }
+      }
+    },
+    {
+      key:'scholar', title:'A scholar sorts through the wreckage',
+      prompt:'They are cataloguing what is left of the old libraries, and offer to share it for an escort past the worst of the ruin.',
+      acceptLabel:'Escort Them', declineLabel:'Leave Them to It',
+      resolve(accept, party){
+        if(!accept){ log('The company leaves the scholar to their books.'); return; }
+        party.forEach(u=>{ u.xpNext = Math.max(4, u.xpNext-2); });
+        log('The scholar shares what they know. Every piece finds its next level a little closer.', 'heal');
+      }
+    },
+    {
+      key:'smith', title:'A smith still works a cold forge',
+      prompt:'They cannot light the forge anymore, but they still know the shape of a good edge. One piece, sharpened for free.',
+      acceptLabel:'Let Them Work', declineLabel:'Thank Them and Go',
+      resolve(accept, party){
+        if(!accept){ log('The company thanks the smith and moves on.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const target = alive[Math.floor(Math.random()*alive.length)];
+        target.atk += 2;
+        log(`The smith works a cold edge sharp anyway. ${CLASSES[target.type].name} carries it now, <span class="heal">+2 Might</span>.`, 'heal');
       }
     },
   ];
@@ -1982,6 +2138,8 @@
     deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.', icon:'sigil-marsh' },
     ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.', icon:'sigil-ember' },
     drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.', icon:'sigil-drowned' },
+    heart_reached:    { name:'Heart Reached',    desc:"Reach Region 5, the Ruin's Heart.", icon:'sigil-throne' },
+    vault_walker:     { name:'Vault Walker',     desc:'Reach Region 6, the Undercroft.', icon:'sigil-undercroft' },
     flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.', icon:'ach-flawless' },
     ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.', icon:'ach-conqueror' },
   };
@@ -2726,7 +2884,20 @@
     }
   }
 
-  const MILESTONE_ACH = { 2:'deep_delver', 3:'ash_walker', 4:'drowned_survivor' };
+  const MILESTONE_ACH = { 2:'deep_delver', 3:'ash_walker', 4:'drowned_survivor', 5:'heart_reached', 6:'vault_walker' };
+  // Two boss victories along the way echo the closing dedication early, each time
+  // making clear the campaign is not actually over yet. Only FINAL_REGION's victory
+  // (below) is the true ending.
+  const DEDICATION_ECHOES = {
+    3: {
+      title: 'Halfway Through the Ruin',
+      body: 'Vesk falls, and the ash finally settles. The company is halfway home, or halfway to wherever this road actually goes. Either way, it keeps walking.',
+    },
+    5: {
+      title: 'The Throne Falls Silent',
+      body: 'The Hollow Sovereign falls. By every rule the company understood when it set out, that should have been the end of the story. The board does not agree, and neither, it turns out, does the ruin.',
+    },
+  };
 
   function showBanner(kind){
     const slot = document.getElementById('banner-slot');
@@ -2739,7 +2910,24 @@
         playSfx('victory');
         slot.innerHTML = `<div class="banner dedication-banner">
           <h2>The Ruin Is Conquered</h2>
-          <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The campaign that began with a single company crossing an empty board ends here, in victory.</p>
+          <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The company has walked every mile the ruin had to offer, and there are no more.</p>
+          <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
+          <blockquote class="dedication">thank you for always and forever. The end.</blockquote>
+          <button class="action" id="next-region">Continue the Campaign</button>
+        </div>`;
+        document.getElementById('next-region').addEventListener('click', ()=>{
+          region += 1;
+          generateMap();
+          showMap();
+        });
+      } else if(isBoss && DEDICATION_ECHOES[region]){
+        const echo = DEDICATION_ECHOES[region];
+        playSfx('victory');
+        const milestone = MILESTONE_ACH[region+1];
+        if(milestone) unlockAchievement(milestone);
+        slot.innerHTML = `<div class="banner dedication-banner">
+          <h2>${echo.title}</h2>
+          <p>${echo.body}</p>
           <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
           <blockquote class="dedication">thank you for always and forever ...</blockquote>
           <button class="action" id="next-region">Continue the Campaign</button>
