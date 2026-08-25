@@ -4,103 +4,140 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkmate &amp; Ruin</title>
+<meta name="description" content="A tactics-RPG played on the board itself. Standard chess rules with health, levels, and consequence: every piece you lose is gone for the run.">
+<meta name="theme-color" content="#241608">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%234a3512'/%3E%3Ccircle cx='16' cy='16' r='15' fill='none' stroke='%23c1953c' stroke-width='1.4'/%3E%3Cpath d='M7 23h18v3H7z M7 23 7 13 12 17 16 9 20 17 25 13 25 23Z' fill='%23c1953c'/%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Checkmate%20%26%20Ruin%22%2C%22short_name%22%3A%22Checkmate%20%26%20Ruin%22%2C%22description%22%3A%22A%20tactics-RPG%20played%20on%20the%20board%20itself.%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23241608%22%2C%22theme_color%22%3A%22%23241608%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2527http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%3D%25270%25200%252032%252032%2527%253E%253Ccircle%2520cx%3D%252716%2527%2520cy%3D%252716%2527%2520r%3D%252715%2527%2520fill%3D%2527%25234a3512%2527%2F%253E%253Ccircle%2520cx%3D%252716%2527%2520cy%3D%252716%2527%2520r%3D%252715%2527%2520fill%3D%2527none%2527%2520stroke%3D%2527%2523c1953c%2527%2520stroke-width%3D%25271.4%2527%2F%253E%253Cpath%2520d%3D%2527M7%252023h18v3H7z%2520M7%252023%25207%252013%252012%252017%252016%25209%252020%252017%252025%252013%252025%252023Z%2527%2520fill%3D%2527%2523c1953c%2527%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
 
   :root{
-    --bg:#efe6ce;
-    --panel:#f7f1de;
-    --panel-2:#fbf7ea;
-    --ink:#2b2620;
-    --ink-dim:#6b6250;
-    --brass:#a9812f;
-    --brass-bright:#c9a24b;
-    --ember:#a13f28;
-    --sage:#4f7549;
-    --line:#d8caa2;
-    --sq-light:#f0e6cc;
-    --sq-dark:#c9b487;
-    --sq-line:#8a7548;
-    --player:#3a5a8c;
-    --enemy:#a13f28;
-    --player-hi:#bcd6f5;
-    --player-lo:#243c5c;
-    --enemy-hi:#e6a37e;
-    --enemy-lo:#5c1f11;
-    --sage-deep:#2f4a2b;
-    --ember-deep:#6f2414;
-    --shadow: 0 8px 24px rgba(43,38,32,.18), inset 0 0 0 1px var(--line);
-    --shadow-lift: 0 1px 0 rgba(255,255,255,.4) inset, 0 14px 30px -12px rgba(43,38,32,.28);
-    --shadow-deep: 0 24px 60px -16px rgba(43,38,32,.38), 0 2px 0 rgba(255,255,255,.35) inset;
-    --shadow-contact: 0 2px 8px rgba(43,38,32,.14);
-    --grain-opacity:.05;
+    --bg:#b58a4e;
+    --panel:#e1c186;
+    --panel-2:#eed8a9;
+    --ink:#291807;
+    --ink-dim:#6b4423;
+    --brass:#8a6423;
+    --brass-bright:#c1953c;
+    --brass-ink:#4a3010;
+    --brass-deep:#4a3512;
+    --ember:#8a3420;
+    --sage:#3f5c36;
+    --line:#a9814f;
+    --sq-light:#dcb87e;
+    --sq-dark:#6b4a30;
+    --sq-line:#3a2412;
+    --player:#c7a765;
+    --enemy:#7a3420;
+    --player-hi:#fdf8ec;
+    --player-lo:#a8956a;
+    --enemy-hi:#c97850;
+    --enemy-lo:#2e1006;
+    --player-accent:#4a6b85;
+    --enemy-accent:#8a3420;
+    --piece-outline:#241608;
+    --piece-eye:#1c1006;
+    --sage-deep:#26381f;
+    --ember-deep:#4a1a0e;
+    --wood-grain-opacity:.5;
+    --wood-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='140'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.014 0.34' numOctaves='4' seed='11' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.55 0.22 0.16 0 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    --wood-grain-fine: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.09 0.85' numOctaves='3' seed='4' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.16 0.06 0.03 0 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>");
+    --shadow: 0 8px 24px rgba(26,15,4,.32), inset 0 0 0 1px var(--line);
+    --shadow-lift: 0 1px 0 rgba(255,240,210,.3) inset, 0 14px 30px -12px rgba(26,15,4,.4);
+    --shadow-deep: 0 24px 60px -16px rgba(20,11,3,.55), 0 2px 0 rgba(255,240,210,.25) inset;
+    --shadow-contact: 0 2px 8px rgba(26,15,4,.24);
+    --grain-opacity:.06;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#17130f;
-      --panel:#241d15;
-      --panel-2:#2b2318;
-      --ink:#ece1c8;
-      --ink-dim:#a89a7c;
-      --brass:#c9a24b;
-      --brass-bright:#e2bd6c;
-      --ember:#c85a3d;
-      --sage:#7fa878;
-      --line:#3a2f21;
-      --sq-light:#3a3021;
-      --sq-dark:#221b12;
-      --sq-line:#57452a;
-      --player:#7ea3d6;
-      --enemy:#d16a4d;
-      --player-hi:#d7e6f9;
-      --player-lo:#3e6394;
-      --enemy-hi:#f4c3a4;
-      --enemy-lo:#8f4326;
-      --sage-deep:#436c3e;
-      --ember-deep:#8f4326;
-      --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--line);
-      --shadow-lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 16px 34px -14px rgba(0,0,0,.55);
-      --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.06) inset;
-      --shadow-contact: 0 2px 10px rgba(0,0,0,.4);
-      --grain-opacity:.09;
+      --bg:#150c05;
+      --panel:#241608;
+      --panel-2:#31200e;
+      --ink:#ecd9b0;
+      --ink-dim:#b8946a;
+      --brass:#b8892f;
+      --brass-bright:#d9a94a;
+      --brass-ink:var(--brass-bright);
+      --brass-deep:#6b4e1c;
+      --ember:#b8543a;
+      --sage:#5c7a4e;
+      --line:#4a3218;
+      --sq-light:#4a3018;
+      --sq-dark:#180e05;
+      --sq-line:#6b4826;
+      --player:#d9c49a;
+      --enemy:#8a4228;
+      --player-hi:#f5ecd6;
+      --player-lo:#7a6440;
+      --enemy-hi:#d68a5c;
+      --enemy-lo:#3a160a;
+      --player-accent:#8fb4d1;
+      --piece-outline:#e0c184;
+      --piece-eye:#120a03;
+      --enemy-accent:#c85a3a;
+      --sage-deep:#33482a;
+      --ember-deep:#5c2414;
+      --wood-grain-opacity:.65;
+      --shadow: 0 10px 30px rgba(0,0,0,.55), inset 0 0 0 1px var(--line);
+      --shadow-lift: 0 1px 0 rgba(255,230,190,.06) inset, 0 16px 34px -14px rgba(0,0,0,.6);
+      --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.7), 0 2px 0 rgba(255,230,190,.08) inset;
+      --shadow-contact: 0 2px 10px rgba(0,0,0,.5);
+      --grain-opacity:.1;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#17130f;
-    --panel:#241d15;
-    --panel-2:#2b2318;
-    --ink:#ece1c8;
-    --ink-dim:#a89a7c;
-    --brass:#c9a24b;
-    --brass-bright:#e2bd6c;
-    --ember:#c85a3d;
-    --sage:#7fa878;
-    --line:#3a2f21;
-    --sq-light:#3a3021;
-    --sq-dark:#221b12;
-    --sq-line:#57452a;
-    --player:#7ea3d6;
-    --enemy:#d16a4d;
-    --player-hi:#d7e6f9;
-    --player-lo:#3e6394;
-    --enemy-hi:#f4c3a4;
-    --enemy-lo:#8f4326;
-    --sage-deep:#436c3e;
-    --ember-deep:#8f4326;
-    --shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--line);
-    --shadow-lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 16px 34px -14px rgba(0,0,0,.55);
-    --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.06) inset;
-    --shadow-contact: 0 2px 10px rgba(0,0,0,.4);
-    --grain-opacity:.09;
+    --bg:#150c05;
+    --panel:#241608;
+    --panel-2:#31200e;
+    --ink:#ecd9b0;
+    --ink-dim:#b8946a;
+    --brass:#b8892f;
+    --brass-bright:#d9a94a;
+    --brass-ink:var(--brass-bright);
+    --ember:#b8543a;
+    --sage:#5c7a4e;
+    --line:#4a3218;
+    --sq-light:#4a3018;
+    --sq-dark:#180e05;
+    --sq-line:#6b4826;
+    --player:#d9c49a;
+    --enemy:#8a4228;
+    --player-hi:#f5ecd6;
+    --player-lo:#7a6440;
+    --enemy-hi:#d68a5c;
+    --enemy-lo:#3a160a;
+    --player-accent:#8fb4d1;
+    --enemy-accent:#c85a3a;
+    --sage-deep:#33482a;
+    --ember-deep:#5c2414;
+    --wood-grain-opacity:.65;
+    --shadow: 0 10px 30px rgba(0,0,0,.55), inset 0 0 0 1px var(--line);
+    --shadow-lift: 0 1px 0 rgba(255,230,190,.06) inset, 0 16px 34px -14px rgba(0,0,0,.6);
+    --shadow-deep: 0 28px 70px -18px rgba(0,0,0,.7), 0 2px 0 rgba(255,230,190,.08) inset;
+    --shadow-contact: 0 2px 10px rgba(0,0,0,.5);
+    --grain-opacity:.1;
   }
+
+  #pieceGradPlayer .grad-player-hi{ stop-color:var(--player-hi); }
+  #pieceGradPlayer .grad-player-mid{ stop-color:var(--player); }
+  #pieceGradPlayer .grad-player-lo{ stop-color:var(--player-lo); }
+  #pieceGradEnemy .grad-enemy-hi{ stop-color:var(--enemy-hi); }
+  #pieceGradEnemy .grad-enemy-mid{ stop-color:var(--enemy); }
+  #pieceGradEnemy .grad-enemy-lo{ stop-color:var(--enemy-lo); }
+  .piece-eye{ fill:var(--piece-eye); }
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{ overscroll-behavior-y:contain; }
   body{
     background:
-      radial-gradient(ellipse 60% 40% at 18% 12%, rgba(0,0,0,.04), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 85% 70%, rgba(0,0,0,.035), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 18% 12%, rgba(0,0,0,.06), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 70%, rgba(0,0,0,.05), transparent 60%),
+      var(--wood-grain-fine),
       var(--bg);
+    background-size:auto, auto, 120px 60px, auto;
+    background-blend-mode:overlay, overlay, multiply, normal;
     color:var(--ink);
     font-family:'Crimson Pro',Georgia,'Times New Roman',serif;
     min-height:100vh;
@@ -125,16 +162,22 @@
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]) body{
       background:
-        radial-gradient(ellipse 60% 40% at 18% 12%, rgba(0,0,0,.35), transparent 60%),
-        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(0,0,0,.3), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 18% 12%, rgba(0,0,0,.4), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(0,0,0,.35), transparent 60%),
+        var(--wood-grain-fine),
         var(--bg);
+      background-size:auto, auto, 120px 60px, auto;
+      background-blend-mode:overlay, overlay, soft-light, normal;
     }
   }
   :root[data-theme="dark"] body{
     background:
-      radial-gradient(ellipse 60% 40% at 18% 12%, rgba(0,0,0,.35), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 85% 70%, rgba(0,0,0,.3), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 18% 12%, rgba(0,0,0,.4), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 70%, rgba(0,0,0,.35), transparent 60%),
+      var(--wood-grain-fine),
       var(--bg);
+    background-size:auto, auto, 120px 60px, auto;
+    background-blend-mode:overlay, overlay, soft-light, normal;
   }
   h1,h2,h3,.disp{
     font-family:'Cinzel',Georgia,serif;
@@ -168,7 +211,7 @@
   header.top h1{
     font-size:clamp(26px,4vw,34px);
     margin:0;
-    color:var(--brass-bright);
+    color:var(--brass-ink);
   }
   header.top .subtitle{
     color:var(--ink-dim);
@@ -192,14 +235,19 @@
     border:1.5px solid var(--line);
     border-radius:3px;
     padding:8px 16px;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
     cursor:pointer;
+    touch-action:manipulation;
   }
   .tab-btn[aria-selected="true"]{
     background:var(--brass);
     color:#1c1509;
     border-color:var(--brass);
   }
-  .tab-btn:focus-visible{ outline:2px solid var(--brass-bright); outline-offset:2px; }
+  .tab-btn:focus-visible{ outline:2px solid var(--brass-ink); outline-offset:2px; }
   .tab-btn.ghost-tab{ background:transparent; }
   .tab-btn.ghost-tab[aria-pressed="true"]{ background:var(--panel-2); color:var(--ink); }
 
@@ -232,7 +280,7 @@
   }
   .segmented button:last-child{ border-right:none; }
   .segmented button[aria-pressed="true"]{ background:var(--brass); color:#1c1509; }
-  .segmented button:focus-visible{ outline:2px solid var(--brass-bright); outline-offset:-2px; }
+  .segmented button:focus-visible{ outline:2px solid var(--brass-ink); outline-offset:-2px; }
   .settings-note{ flex-basis:100%; margin:0; font-size:12.5px; color:var(--ink-dim); font-style:italic; }
   .settings-panel .action{ width:auto; margin:0 0 0 auto; }
   @media (max-width:480px){
@@ -258,11 +306,24 @@
   }
 
   .board-wrap{
-    background:var(--panel);
+    position:relative;
+    background:var(--wood-grain-fine), var(--panel);
+    background-size:120px 60px, auto;
+    background-blend-mode:multiply, normal;
     border:1px solid var(--line);
     border-radius:8px;
     padding:16px;
     box-shadow:var(--shadow);
+  }
+  .board-wrap::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:8px;
+    background:radial-gradient(ellipse 70% 55% at 50% 0%, var(--region-accent, transparent), transparent 72%);
+    opacity:.12;
+    pointer-events:none;
   }
   .sidebar{
     display:flex;
@@ -280,18 +341,31 @@
     grid-template-rows:1fr 16px;
     gap:4px;
   }
-  .board-frame{
+  .board-molding{
     position:relative;
     grid-column:2;
     grid-row:1;
-    border:10px solid var(--brass);
-    border-image: linear-gradient(155deg, var(--brass-bright), var(--brass) 40%, #7a5b21 100%) 1;
-    border-radius:2px;
+    padding:12px;
+    border-radius:5px;
+    background:
+      var(--wood-grain),
+      linear-gradient(155deg, var(--line) 0%, var(--sq-dark) 45%, var(--sq-line) 100%);
+    background-size:300px 140px, auto;
+    background-blend-mode:multiply, normal;
+    box-shadow:
+      inset 2px 2px 3px rgba(255,255,255,.12),
+      inset -3px -3px 7px rgba(0,0,0,.55),
+      0 18px 40px -14px rgba(20,16,10,.55);
+  }
+  .board-frame{
+    position:relative;
+    border:5px solid var(--brass);
+    border-image: linear-gradient(155deg, var(--brass-bright), var(--brass) 40%, var(--brass-deep) 100%) 1;
+    border-radius:1px;
     overflow:hidden;
     box-shadow:
       inset 0 0 0 1px var(--sq-line),
-      inset 0 2px 4px rgba(0,0,0,.35),
-      0 18px 40px -14px rgba(20,16,10,.5);
+      inset 0 2px 4px rgba(0,0,0,.35);
   }
   .board-frame::after{
     content:"";
@@ -306,17 +380,17 @@
   }
   .rivet{
     position:absolute;
-    width:6px; height:6px;
+    width:8px; height:8px;
     border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #f6e2a8, #a9812f 65%, #5a4213 100%);
-    box-shadow:0 1px 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.35);
+    background:radial-gradient(circle at 35% 30%, var(--brass-bright), var(--brass) 65%, var(--brass-deep) 100%);
+    box-shadow:0 1px 2px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.35);
     z-index:6;
     pointer-events:none;
   }
-  .rivet-tl{ top:3px; left:3px; }
-  .rivet-tr{ top:3px; right:3px; }
-  .rivet-bl{ bottom:3px; left:3px; }
-  .rivet-br{ bottom:3px; right:3px; }
+  .rivet-tl{ top:4px; left:4px; }
+  .rivet-tr{ top:4px; right:4px; }
+  .rivet-bl{ bottom:4px; left:4px; }
+  .rivet-br{ bottom:4px; right:4px; }
   .ranks{
     grid-column:1;
     grid-row:1;
@@ -355,12 +429,18 @@
   .sq.light{
     background:
       linear-gradient(155deg, rgba(255,255,255,.10), transparent 55%),
+      var(--wood-grain),
       var(--sq-light);
+    background-size:auto, 300px 140px, auto;
+    background-blend-mode:overlay, multiply, normal;
   }
   .sq.dark{
     background:
       linear-gradient(155deg, rgba(255,255,255,.05), transparent 55%),
+      var(--wood-grain),
       var(--sq-dark);
+    background-size:auto, 300px 140px, auto;
+    background-blend-mode:overlay, multiply, normal;
   }
   .sq.selectable{ cursor:pointer; }
   .sq.selectable:hover{ box-shadow:inset 0 0 0 999px rgba(255,255,255,.06); }
@@ -392,10 +472,15 @@
     opacity:.92;
   }
   .sq.selected{
-    outline:2px solid var(--brass-bright);
+    outline:2px solid var(--brass-ink);
     outline-offset:-2px;
     box-shadow:inset 0 0 0 5px rgba(0,0,0,.10);
     z-index:2;
+  }
+  .sq:focus-visible{
+    outline:2px solid var(--brass-ink);
+    outline-offset:-2px;
+    z-index:3;
   }
   .sq.acted{ filter:saturate(.55) brightness(.92); }
   .sq.impact::before{
@@ -412,8 +497,6 @@
     0%{ opacity:.55; }
     100%{ opacity:0; }
   }
-  .piece.ascended .glyph{ text-shadow:0 0 6px var(--brass-bright); }
-
   .tooltip{ position:relative; }
   .tooltip::after{
     content:attr(data-tip);
@@ -438,7 +521,7 @@
     z-index:10;
     box-shadow:0 4px 12px rgba(0,0,0,.3);
   }
-  .tooltip:hover::after, .tooltip:focus-visible::after{ opacity:1; }
+  .tooltip:hover::after, .tooltip:focus-visible::after, .tooltip.tap-active::after{ opacity:1; }
 
   .dmg-preview{
     position:absolute;
@@ -485,8 +568,6 @@
   }
 
   .piece{
-    font-size:clamp(20px,3.4vw,34px);
-    line-height:1;
     position:relative;
     display:flex;
     flex-direction:column;
@@ -524,19 +605,23 @@
     height:2.5px;
     box-shadow:0 0 5px var(--brass-bright);
   }
-  .piece .glyph{
-    display:inline-block;
+  .piece .glyph-svg{
+    display:block;
+    width:clamp(20px,3.4vw,34px);
+    height:clamp(20px,3.4vw,34px);
+    overflow:visible;
     filter:drop-shadow(0 2px 1px rgba(15,12,8,.55)) drop-shadow(0 -1px 0 rgba(255,255,255,.16));
   }
-  .piece .glyph.player{
-    background:linear-gradient(155deg, var(--player-hi) 0%, var(--player) 45%, var(--player-lo) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
+  .glyph-svg.player{ fill:url(#pieceGradPlayer); stroke:var(--piece-outline); }
+  .glyph-svg.enemy{ fill:url(#pieceGradEnemy); stroke:var(--piece-outline); }
+  .glyph-svg.neutral{ fill:var(--brass-bright); stroke:var(--piece-outline); }
+  .piece.ascended .glyph-svg{
+    filter:
+      drop-shadow(0 2px 1px rgba(15,12,8,.55))
+      drop-shadow(0 -1px 0 rgba(255,255,255,.16))
+      drop-shadow(0 0 3px var(--brass-bright))
+      drop-shadow(0 0 7px var(--brass-bright));
   }
-  .piece .glyph.enemy{
-    background:linear-gradient(155deg, var(--enemy-hi) 0%, var(--enemy) 45%, var(--enemy-lo) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  .piece.ascended .glyph{ text-shadow:0 0 7px var(--brass-bright); }
   .hp-bar{
     width:72%;
     height:5px;
@@ -589,10 +674,10 @@
     background:var(--ink-dim);
     flex:none;
   }
-  #round-pill[data-side="player"]{ border-color:var(--player); color:var(--player); }
-  #round-pill[data-side="player"]::before{ background:var(--player); box-shadow:0 0 6px var(--player); }
-  #round-pill[data-side="enemy"]{ border-color:var(--enemy); color:var(--enemy); }
-  #round-pill[data-side="enemy"]::before{ background:var(--enemy); box-shadow:0 0 6px var(--enemy); }
+  #round-pill[data-side="player"]{ border-color:var(--player-accent); color:var(--player-accent); }
+  #round-pill[data-side="player"]::before{ background:var(--player-accent); box-shadow:0 0 6px var(--player-accent); }
+  #round-pill[data-side="enemy"]{ border-color:var(--enemy-accent); color:var(--enemy-accent); }
+  #round-pill[data-side="enemy"]::before{ background:var(--enemy-accent); box-shadow:0 0 6px var(--enemy-accent); }
   #round-pill .mono, #round-pill span{ color:inherit; }
 
   /* ---------- Title screen ---------- */
@@ -603,7 +688,10 @@
     text-align:center;
     background:
       radial-gradient(ellipse 80% 55% at 50% 0%, rgba(201,162,75,.10), transparent 65%),
+      var(--wood-grain-fine),
       var(--panel);
+    background-size:auto, 120px 60px, auto;
+    background-blend-mode:overlay, multiply, normal;
     border:1px solid var(--line);
     border-radius:2px;
     padding:clamp(34px,6vw,56px) clamp(22px,5vw,44px);
@@ -641,24 +729,35 @@
   .crest-ring{ fill:none; stroke:var(--brass); stroke-width:2; }
   .crest-ring-inner{ fill:var(--panel-2); stroke:var(--line); stroke-width:1.5; }
   .crest-sheen{ fill:none; stroke:rgba(255,255,255,.3); stroke-width:1; opacity:.6; }
-  .crest-glyph{ font-family:'Cinzel',serif; font-size:40px; fill:var(--brass-bright); text-anchor:middle; }
+  .crest-glyph{ font-family:'Cinzel',serif; font-size:40px; fill:var(--brass-ink); text-anchor:middle; }
   .crest-small{ font-family:'Cinzel',serif; font-size:18px; fill:var(--ink-dim); text-anchor:middle; }
-  .title-wrap h2{ margin:0 0 10px; font-size:clamp(24px,4vw,30px); color:var(--brass-bright); }
+  .title-wrap h2{ margin:0 0 10px; font-size:clamp(24px,4vw,30px); color:var(--brass-ink); }
   .title-tagline{ margin:0 0 22px; color:var(--ink-dim); font-style:italic; font-size:15px; line-height:1.6; }
   .title-wrap .action{ display:block; max-width:260px; margin:0 auto 10px; }
   .title-wrap .action:last-of-type{ margin-bottom:0; }
   .ach-list{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; }
   .ach-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
     font-family:'Cinzel',serif;
     font-size:10.5px;
     letter-spacing:.03em;
     background:var(--panel-2);
     border:1px solid var(--brass);
-    color:var(--brass-bright);
+    color:var(--brass-ink);
     border-radius:999px;
-    padding:4px 10px;
+    padding:4px 12px 4px 6px;
     cursor:default;
   }
+  .ach-icon{
+    width:18px; height:18px; flex:none; border-radius:50%;
+    background:radial-gradient(circle at 35% 28%, rgba(255,255,255,.16), transparent 55%), var(--panel);
+    border:1px solid var(--brass);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--brass-ink);
+  }
+  .ach-icon svg{ width:11px; height:11px; }
   .ach-empty{ margin:10px 0 0; font-style:italic; }
   .hall{
     margin-top:22px;
@@ -668,13 +767,16 @@
     font-size:12.5px;
     color:var(--ink-dim);
   }
-  .hall .hall-title{ font-family:'Cinzel',serif; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:6px; }
+  .hall .hall-title{ font-family:'Cinzel',serif; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--brass-ink); display:block; margin-bottom:6px; }
 
   /* ---------- Overworld map ---------- */
   .map-wrap{
     position:relative;
     background:
+      var(--wood-grain-fine),
       radial-gradient(ellipse 90% 75% at 50% 30%, var(--panel-2) 0%, var(--panel) 70%, var(--bg) 130%);
+    background-size:120px 60px, auto;
+    background-blend-mode:multiply, normal;
     border:none;
     border-radius:6px;
     padding:clamp(20px,3.5vw,34px);
@@ -690,16 +792,38 @@
     box-shadow: inset 0 0 60px 10px rgba(20,16,10,.14);
     pointer-events:none;
   }
+  .map-wrap::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:6px;
+    background:radial-gradient(ellipse 75% 60% at 50% 8%, var(--region-accent, transparent), transparent 72%);
+    opacity:.18;
+    pointer-events:none;
+  }
   .map-head{
     display:flex;
     justify-content:space-between;
-    align-items:baseline;
+    align-items:center;
     flex-wrap:wrap;
-    gap:10px;
+    gap:14px 10px;
     margin-bottom:6px;
   }
-  .map-head h2{ margin:0; font-size:19px; color:var(--brass-bright); }
+  .map-head-title{ flex:1 1 auto; min-width:0; }
+  .map-head h2{ margin:0; font-size:19px; color:var(--brass-ink); }
   .map-head p{ margin:2px 0 0; font-size:13.5px; color:var(--ink-dim); max-width:52ch; }
+  .region-sigil{
+    width:44px; height:44px; flex:none; border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 26%, rgba(255,255,255,.14), transparent 55%),
+      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1.5px solid var(--region-accent, var(--brass));
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.3), inset 0 -1px 0 rgba(255,255,255,.06), 0 0 12px -3px var(--region-accent, transparent);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--region-accent, var(--brass-ink));
+  }
+  .region-sigil svg{ width:24px; height:24px; }
   .map-head p.region-tagline{ font-style:italic; margin-top:4px; }
   .map-scroll{ overflow-x:auto; margin-top:10px; -webkit-overflow-scrolling:touch; }
   .map-svg{ width:100%; min-width:600px; height:auto; display:block; }
@@ -722,10 +846,10 @@
   .map-node.locked circle.disc-rim, .map-node.locked circle.disc{ opacity:.5; }
   .map-node.locked circle.disc-sheen{ display:none; }
   .map-node text.icon{ font-size:19px; fill:var(--ink-dim); text-anchor:middle; dominant-baseline:central; pointer-events:none; }
-  .map-node.clickable text.icon{ fill:var(--brass-bright); }
+  .map-node.clickable text.icon{ fill:var(--brass-ink); }
   .map-node.cleared text.icon{ fill:var(--ink-dim); }
   .map-node text.label{ font-size:9.5px; fill:var(--ink-dim); text-anchor:middle; text-transform:uppercase; letter-spacing:.04em; pointer-events:none; font-family:'JetBrains Mono',monospace; }
-  .map-node:focus-visible circle.disc{ stroke:var(--brass-bright); stroke-width:3.5; }
+  .map-node:focus-visible circle.disc{ stroke:var(--brass-ink); stroke-width:3.5; }
   .map-legend{ display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:12px; color:var(--ink-dim); }
   .map-legend span{ display:inline-flex; align-items:center; gap:6px; }
   .map-legend i{ width:11px; height:11px; border-radius:50%; display:inline-block; border:1.5px solid var(--brass); background:var(--panel-2); }
@@ -739,43 +863,67 @@
     border-radius:8px;
     text-align:center;
   }
-  .shrine-panel h3{ margin:0 0 4px; font-size:16px; color:var(--brass-bright); }
+  .shrine-panel h3{ margin:0 0 4px; font-size:16px; color:var(--brass-ink); }
   .shrine-panel p{ margin:0 0 12px; font-size:13.5px; color:var(--ink-dim); }
   .shrine-choices{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .shrine-choices button{ width:auto; min-width:150px; }
-  .champion-intro{
-    border-color:var(--ember);
-    text-align:left;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:16px 18px;
+  /* ---------------- Boss/elite intro panel (comic-splash treatment) ---------------- */
+  .boss-panel{
+    margin:16px auto 0;
+    max-width:640px;
+    border:3px solid var(--ink);
+    border-radius:6px;
+    overflow:hidden;
+    background:var(--panel-2);
+    box-shadow:var(--shadow-deep);
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);
   }
-  .champion-medallion{
-    width:64px; height:64px; border-radius:50%; flex:none;
+  .boss-panel-art{
+    position:relative;
     background:
-      radial-gradient(circle at 32% 26%, rgba(255,255,255,.12), transparent 55%),
-      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
-    border:1px solid var(--line);
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.3), inset 0 -1px 0 rgba(255,255,255,.06);
-    display:flex; align-items:center; justify-content:center;
+      radial-gradient(ellipse 90% 70% at 30% 20%, rgba(255,255,255,.14), transparent 60%),
+      linear-gradient(165deg, var(--region-accent, var(--ember)) 0%, rgba(0,0,0,.55) 130%);
+    display:flex; align-items:flex-end; justify-content:center;
+    padding:18px 10px 0;
+    min-height:190px;
+    overflow:hidden;
   }
-  .champion-medallion .glyph{
-    font-size:32px; line-height:1;
-    background:linear-gradient(155deg, var(--enemy-hi) 0%, var(--enemy) 45%, var(--enemy-lo) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    filter:drop-shadow(0 2px 1px rgba(15,8,6,.5));
+  .boss-panel-sigil-bg{
+    position:absolute; top:50%; left:50%; width:230%; height:230%;
+    transform:translate(-50%,-50%);
+    color:rgba(255,255,255,.14);
+    pointer-events:none;
   }
-  .champion-text{ flex:1; min-width:180px; }
-  .champion-intro h3{ color:var(--ember); font-family:'Cinzel',serif; letter-spacing:.04em; text-transform:uppercase; font-size:12.5px; margin:0 0 4px; }
-  .champion-intro .champion-name{ font-family:'Cinzel',serif; font-size:19px; color:var(--ink); margin:0 0 8px; }
-  .champion-intro .champion-quote{ font-style:italic; font-size:15px; color:var(--ink-dim); margin:0; line-height:1.5; }
-  .champion-intro .shrine-choices{ flex-basis:100%; justify-content:flex-start; }
-  @media (max-width:480px){
-    .champion-intro{ text-align:center; justify-content:center; }
-    .champion-intro .shrine-choices{ justify-content:center; }
+  .boss-panel-figure{
+    position:relative; width:auto; height:100%; max-height:210px;
+    color:var(--ink);
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));
   }
-
+  .boss-panel-text{ padding:18px 20px 20px; text-align:left; }
+  .boss-panel .eyebrow{
+    color:var(--ember); font-family:'Cinzel',serif; letter-spacing:.08em; text-transform:uppercase;
+    font-size:11.5px; margin:0 0 4px;
+  }
+  .boss-panel-name{ font-family:'Cinzel',serif; font-size:clamp(22px,4vw,28px); line-height:1.1; color:var(--ink); margin:0 0 12px; }
+  .boss-panel-quote{
+    position:relative;
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    padding:10px 14px;
+    font-style:italic; font-size:14px; line-height:1.5; color:var(--ink);
+    margin:0 0 16px;
+    box-shadow:3px 3px 0 rgba(0,0,0,.18);
+  }
+  .boss-panel .shrine-choices{ justify-content:flex-start; }
+  @media (max-width:560px){
+    .boss-panel{ grid-template-columns:1fr; }
+    .boss-panel-art{ min-height:150px; padding-top:14px; }
+    .boss-panel-figure{ max-height:150px; }
+    .boss-panel-text{ text-align:center; }
+    .boss-panel .shrine-choices{ justify-content:center; }
+  }
   /* ---------- Sidebar ---------- */
   .panel{
     background:transparent;
@@ -814,8 +962,7 @@
   .unit-card.dead{ opacity:.35; }
   .unit-card.acted{ opacity:.55; }
   .unit-card:hover, .unit-card:focus-visible{ background:var(--panel-2); }
-  .unit-card .g, #selected-info .g, .class-card .g{
-    font-size:18px;
+  .unit-card .g, #selected-info .g, .class-card .g, .promo-choice .g{
     width:34px; height:34px;
     display:flex; align-items:center; justify-content:center;
     border-radius:50%;
@@ -824,13 +971,32 @@
       radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
     border:1px solid var(--line);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.28), inset 0 -1px 0 rgba(255,255,255,.06);
-    color:var(--player);
   }
-  .class-card .g{ color:var(--brass-bright); font-size:20px; }
+  .unit-card .g .glyph-svg, #selected-info .g .glyph-svg, .promo-choice .g .glyph-svg{ width:20px; height:20px; }
+  .class-card .g .glyph-svg{ width:22px; height:22px; }
+  .promo-choices{ display:flex; gap:8px; }
+  .promo-choice{
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:10px 4px;
+    cursor:pointer;
+    font-family:'Cinzel',serif;
+    font-size:11.5px;
+    color:var(--ink);
+    transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;
+  }
+  .promo-choice:hover{ border-color:var(--brass-bright); box-shadow:var(--shadow-contact); transform:translateY(-1px); }
+  .promo-choice:active{ transform:translateY(1px); }
+  .promo-choice:focus-visible{ outline:2px solid var(--brass-ink); outline-offset:2px; }
   .unit-card .g.ascended, #selected-info .g.ascended{
     border-color:var(--brass-bright);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.28), 0 0 6px rgba(201,162,75,.5);
-    text-shadow:0 0 6px var(--brass-bright);
+  }
+  .unit-card .g.ascended .glyph-svg, #selected-info .g.ascended .glyph-svg{
+    filter:drop-shadow(0 0 3px var(--brass-bright));
   }
   .unit-card .name{ font-weight:600; font-size:14px; }
   .unit-card .cls{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.05em; }
@@ -849,7 +1015,7 @@
   .log p:last-child{ border-bottom:none; }
   .log .dmg{ color:var(--ember); font-family:'JetBrains Mono',monospace; }
   .log .heal{ color:var(--sage); font-family:'JetBrains Mono',monospace; }
-  .log .quote{ color:var(--brass-bright); font-style:italic; }
+  .log .quote{ color:var(--brass-ink); font-style:italic; }
 
   button.action{
     width:100%;
@@ -857,15 +1023,17 @@
     letter-spacing:.05em;
     text-transform:uppercase;
     font-size:13px;
-    background:linear-gradient(180deg, var(--brass-bright), var(--brass) 65%, #8a691f 100%);
+    background:linear-gradient(180deg, var(--brass-bright), var(--brass) 65%, var(--brass-deep) 100%);
     color:#1c1509;
     border:none;
     border-radius:4px;
     padding:10px;
+    min-height:44px;
     cursor:pointer;
     margin-top:4px;
     box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 1px 3px rgba(0,0,0,.25);
     transition:transform .08s ease, box-shadow .08s ease, filter .12s ease;
+    touch-action:manipulation;
   }
   button.action:hover{
     filter:brightness(1.06);
@@ -878,7 +1046,7 @@
   button.action.ghost{
     background:transparent;
     border:1.5px solid var(--brass);
-    color:var(--brass-bright);
+    color:var(--brass-ink);
     box-shadow:none;
   }
   button.action.ghost:hover{ background:rgba(201,162,75,.08); filter:none; }
@@ -897,29 +1065,59 @@
   .banner p.run-stats{ margin:-8px 0 14px; font-size:12.5px; font-family:'JetBrains Mono',monospace; letter-spacing:.02em; }
   .banner button{ max-width:220px; margin:0 auto; }
   .dedication-banner{
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201,162,75,.14), transparent 65%),
-      var(--panel-2);
-    border-color:var(--brass-bright);
-    padding-top:34px;
-    padding-bottom:32px;
+    padding:0;
+    overflow:hidden;
+    border:3px solid var(--ink);
+    border-radius:6px;
   }
-  .dedication-banner h2{ font-size:26px; color:var(--brass-bright); }
+  .dedication-art{
+    position:relative;
+    background:
+      radial-gradient(ellipse 90% 80% at 50% 15%, rgba(255,255,255,.18), transparent 60%),
+      linear-gradient(165deg, var(--region-accent, var(--brass-bright)) 0%, rgba(0,0,0,.55) 150%);
+    padding:28px 16px 22px;
+    overflow:hidden;
+  }
+  .dedication-sigil-bg{
+    position:absolute; top:50%; left:50%; width:220%; height:280%;
+    transform:translate(-50%,-50%);
+    color:rgba(255,255,255,.14);
+    pointer-events:none;
+  }
+  .dedication-badge{
+    position:relative; width:56px; height:56px; margin:0 auto 12px; border-radius:50%;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.2), transparent 55%), rgba(0,0,0,.28);
+    border:1.5px solid rgba(255,255,255,.55);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    box-shadow:0 3px 10px rgba(0,0,0,.3);
+  }
+  .dedication-badge svg{ width:30px; height:30px; }
+  .dedication-art h2{
+    position:relative; margin:0; font-size:26px; color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.45);
+  }
+  .dedication-body{ padding:22px 20px 26px; text-align:center; }
   .dedication{
-    margin:18px auto 22px;
+    margin:0 auto 18px;
     max-width:44ch;
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    padding:12px 18px;
+    box-shadow:3px 3px 0 rgba(0,0,0,.16);
     font-family:'Crimson Pro',Georgia,serif;
     font-style:italic;
-    font-size:19px;
+    font-size:18px;
     line-height:1.6;
     color:var(--ink);
-    border:none;
-    padding:0;
   }
 
   /* ---------- Codex ---------- */
   .codex{
-    background:var(--panel);
+    background:var(--wood-grain-fine), var(--panel);
+    background-size:120px 60px, auto;
+    background-blend-mode:multiply, normal;
     border:none;
     border-top:3px double var(--brass);
     border-radius:0 0 6px 6px;
@@ -928,8 +1126,14 @@
     max-width:820px;
     margin:0 auto;
   }
-  .codex h2{ font-size:22px; color:var(--brass-bright); margin:28px 0 8px; }
+  .codex h2{ font-size:22px; color:var(--brass-ink); margin:28px 0 8px; }
   .codex h2:first-child{ margin-top:0; }
+  .codex h2.codex-title{
+    font-size:clamp(28px,4.5vw,38px);
+    text-align:center;
+    margin:0 0 18px;
+    letter-spacing:.01em;
+  }
   .codex h3{ font-size:16px; margin:18px 0 6px; color:var(--ink); }
   .codex p{ line-height:1.65; margin:0 0 10px; }
   .codex .lede{ font-style:italic; color:var(--ink-dim); font-size:17px; border-left:3px solid var(--brass); padding-left:14px; }
@@ -952,8 +1156,43 @@
   .class-card .n{ font-family:'Cinzel',serif; font-size:14px; letter-spacing:.02em; }
   .class-card .piece-of{ font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.04em; }
   .class-card p{ font-size:13.5px; margin:0; color:var(--ink-dim); }
+  .chronicle-entry{
+    border:1px solid var(--line);
+    border-left:3px solid var(--brass);
+    border-radius:2px;
+    background:var(--panel-2);
+    padding:16px 18px;
+    margin:0 0 14px;
+  }
+  .chronicle-head{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .chronicle-sigil{
+    width:38px; height:38px; border-radius:50%; flex:none;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.14), transparent 55%), var(--panel);
+    border:1px solid var(--brass); display:flex; align-items:center; justify-content:center;
+  }
+  .chronicle-sigil svg{ width:20px; height:20px; }
+  .chronicle-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); }
+  .chronicle-entry h3{ margin:2px 0 0; font-size:17px; color:var(--ink); }
+  .chronicle-tagline{ font-style:italic; color:var(--ink-dim); font-size:13px; margin:2px 0 0; }
+  .chronicle-entry .establishing{ font-size:13.5px; color:var(--ink-dim); margin:10px 0 12px; line-height:1.6; }
+  .chronicle-boss{ display:flex; align-items:center; gap:12px; padding-top:10px; border-top:1px solid var(--line); }
+  .chronicle-boss .medallion{
+    width:44px; height:44px; border-radius:50%; flex:none;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.12), transparent 55%), radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  }
+  .chronicle-boss .medallion .glyph-svg{ width:24px; height:24px; }
+  .chronicle-boss .boss-title{ font-family:'Cinzel',serif; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ember); margin:0; }
+  .chronicle-boss .boss-name{ font-family:'Cinzel',serif; font-size:14.5px; color:var(--ink); margin:1px 0 3px; }
+  .chronicle-boss .boss-quote{ font-style:italic; font-size:12.5px; color:var(--ink-dim); margin:0; }
+  .chronicle-entry.locked{ opacity:.65; }
+  .chronicle-entry.locked .chronicle-sigil{ color:var(--ink-dim); }
+  .chronicle-entry.locked h3{ color:var(--ink-dim); }
   .table-scroll{ overflow-x:auto; margin:8px 0 18px; -webkit-overflow-scrolling:touch; }
   .codex table{ width:100%; min-width:480px; border-collapse:collapse; font-size:13.5px; margin:0; }
+  .codex .credits{ margin:18px 0 0; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink-dim); }
+  .codex .credits a{ color:var(--ink-dim); text-decoration:underline; text-underline-offset:2px; }
+  .codex .credits a:hover{ color:var(--brass-ink); }
   .codex th,.codex td{ text-align:left; padding:6px 10px; border-bottom:1px solid var(--line); }
   .codex th{ font-family:'Cinzel',serif; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-dim); }
 
@@ -978,9 +1217,9 @@
     max-width:420px;
     box-shadow:var(--shadow);
   }
-  .tutorial-card h2{ margin:0 0 16px; font-size:19px; color:var(--brass-bright); }
+  .tutorial-card h2{ margin:0 0 16px; font-size:19px; color:var(--brass-ink); }
   .tutorial-row{ display:flex; gap:12px; align-items:baseline; margin-bottom:10px; }
-  .tutorial-key{ flex:0 0 70px; font-family:'Cinzel',serif; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--brass); }
+  .tutorial-key{ flex:0 0 70px; font-family:'Cinzel',serif; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--brass-ink); }
   .tutorial-row span:last-child{ font-size:14px; line-height:1.5; }
   .tutorial-card .action{ margin-top:14px; max-width:200px; }
 
@@ -998,6 +1237,247 @@
 </style>
 </head>
 <body>
+<!--
+  Piece silhouettes below are the "cburnett" chess set by Colin M.L. Burnett
+  (https://en.wikipedia.org/wiki/User:Cburnett), used under GPLv2+ as published
+  by lichess.org (github.com/lichess-org/lila, public/piece/cburnett). Original
+  fills/strokes stripped so the shapes inherit this game's own gradient tokens.
+-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="pieceGradPlayer" x1="15%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" class="grad-player-hi"/>
+      <stop offset="45%" class="grad-player-mid"/>
+      <stop offset="100%" class="grad-player-lo"/>
+    </linearGradient>
+    <linearGradient id="pieceGradEnemy" x1="15%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" class="grad-enemy-hi"/>
+      <stop offset="45%" class="grad-enemy-mid"/>
+      <stop offset="100%" class="grad-enemy-lo"/>
+    </linearGradient>
+
+    <symbol id="pc-king" viewBox="0 0 45 45">
+      <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+        <path fill="none" stroke-linejoin="miter" d="M22.5 11.63V6M20 8h5"/>
+        <path stroke-linecap="butt" stroke-linejoin="miter" d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"/>
+        <path d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10z"/>
+        <path fill="none" d="M11.5 30c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0"/>
+      </g>
+    </symbol>
+
+    <symbol id="pc-queen" viewBox="0 0 45 45">
+      <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+        <path d="M8 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0m16.5-4.5a2 2 0 1 1-4 0 2 2 0 1 1 4 0M41 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0M16 8.5a2 2 0 1 1-4 0 2 2 0 1 1 4 0M33 9a2 2 0 1 1-4 0 2 2 0 1 1 4 0"/>
+        <path stroke-linecap="butt" d="M9 26c8.5-1.5 21-1.5 27 0l2-12-7 11V11l-5.5 13.5-3-15-3 15-5.5-14V25L7 14z"/>
+        <path stroke-linecap="butt" d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"/>
+        <path fill="none" d="M11.5 30c3.5-1 18.5-1 22 0M12 33.5c6-1 15-1 21 0"/>
+      </g>
+    </symbol>
+
+    <symbol id="pc-rook" viewBox="0 0 45 45">
+      <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+        <path stroke-linecap="butt" d="M9 39h27v-3H9zm3-3v-4h21v4zm-1-22V9h4v2h5V9h5v2h5V9h4v5"/>
+        <path d="m34 14-3 3H14l-3-3"/>
+        <path stroke-linecap="butt" stroke-linejoin="miter" d="M31 17v12.5H14V17"/>
+        <path d="m31 29.5 1.5 2.5h-20l1.5-2.5"/>
+        <path fill="none" stroke-linejoin="miter" d="M11 14h23"/>
+      </g>
+    </symbol>
+
+    <symbol id="pc-bishop" viewBox="0 0 45 45">
+      <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+        <g stroke-linecap="butt">
+          <path d="M9 36c3.39-.97 10.11.43 13.5-2 3.39 2.43 10.11 1.03 13.5 2 0 0 1.65.54 3 2-.68.97-1.65.99-3 .5-3.39-.97-10.11.46-13.5-1-3.39 1.46-10.11.03-13.5 1-1.35.49-2.32.47-3-.5 1.35-1.94 3-2 3-2z"/>
+          <path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z"/>
+          <path d="M25 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 1 1 5 0z"/>
+        </g>
+        <path fill="none" stroke-linejoin="miter" d="M17.5 26h10M15 30h15m-7.5-14.5v5M20 18h5"/>
+      </g>
+    </symbol>
+
+    <symbol id="pc-knight" viewBox="0 0 45 45">
+      <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+        <path stroke-linecap="butt" d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"/>
+        <path stroke-linecap="butt" d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.042-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4.003 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-.994-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-1.992 2.5-3c1 0 1 3 1 3"/>
+        <path class="piece-eye" d="M9.5 25.5a.5.5 0 1 1-1 0 .5.5 0 1 1 1 0m5.433-9.75a.5 1.5 30 1 1-.866-.5.5 1.5 30 1 1 .866.5"/>
+      </g>
+    </symbol>
+
+    <symbol id="pc-pawn" viewBox="0 0 45 45">
+      <path stroke-linecap="round" stroke-width="1.5" d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47 1.47-1.19 2.41-3 2.41-5.03 0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4z"/>
+    </symbol>
+
+    <!-- Region sigils: simple engraved line marks, not illustrations, tinted per region via currentColor. -->
+    <symbol id="sigil-gate" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 26V10M23 26V10M9 10a7 7 0 0 1 14 0"/>
+        <path d="M16 10l-2 6 4 4-3 6"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-marsh" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 11q4-3 8 0t8 0t8 0M4 17q4-3 8 0t8 0t8 0M4 23q4-3 8 0t8 0t8 0"/>
+        <path d="M11 23 10 6M19 23l1-15"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-ember" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 17 10 7M16 17l6-11M16 17l10-2M16 17l7 9M16 17 7 24M16 17 5 13"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-drowned" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 6v20M16 6v20M23 6v20M6 6h6M13 6h6M20 6h6"/>
+        <path d="M3 18q5-3 10 0t10 0t6 0"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-throne" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 26V8h12v18M10 18h12M7 26h18"/>
+        <path d="M11 8V4l2 2 2-3 2 3 2-2 2 2 2-2v4"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-void" viewBox="0 0 32 32">
+      <g fill="currentColor">
+        <circle cx="8" cy="10" r="1.1"/>
+        <circle cx="21" cy="7" r="1.3"/>
+        <circle cx="14" cy="18" r=".9"/>
+        <circle cx="25" cy="22" r="1.1"/>
+        <circle cx="6" cy="24" r="1"/>
+        <circle cx="18" cy="26" r="1.2"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-undercroft" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 15a10 9 0 0 1 20 0"/>
+        <path d="M8 15v3h4v3h4v3h4v3h4"/>
+      </g>
+    </symbol>
+    <symbol id="sigil-edge" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 27 15 9M21 27 17 9M13 9h4"/>
+      </g>
+      <g fill="currentColor">
+        <circle cx="23" cy="8" r="1"/>
+        <circle cx="27" cy="14" r=".8"/>
+        <circle cx="25" cy="21" r="1.1"/>
+      </g>
+    </symbol>
+
+    <!-- Champion silhouettes: flat geometric figures for the pre-battle intro panel. -->
+    <symbol id="sil-thorne" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="56" cy="26" r="12"/>
+        <path d="M28 42 L44 42 L36 52 L26 52 Z"/>
+        <path d="M68 42 L84 42 L86 52 L74 52 Z"/>
+        <path d="M32 44 L80 44 L88 68 L78 130 L34 130 L24 68 Z"/>
+        <path d="M34 130 L46 130 L42 195 L30 195 Z"/>
+        <path d="M66 130 L78 130 L82 195 L70 195 Z"/>
+        <path d="M98 18 L102 18 L102 172 L98 172 Z"/>
+        <path d="M100 8 L108 30 L100 46 L92 30 Z"/>
+        <path d="M84 38 L100 30 L100 42 L88 48 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-ysolt" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="52" cy="24" r="11"/>
+        <path d="M40 38 L64 38 L60 150 L44 150 Z"/>
+        <path d="M40 38 L14 60 L20 150 L44 150 L48 60 Z"/>
+        <path d="M64 38 L96 46 L90 130 L60 150 Z"/>
+        <path d="M46 150 L58 150 L54 195 L44 195 Z"/>
+        <path d="M90 62 L112 50 L114 56 L94 70 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-vesk" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <path d="M56 6 L70 30 L42 30 Z"/>
+        <path d="M46 30 L66 30 L82 100 L76 150 L68 130 L60 150 L52 130 L44 150 L36 100 Z"/>
+        <path d="M46 150 L56 150 L52 195 L42 195 Z"/>
+        <path d="M96 20 L100 20 L100 175 L96 175 Z"/>
+        <path d="M98 6 Q112 16 98 32 Q84 16 98 6 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-maren" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="58" cy="26" r="12"/>
+        <path d="M44 40 L72 40 L90 150 Q58 162 26 150 Z"/>
+        <path d="M40 60 L20 90 L26 96 L44 70 Z"/>
+        <path d="M20 40 L28 40 L28 100 L20 100 Z"/>
+        <circle cx="24" cy="36" r="7"/>
+      </g>
+    </symbol>
+    <symbol id="sil-sovereign" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="58" cy="26" r="12"/>
+        <path d="M40 12 L46 12 L46 2 L52 12 L58 0 L64 12 L70 2 L70 12 L76 12 L76 16 L40 16 Z"/>
+        <path d="M40 40 L76 40 L100 155 Q58 168 16 155 Z"/>
+        <path d="M42 60 L36 60 L34 130 L40 130 Z"/>
+        <path d="M74 60 L80 60 L82 130 L76 130 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-osric" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="66" cy="44" r="11"/>
+        <path d="M40 56 L82 60 L76 150 L40 148 Z"/>
+        <path d="M34 78 L64 68 L68 90 L38 100 Z"/>
+        <path d="M50 150 L62 150 L58 195 L46 195 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-wren" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <ellipse cx="56" cy="24" rx="22" ry="6"/>
+        <circle cx="56" cy="26" r="10"/>
+        <path d="M44 38 L70 38 L82 150 L32 150 Z"/>
+        <path d="M22 92 L38 92 L40 122 L20 122 Z"/>
+        <path d="M46 150 L58 150 L54 195 L44 195 Z"/>
+        <path d="M96 10 L100 10 L98 150 L94 150 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-elite-guard" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="56" cy="26" r="12"/>
+        <path d="M30 42 L82 42 L88 68 L78 130 L34 130 L24 68 Z"/>
+        <path d="M34 130 L46 130 L42 195 L30 195 Z"/>
+        <path d="M66 130 L78 130 L82 195 L70 195 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-elite-rider" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="52" cy="24" r="11"/>
+        <path d="M40 38 L64 38 L60 150 L44 150 Z"/>
+        <path d="M40 38 L14 60 L20 150 L44 150 L48 60 Z"/>
+        <path d="M64 38 L96 46 L90 130 L60 150 Z"/>
+        <path d="M46 150 L58 150 L54 195 L44 195 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-elite-mystic" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <path d="M58 6 L72 30 L44 30 Z"/>
+        <path d="M48 30 L68 30 L84 100 L76 150 Q58 160 40 150 L32 100 Z"/>
+      </g>
+    </symbol>
+
+    <!-- Achievement icons: same engraved line-mark language as the region sigils. -->
+    <symbol id="ach-firstblood" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M16 6c5 7 8 11 8 15a8 8 0 1 1-16 0c0-4 3-8 8-15z"/>
+    </symbol>
+    <symbol id="ach-ascendant" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M16 4l3.5 9H29l-7.5 5.5L24 28l-8-5.7L8 28l2.5-9.5L3 13h9.5z"/>
+    </symbol>
+    <symbol id="ach-giantslayer" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 7l18 18M7 10V7h3M25 22v3h-3"/>
+        <path d="M25 7l-18 18M25 10V7h-3M7 22v3h3"/>
+      </g>
+    </symbol>
+    <symbol id="ach-flawless" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M16 4l10 4v8c0 7-4.5 11-10 12-5.5-1-10-5-10-12V8z"/>
+    </symbol>
+    <symbol id="ach-conqueror" viewBox="0 0 32 32">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 25h22l-2-12-6 6-3-10-3 10-6-6z"/>
+    </symbol>
+  </defs>
+</svg>
 
 <div class="shell">
   <header class="top">
@@ -1007,6 +1487,7 @@
     </div>
     <div class="tabs" role="tablist" aria-label="View">
       <button class="tab-btn" id="tab-battle" role="tab" aria-selected="true" aria-controls="view-battle">Battle</button>
+      <button class="tab-btn" id="tab-chronicle" role="tab" aria-selected="false" aria-controls="view-chronicle">Chronicle</button>
       <button class="tab-btn" id="tab-codex" role="tab" aria-selected="false" aria-controls="view-codex">Codex</button>
       <button class="tab-btn ghost-tab" id="sound-toggle" aria-pressed="false">Sound On</button>
       <button class="tab-btn ghost-tab" id="settings-toggle" aria-haspopup="true" aria-expanded="false">Settings</button>
@@ -1067,8 +1548,11 @@
     <div id="view-map" hidden>
       <div class="map-wrap">
         <div class="map-head">
-          <h2>Region <span id="region-num" class="mono">1</span>: <span id="region-name">The Broken Gate</span></h2>
-          <p id="region-tagline" class="region-tagline">Where the road out of the ruin begins.</p>
+          <div class="region-sigil" id="region-sigil" aria-hidden="true"><svg viewBox="0 0 32 32"><use id="region-sigil-use" href="#sigil-gate"></use></svg></div>
+          <div class="map-head-title">
+            <h2>Region <span id="region-num" class="mono">1</span>: <span id="region-name">The Broken Gate</span></h2>
+            <p id="region-tagline" class="region-tagline">Where the road out of the ruin begins.</p>
+          </div>
           <p>Choose your path. Each waypoint is a fight, a rest, or a shrine's blessing. The road forks, and once you move on there's no going back.</p>
         </div>
         <div class="map-scroll"><svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg></div>
@@ -1078,7 +1562,7 @@
           <span><i style="background:var(--sage);opacity:.5"></i>Rest</span>
           <span><i style="background:var(--brass-bright);opacity:.5"></i>Shrine</span>
           <span><i style="background:var(--brass);opacity:.5"></i>Cache</span>
-          <span><i style="background:var(--player);opacity:.5"></i>Wayfarer</span>
+          <span><i style="background:var(--player-accent);opacity:.5"></i>Wayfarer</span>
           <span><i style="background:var(--ink-dim);opacity:.6"></i>Region Boss</span>
         </div>
         <div id="shrine-slot"></div>
@@ -1090,12 +1574,14 @@
         <div class="board-wrap">
           <div class="board-coords">
             <div class="ranks"><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
-            <div class="board-frame">
+            <div class="board-molding">
               <span class="rivet rivet-tl" aria-hidden="true"></span>
               <span class="rivet rivet-tr" aria-hidden="true"></span>
               <span class="rivet rivet-bl" aria-hidden="true"></span>
               <span class="rivet rivet-br" aria-hidden="true"></span>
-              <div class="board" id="board"></div>
+              <div class="board-frame">
+                <div class="board" id="board" role="group" aria-label="Chess board, 8 by 8"></div>
+              </div>
             </div>
             <div class="files"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
           </div>
@@ -1119,7 +1605,7 @@
           </div>
           <div class="panel">
             <h2>Chronicle</h2>
-            <div class="log" id="log"></div>
+            <div class="log" id="log" role="log" aria-live="polite" aria-atomic="false"></div>
           </div>
           <button class="action ghost" id="end-turn">End Round</button>
         </div>
@@ -1129,7 +1615,7 @@
 
   <section id="view-codex" hidden>
     <div class="codex">
-      <h2>What This Is</h2>
+      <h2 class="codex-title">Checkmate &amp; Ruin</h2>
       <p class="lede">Chess supplies the board and the geometry of movement. The RPG supplies everything chess refuses to have: hit points, growth, and consequence that isn't instant. A capture in chess removes a piece forever, in one motion, with no in-between. Here, every attack is a fight: pieces have health, deal damage ranges, sometimes miss their kill, and sometimes survive to fight again next round.</p>
 
       <h2>How a Round Works</h2>
@@ -1169,6 +1655,16 @@
         </tbody>
       </table>
       </div>
+
+      <p class="credits">Piece artwork: the "cburnett" chess set by <a href="https://en.wikipedia.org/wiki/User:Cburnett" target="_blank" rel="noopener">Colin M.L. Burnett</a>, used under <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank" rel="noopener">GPLv2+</a> as published by <a href="https://github.com/lichess-org/lila" target="_blank" rel="noopener">lichess.org</a>.</p>
+    </div>
+  </section>
+
+  <section id="view-chronicle" hidden>
+    <div class="codex chronicle">
+      <h2 class="codex-title">The Ruin Campaign</h2>
+      <p class="lede">Who guards each stretch of road, and what they say before the fight. Entries reveal themselves as the company presses further in.</p>
+      <div id="chronicle-list"></div>
     </div>
   </section>
 </div>
@@ -1198,11 +1694,17 @@
     pawn:   { name:"Recruit",  of:"Pawn",    hp:14, atk:5,  def:3, glyph:"♟", desc:"Fragile but numerous. Reaching the far rank promotes it into a Ranger, Cleric, or Warden of your choosing." },
   };
 
+  // Renders one of the six carved piece shapes (see the <symbol> defs near the top of
+  // <body>) tinted with this game's own player/enemy material gradients.
+  function pieceIconHTML(type, team){
+    return `<svg class="glyph-svg ${team}" viewBox="0 0 45 45" aria-hidden="true"><use href="#pc-${type}"></use></svg>`;
+  }
+
   function renderCodexClasses(){
     const grid = document.getElementById('codex-classes');
     grid.innerHTML = Object.entries(CLASSES).map(([key,c])=>`
       <div class="class-card">
-        <div class="h"><span class="g">${c.glyph}</span><div>
+        <div class="h"><span class="g">${pieceIconHTML(key,'neutral')}</span><div>
           <div class="n">${c.name}</div>
           <div class="piece-of">from the ${c.of}</div>
         </div></div>
@@ -1210,6 +1712,42 @@
       </div>`).join('');
   }
   renderCodexClasses();
+
+  // Reveals one entry per authored region, gated by how far this viewer has actually
+  // gotten (the current save's region, or the deepest a past run reached). Region 1 is
+  // always shown since it's the very first thing a new company sees.
+  function renderChronicle(){
+    const list = document.getElementById('chronicle-list');
+    const hall = loadHall();
+    const save = loadSave();
+    const depth = Math.max(hall.bestRegion||0, save ? save.region : 0, 1);
+    list.innerHTML = REGIONS.map((rg,i)=>{
+      const num = i+1;
+      if(num > depth){
+        return `<div class="chronicle-entry locked">
+          <div class="chronicle-head">
+            <div class="chronicle-sigil"><svg viewBox="0 0 32 32"><use href="#sigil-void"></use></svg></div>
+            <div><div class="chronicle-eyebrow">Region ${num}</div><h3>Not yet reached</h3></div>
+          </div>
+        </div>`;
+      }
+      return `<div class="chronicle-entry">
+        <div class="chronicle-head">
+          <div class="chronicle-sigil" style="color:${rg.accent}"><svg viewBox="0 0 32 32"><use href="#sigil-${rg.sigil}"></use></svg></div>
+          <div><div class="chronicle-eyebrow">Region ${num}</div><h3>${rg.name}</h3><p class="chronicle-tagline">${rg.tagline}</p></div>
+        </div>
+        <p class="establishing">${rg.establishing}</p>
+        <div class="chronicle-boss">
+          <div class="medallion">${pieceIconHTML(rg.bossGlyph,'enemy')}</div>
+          <div>
+            <p class="boss-title">${rg.bossTitle}</p>
+            <p class="boss-name">${rg.boss}</p>
+            <p class="boss-quote">&ldquo;${rg.bossQuote}&rdquo;</p>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
 
   /* ---------------- Settings ---------------- */
   const SETTINGS_KEY = 'checkmateAndRuinSettings';
@@ -1267,6 +1805,20 @@
     document.getElementById('settings-toggle').setAttribute('aria-expanded', 'false');
   });
 
+  // Tooltips are hover-only by default, which touch devices can't reach.
+  // A tap toggles the tip open instead, everywhere except on the board
+  // itself, where a tap on a piece has to keep selecting/acting on it.
+  document.addEventListener('click', e=>{
+    const tip = e.target.closest('.tooltip');
+    if(tip && !tip.closest('#board')){
+      const wasActive = tip.classList.contains('tap-active');
+      document.querySelectorAll('.tooltip.tap-active').forEach(t=> t.classList.remove('tap-active'));
+      tip.classList.toggle('tap-active', !wasActive);
+    } else {
+      document.querySelectorAll('.tooltip.tap-active').forEach(t=> t.classList.remove('tap-active'));
+    }
+  });
+
   applySettings();
 
   /* ---------------- Sound (synthesized, no audio files) ---------------- */
@@ -1277,6 +1829,9 @@
       if(Ctx) audioCtx = new Ctx();
     }
     return audioCtx;
+  }
+  function vibrate(pattern){
+    if(navigator.vibrate) navigator.vibrate(pattern);
   }
   function playSfx(kind){
     if(settings.sound!=='on') return;
@@ -1313,17 +1868,22 @@
 
   /* ---------------- Tabs ---------------- */
   const tabBattle = document.getElementById('tab-battle');
+  const tabChronicle = document.getElementById('tab-chronicle');
   const tabCodex  = document.getElementById('tab-codex');
   const viewBattle = document.getElementById('view-battle');
+  const viewChronicle = document.getElementById('view-chronicle');
   const viewCodex  = document.getElementById('view-codex');
   function selectTab(which){
-    const isBattle = which==='battle';
-    tabBattle.setAttribute('aria-selected', isBattle);
-    tabCodex.setAttribute('aria-selected', !isBattle);
-    viewBattle.hidden = !isBattle;
-    viewCodex.hidden = isBattle;
+    tabBattle.setAttribute('aria-selected', which==='battle');
+    tabChronicle.setAttribute('aria-selected', which==='chronicle');
+    tabCodex.setAttribute('aria-selected', which==='codex');
+    viewBattle.hidden = which!=='battle';
+    viewChronicle.hidden = which!=='chronicle';
+    viewCodex.hidden = which!=='codex';
+    if(which==='chronicle') renderChronicle();
   }
   tabBattle.addEventListener('click', ()=>selectTab('battle'));
+  tabChronicle.addEventListener('click', ()=>selectTab('chronicle'));
   tabCodex.addEventListener('click', ()=>selectTab('codex'));
 
   /* ---------------- Game state ---------------- */
@@ -1350,56 +1910,89 @@
     wayfarer: { icon:'❢', label:'Wayfarer' },
     boss:     { icon:'♚', label:'Boss' },
   };
-  // The campaign's five regions, in order. Each region's boss is a fixed, named
+  // The campaign's authored regions, in order. Each region's boss is a fixed, named
   // character (not drawn from the elite pool) so the story has a consistent cast.
   const REGIONS = [
     {
       name:'The Broken Gate', tagline:'Where the road out of the ruin begins.',
+      accent:'#8a7a52', sigil:'gate',
+      establishing:'A gatehouse built to keep something out, now only keeping count of what gets through. Wagon ruts run under the arch and stop, mid-track, the way everything in the ruin stops mid-motion. Thorne has held this post since before anyone thought to ask him to stop.',
       battleFlavor:'A patrol blocks the gate road.',
       eliteFlavor:'{name} holds the gate with a hardened company.',
       clearFlavor:'The gate falls open. Nothing guards the road behind it now.',
-      boss:'Thorne the Unyielding', bossTitle:'Warden of the Broken Gate', bossGlyph:'♜',
+      boss:'Thorne the Unyielding', bossTitle:'Warden of the Broken Gate', bossGlyph:'rook', bossSil:'sil-thorne',
       bossFlavor:'{name} takes the field, and the gate itself seems to lean in to watch.',
       bossQuote:'None pass the gate. Not living, not dead, not you.',
     },
     {
       name:'The Salt Marches', tagline:'Flooded fields where the old cavalry drowned.',
+      accent:'#3f6b6a', sigil:'marsh',
+      establishing:'Ground that used to be a road is now a suggestion. The company wades more than it walks, and every splash sounds like a warning. Ysolt still rides here, or walks where a horse would drown, patrolling a border that stopped mattering years ago.',
       battleFlavor:'A company wades out of the reeds to meet you.',
       eliteFlavor:'{name} commands the marsh from a rise of dry ground.',
       clearFlavor:'The marches go quiet. Somewhere under the water, the old cavalry finally rests.',
-      boss:'Ysolt the Pale Rider', bossTitle:'Last Rider of the Marches', bossGlyph:'♞',
+      boss:'Ysolt the Pale Rider', bossTitle:'Last Rider of the Marches', bossGlyph:'knight', bossSil:'sil-ysolt',
       bossFlavor:'{name} takes the field on foot. There has been no horse for a long time.',
       bossQuote:'I rode faster than the fall. It caught me anyway.',
     },
     {
       name:'The Ember Wastes', tagline:"Ash fields where the court's magic finally broke.",
+      accent:'#b8541f', sigil:'ember',
+      establishing:"This is where the old kingdom's last working spell went off, and it is still going off, in a way, every time the wind moves the ash into new shapes. Vesk stands at the center of it because Vesk was standing at the center of it when it happened, and never quite left.",
       battleFlavor:'Figures move through the ash haze, closing in.',
       eliteFlavor:'{name} stands where the fire burned hottest.',
       clearFlavor:'The ash settles. Halfway through the ruin, and the company is still standing.',
-      boss:'Vesk the Hollow Blade', bossTitle:'Ashbound Battlemage', bossGlyph:'♛',
+      boss:'Vesk the Hollow Blade', bossTitle:'Ashbound Battlemage', bossGlyph:'queen', bossSil:'sil-vesk',
       bossFlavor:'{name} takes the field, and the air around them still tastes of old fire.',
       bossQuote:'Power was supposed to save us. Ask the ash how that went.',
     },
     {
       name:'The Drowned Court', tagline:'The throne room, filled to the windows with grey water.',
+      accent:'#2f4a68', sigil:'drowned',
+      establishing:'Water found the lowest point in the old capital and stayed there, which happened to be the throne room. Maren still keeps the appointments she used to keep, tending patients who are no longer here, in a room that no longer has a king to report to.',
       battleFlavor:'A company forms up between the flooded columns.',
       eliteFlavor:'{name} guards a stairway that no longer leads anywhere dry.',
       clearFlavor:'The water stills. Somewhere above it, the last stretch of road waits.',
-      boss:'Maren of the Broken Rank', bossTitle:'Keeper of the Drowned Court', bossGlyph:'♝',
+      boss:'Maren of the Broken Rank', bossTitle:'Keeper of the Drowned Court', bossGlyph:'bishop', bossSil:'sil-maren',
       bossFlavor:'{name} takes the field between the flooded pillars of a throne room with no throne.',
       bossQuote:'I healed kings until there were none left to heal.',
     },
     {
       name:"The Ruin's Heart", tagline:'What is left of the Sovereign who let it all fall.',
+      accent:'#7a3a5c', sigil:'throne',
+      establishing:'There is no more court here, no more gate, no more water to wade through. Just a throne, a King who never left it, and a company that has walked the length of a fallen kingdom to reach one occupied chair.',
       battleFlavor:'The last of the loyal guard forms a line, more out of habit than hope.',
       eliteFlavor:'{name} fights for a throne that no longer exists.',
-      clearFlavor:'',
-      boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin', bossGlyph:'♚',
+      clearFlavor:'The throne room empties out. It should feel like the end of something.',
+      boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin', bossGlyph:'king', bossSil:'sil-sovereign',
       bossFlavor:'{name} takes the field at last, alone, exactly as it wanted.',
       bossQuote:'Sit the throne if you want it. See how long you last.',
     },
+    {
+      name:'The Undercroft', tagline:'Beneath the throne, a stair no one admitted was there.',
+      accent:'#6b6b78', sigil:'undercroft',
+      establishing:'Beneath the throne room is a stair the old maps never marked, and a door that opened days ago for the first time in longer than anyone kept records for. Osric has been down here the whole time, writing everything down, waiting for someone to finally read it.',
+      battleFlavor:'A company rises from the dark stair to meet you, pale, like they have not seen the field above in years.',
+      eliteFlavor:'{name} has guarded this stair longer than the throne room above remembers having one.',
+      clearFlavor:'The undercroft empties out. Whatever this place was keeping, it is not keeping it anymore.',
+      boss:'Osric the Unwritten', bossTitle:'Keeper of the Undercroft', bossGlyph:'pawn', bossSil:'sil-osric',
+      bossFlavor:'{name} takes the field surrounded by shelves of records no living hand has touched in years.',
+      bossQuote:'Every story needs an ending. No one gave me permission to write one.',
+    },
+    {
+      name:'The Last Mile', tagline:'Where the map runs out and the road becomes a guess.',
+      accent:'#5f6a78', sigil:'edge',
+      establishing:'Past the undercroft, the ground stops matching any map the company carried in. Wren drew as much of it as anyone ever dared, then stopped drawing and stayed here instead, at the exact point where the ink runs out.',
+      battleFlavor:'A company forms up at the very edge of anything mapped, unsure it should exist here at all.',
+      eliteFlavor:"{name} holds a line that, by any honest map, should not be here to hold.",
+      clearFlavor:'',
+      boss:'Wren the Last Cartographer', bossTitle:"Keeper of the Map's End", bossGlyph:'queen', bossSil:'sil-wren',
+      bossFlavor:'{name} takes the field where the last ink on the last map runs dry.',
+      bossQuote:'I drew as far as I dared. Past here, you are drawing for yourself.',
+    },
   ];
   const FINAL_REGION = REGIONS.length;
+  const BOSS_SILS = REGIONS.map(rg=>rg.bossSil);
   // Past the authored campaign (region > FINAL_REGION), the codex promises the run
   // "continues indefinitely as a personal high-score". These entries are synthesized
   // once per depth and cached, so the endless mode still has a name, a boss, and a line.
@@ -1418,12 +2011,14 @@
     const info = {
       name:`Beyond the Ruin, Depth ${depth}`,
       tagline:"Nothing this far out has a name anymore.",
+      accent:'#5a5248', sigil:'void',
       battleFlavor:'A company forms up out of the grey, indistinct.',
       eliteFlavor:'{name} leads them, for no reason anyone remembers.',
       clearFlavor:'The company presses on, past where the map used to end.',
       boss: ELITE_NAMES[Math.floor(Math.random()*ELITE_NAMES.length)],
       bossTitle: ENDLESS_TITLES[Math.floor(Math.random()*ENDLESS_TITLES.length)],
-      bossGlyph: ['♚','♛','♜','♝','♞'][Math.floor(Math.random()*5)],
+      bossGlyph: ['king','queen','rook','bishop','knight'][Math.floor(Math.random()*5)],
+      bossSil: BOSS_SILS[Math.floor(Math.random()*BOSS_SILS.length)],
       bossFlavor:'{name} takes the field, one more nameless line in an endless one.',
       bossQuote: ENDLESS_QUOTES[Math.floor(Math.random()*ENDLESS_QUOTES.length)],
     };
@@ -1434,6 +2029,8 @@
     'Cael Ashguard','Drevan Ninefingers','Sable Wren','Korrath the Anvil',
     'Illyn of the Last Gate','Bram Wolfmarch','Petra Stormglass','Uldric the Undone',
     'Fenwick Grave','Nyra Halfshadow','Old Corrin','Wrenna Duskfield',
+    'Garrek Stonejaw','Mireille Ashcloak','Tobar the Unbowed','Kessa Nightward',
+    'Thane Emberlow','Vashti Coldwell',
   ];
   const ELITE_TAUNTS = [
     'Turn back. There is nothing left here worth the fight.',
@@ -1442,6 +2039,10 @@
     'I have buried better companies than this one.',
     'The ruin does not care who wins. Fight anyway.',
     'Every company that comes this way says the same prayers.',
+    'You picked a poor day to test the ruin.',
+    'I have seen better companies turn back at the sight of me.',
+    'This road remembers every company that tried it.',
+    'Fight if you must. The ruin keeps score either way.',
   ];
   const RELICS = [
     { key:'whetstone', name:'Whetstone', flavor:'a worn stone that keeps an edge sharp', apply:u=>{ u.atk+=2; } },
@@ -1451,6 +2052,9 @@
     { key:'hourglass', name:'Cracked Hourglass', flavor:'time enough for one more fight', apply:u=>{ u.maxHp+=8; u.hp=Math.min(u.maxHp,u.hp+8); } },
     { key:'tooth', name:"Wolf's Tooth", flavor:'sharp, but it leaves the hand exposed', apply:u=>{ u.atk+=4; u.def=Math.max(1,u.def-1); } },
     { key:'standard', name:'Old Standard', flavor:'a banner no one marches under anymore', apply:u=>{ u.def+=2; u.maxHp+=3; u.hp=Math.min(u.maxHp,u.hp+3); } },
+    { key:'lantern', name:'Guttering Lantern', flavor:'it has not gone out, though by now it really should have', apply:u=>{ u.def+=1; u.maxHp+=4; u.hp=Math.min(u.maxHp,u.hp+4); } },
+    { key:'signet', name:'Broken Signet', flavor:'a ring stamped with a house no one remembers anymore', apply:u=>{ u.atk+=3; } },
+    { key:'flask', name:"Field Medic's Flask", flavor:'half empty, and somehow still enough', apply:u=>{ u.maxHp+=2; u.hp=u.maxHp; } },
   ];
   // Wayfarer waypoints roll one of these vignettes at random each time they're reached.
   const WAYFARER_EVENTS = [
@@ -1511,6 +2115,28 @@
           alive.forEach(u=>{ u.hp = Math.max(1, u.hp - Math.round(u.maxHp*0.1)); });
           log('The draw comes up against the company. Every piece fights hungrier now.');
         }
+      }
+    },
+    {
+      key:'scholar', title:'A scholar sorts through the wreckage',
+      prompt:'They are cataloguing what is left of the old libraries, and offer to share it for an escort past the worst of the ruin.',
+      acceptLabel:'Escort Them', declineLabel:'Leave Them to It',
+      resolve(accept, party){
+        if(!accept){ log('The company leaves the scholar to their books.'); return; }
+        party.forEach(u=>{ u.xpNext = Math.max(4, u.xpNext-2); });
+        log('The scholar shares what they know. Every piece finds its next level a little closer.', 'heal');
+      }
+    },
+    {
+      key:'smith', title:'A smith still works a cold forge',
+      prompt:'They cannot light the forge anymore, but they still know the shape of a good edge. One piece, sharpened for free.',
+      acceptLabel:'Let Them Work', declineLabel:'Thank Them and Go',
+      resolve(accept, party){
+        if(!accept){ log('The company thanks the smith and moves on.'); return; }
+        const alive = party.filter(u=>u.alive!==false && u.hp>0);
+        const target = alive[Math.floor(Math.random()*alive.length)];
+        target.atk += 2;
+        log(`The smith works a cold edge sharp anyway. ${CLASSES[target.type].name} carries it now, <span class="heal">+2 Might</span>.`, 'heal');
       }
     },
   ];
@@ -1592,6 +2218,7 @@
       if(kind==='guard'){ u.def += 1; }
     });
     log(`A shrine blesses the company with ${labels[kind]}.`, 'heal');
+    playSfx('heal');
     markNodeCleared(pendingShrine);
     pendingShrine = null;
     renderMap();
@@ -1604,10 +2231,12 @@
     if(node.type==='rest'){
       persistedParty.forEach(u=>{ u.hp = u.maxHp; });
       log('The company rests. Every wound is healed.', 'heal');
+      playSfx('heal');
       markNodeCleared(node);
       renderMap();
     } else if(node.type==='shrine'){
       pendingShrine = node;
+      playSfx('click');
       renderMap();
     } else if(node.type==='cache'){
       const alive = persistedParty.filter(u=>u.alive!==false && u.hp>0);
@@ -1615,20 +2244,29 @@
       const relic = RELICS[Math.floor(Math.random()*RELICS.length)];
       relic.apply(target);
       log(`The company finds the ${relic.name}, ${relic.flavor}. ${CLASSES[target.type].name} carries it now.`, 'heal');
+      playSfx('heal');
       markNodeCleared(node);
       renderMap();
     } else if(node.type==='wayfarer'){
       pendingWayfarer = { node, event: WAYFARER_EVENTS[Math.floor(Math.random()*WAYFARER_EVENTS.length)] };
+      playSfx('click');
       renderMap();
     } else if(node.type==='elite' || node.type==='boss'){
+      playSfx('click');
       const rg = regionInfo(region);
-      const eliteGlyphs = ['♞','♝','♜'];
+      const eliteArchetypes = [
+        { glyph:'knight', sil:'sil-elite-rider' },
+        { glyph:'bishop', sil:'sil-elite-mystic' },
+        { glyph:'rook',   sil:'sil-elite-guard' },
+      ];
+      const archetype = eliteArchetypes[Math.floor(Math.random()*eliteArchetypes.length)];
       pendingIntro = {
         node,
         name: node.championName,
         title: node.type==='boss' ? rg.bossTitle : 'Elite Champion',
         quote: node.type==='boss' ? rg.bossQuote : ELITE_TAUNTS[Math.floor(Math.random()*ELITE_TAUNTS.length)],
-        glyph: node.type==='boss' ? rg.bossGlyph : eliteGlyphs[Math.floor(Math.random()*eliteGlyphs.length)],
+        glyph: node.type==='boss' ? rg.bossGlyph : archetype.glyph,
+        sil: node.type==='boss' ? rg.bossSil : archetype.sil,
       };
       renderMap();
     } else {
@@ -1638,6 +2276,7 @@
 
   function resolveWayfarer(accept){
     const { node, event } = pendingWayfarer;
+    playSfx('click');
     event.resolve(accept, persistedParty);
     markNodeCleared(node);
     pendingWayfarer = null;
@@ -1648,14 +2287,16 @@
   const HALL_KEY = 'checkmateAndRuinHall';
   const SAVE_KEY = 'checkmateAndRuinSave';
   const ACHIEVEMENTS = {
-    first_blood:      { name:'First Blood',      desc:'Defeat an enemy piece for the first time.' },
-    ascendant:        { name:'Ascendant',        desc:'Bring a piece to its ascension at level five.' },
-    giant_slayer:     { name:'Giant Slayer',     desc:'Defeat an elite waypoint.' },
-    deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.' },
-    ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.' },
-    drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.' },
-    flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.' },
-    ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.' },
+    first_blood:      { name:'First Blood',      desc:'Defeat an enemy piece for the first time.', icon:'ach-firstblood' },
+    ascendant:        { name:'Ascendant',        desc:'Bring a piece to its ascension at level five.', icon:'ach-ascendant' },
+    giant_slayer:     { name:'Giant Slayer',     desc:'Defeat an elite waypoint.', icon:'ach-giantslayer' },
+    deep_delver:      { name:'Deep Delver',      desc:'Reach Region 2, the Salt Marches.', icon:'sigil-marsh' },
+    ash_walker:       { name:'Ash Walker',       desc:'Reach Region 3, the Ember Wastes.', icon:'sigil-ember' },
+    drowned_survivor: { name:'Drowned Survivor', desc:'Reach Region 4, the Drowned Court.', icon:'sigil-drowned' },
+    heart_reached:    { name:'Heart Reached',    desc:"Reach Region 5, the Ruin's Heart.", icon:'sigil-throne' },
+    vault_walker:     { name:'Vault Walker',     desc:'Reach Region 6, the Undercroft.', icon:'sigil-undercroft' },
+    flawless_region:  { name:'Flawless',         desc:'Clear a full region without losing a single piece.', icon:'ach-flawless' },
+    ruin_conqueror:   { name:'Ruin Conqueror',   desc:'Defeat the Region ' + FINAL_REGION + ' champion and finish the campaign.', icon:'ach-conqueror' },
   };
 
   function loadHall(){
@@ -1689,6 +2330,16 @@
     try{
       const nodes = map.nodes.map(n=>({ id:n.id, layer:n.layer, index:n.index, type:n.type, cleared:n.cleared, next:n.next, championName:n.championName||null }));
       const payload = { v:1, region, currentNodeId, nodes, party: persistedParty.map(u=>({...u})), difficulty: settings.difficulty, regionDeaths, runStats };
+      // Mid-battle progress: only meaningful while a fight against a still-open node is
+      // actually underway. A stray render() after victory (node already cleared) or defeat
+      // (gameOver) must NOT re-attach a stale snapshot here.
+      if(activeNode && !activeNode.cleared && !gameOver && board && units){
+        payload.battle = {
+          nodeId: activeNode.id, round, side,
+          units: units.map(u=>({...u})),
+          awaitingPromotionId: awaitingPromotion ? awaitingPromotion.id : null,
+        };
+      }
       localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
     }catch(e){ /* per-viewer convenience only */ }
   }
@@ -1712,7 +2363,26 @@
     if(save.difficulty) settings.difficulty = save.difficulty;
     regionDeaths = save.regionDeaths || 0;
     runStats = save.runStats || { kills:0 };
-    showMap();
+    const node = save.battle && map.byId[save.battle.nodeId];
+    if(node && !node.cleared){
+      activeNode = node;
+      board = emptyBoard();
+      units = save.battle.units.map(u=>({...u}));
+      units.forEach(u=> place(u.r, u.c, u));
+      round = save.battle.round;
+      side = save.battle.side;
+      gameOver = false;
+      selected = null; legalMoves = [];
+      awaitingPromotion = save.battle.awaitingPromotionId
+        ? units.find(u=>u.id===save.battle.awaitingPromotionId) || null
+        : null;
+      showCombat();
+      render();
+      log('Picking the fight back up.');
+      if(side==='enemy') setTimeout(enemyRound, 500);
+    } else {
+      showMap();
+    }
     return true;
   }
 
@@ -1725,7 +2395,7 @@
     const readout = document.getElementById('hall-readout');
     const earned = (hall.achievements||[]).map(id=>ACHIEVEMENTS[id]).filter(Boolean);
     const achLine = earned.length
-      ? `<div class="ach-list">${earned.map(a=>`<span class="ach-badge tooltip" data-tip="${a.desc}">${a.name}</span>`).join('')}</div>`
+      ? `<div class="ach-list">${earned.map(a=>`<span class="ach-badge tooltip" data-tip="${a.desc}"><span class="ach-icon"><svg viewBox="0 0 32 32"><use href="#${a.icon}"></use></svg></span>${a.name}</span>`).join('')}</div>`
       : `<p class="ach-empty">No achievements unlocked yet.</p>`;
     if(hall.runs>0){
       readout.innerHTML = `<span class="hall-title">Hall of Champions</span>${hall.runs} campaign${hall.runs===1?'':'s'} run &middot; deepest reach, Region ${hall.bestRegion}${achLine}`;
@@ -1758,9 +2428,12 @@
   }
 
   function renderMap(){
+    const rgInfo = regionInfo(region);
     document.getElementById('region-num').textContent = region;
-    document.getElementById('region-name').textContent = regionInfo(region).name;
-    document.getElementById('region-tagline').textContent = regionInfo(region).tagline;
+    document.getElementById('region-name').textContent = rgInfo.name;
+    document.getElementById('region-tagline').textContent = rgInfo.tagline;
+    document.documentElement.style.setProperty('--region-accent', rgInfo.accent);
+    document.getElementById('region-sigil-use').setAttribute('href', '#sigil-'+rgInfo.sigil);
     const svg = document.getElementById('map-svg');
     const W=870, H=380, marginX=70, xGap=(W-marginX*2)/(map.layers.length-1);
     const avail = availableNodeIds();
@@ -1797,6 +2470,7 @@
       const title = node.championName ? `${t.label}: ${node.championName}` : t.label;
       svgHtml += `<g class="${cls}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
         <title>${title}</title>
+        ${isAvail?`<circle class="disc-hit" cx="${x}" cy="${y}" r="34" fill="transparent" pointer-events="all"></circle>`:''}
         <circle class="disc-rim" cx="${x}" cy="${y}" r="25"></circle>
         <circle class="disc" cx="${x}" cy="${y}" r="21"></circle>
         <circle class="disc-sheen" cx="${x-7}" cy="${y-9}" r="9"></circle>
@@ -1813,18 +2487,23 @@
 
     const shrineSlot = document.getElementById('shrine-slot');
     if(pendingIntro){
-      shrineSlot.innerHTML = `<div class="shrine-panel champion-intro">
-        <div class="champion-medallion"><span class="glyph">${pendingIntro.glyph}</span></div>
-        <div class="champion-text">
-          <h3>${pendingIntro.title}</h3>
-          <p class="champion-name">${pendingIntro.name}</p>
-          <p class="champion-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+      const introSigil = regionInfo(region).sigil;
+      shrineSlot.innerHTML = `<div class="boss-panel">
+        <div class="boss-panel-art">
+          <svg class="boss-panel-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${introSigil}"></use></svg>
+          <svg class="boss-panel-figure" viewBox="0 0 120 200" role="img" aria-label="${pendingIntro.name}"><use href="#${pendingIntro.sil}"></use></svg>
         </div>
-        <div class="shrine-choices">
-          <button class="action" id="begin-battle-btn">Begin the Battle</button>
+        <div class="boss-panel-text">
+          <p class="eyebrow">${pendingIntro.title}</p>
+          <h3 class="boss-panel-name">${pendingIntro.name}</h3>
+          <p class="boss-panel-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+          <div class="shrine-choices">
+            <button class="action" id="begin-battle-btn">Begin the Battle</button>
+          </div>
         </div>
       </div>`;
       document.getElementById('begin-battle-btn').addEventListener('click', ()=>{
+        playSfx('click');
         const node = pendingIntro.node;
         pendingIntro = null;
         startBattle(node);
@@ -2125,6 +2804,7 @@
     lastHit = {r:target.r, c:target.c};
     pendingFloats.push({r:target.r, c:target.c, text:'-'+dmg, cls: crit? 'crit':''});
     playSfx(crit? 'crit' : 'hit');
+    vibrate(crit? [18,35,22] : 15);
     log(`${sideLabel(att)} ${CLASSES[att.type].name} strikes ${sideLabel(target)} ${CLASSES[target.type].name} for <span class="dmg">${dmg}</span>${crit? ' (critical!)':''}.`);
     if(target.hp<=0){
       target.hp=0;
@@ -2363,7 +3043,20 @@
     }
   }
 
-  const MILESTONE_ACH = { 2:'deep_delver', 3:'ash_walker', 4:'drowned_survivor' };
+  const MILESTONE_ACH = { 2:'deep_delver', 3:'ash_walker', 4:'drowned_survivor', 5:'heart_reached', 6:'vault_walker' };
+  // Two boss victories along the way echo the closing dedication early, each time
+  // making clear the campaign is not actually over yet. Only FINAL_REGION's victory
+  // (below) is the true ending.
+  const DEDICATION_ECHOES = {
+    3: {
+      title: 'Halfway Through the Ruin',
+      body: 'Vesk falls, and the ash finally settles. The company is halfway home, or halfway to wherever this road actually goes. Either way, it keeps walking.',
+    },
+    5: {
+      title: 'The Throne Falls Silent',
+      body: 'The Hollow Sovereign falls. By every rule the company understood when it set out, that should have been the end of the story. The board does not agree, and neither, it turns out, does the ruin.',
+    },
+  };
 
   function showBanner(kind){
     const slot = document.getElementById('banner-slot');
@@ -2374,12 +3067,43 @@
       if(isBoss && region===FINAL_REGION){
         unlockAchievement('ruin_conqueror');
         playSfx('victory');
+        const sig = regionInfo(region).sigil;
         slot.innerHTML = `<div class="banner dedication-banner">
-          <h2>The Ruin Is Conquered</h2>
-          <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The campaign that began with a single company crossing an empty board ends here, in victory.</p>
-          <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
-          <blockquote class="dedication">thank you for always and forever ...</blockquote>
-          <button class="action" id="next-region">Continue the Campaign</button>
+          <div class="dedication-art">
+            <svg class="dedication-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg>
+            <div class="dedication-badge"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg></div>
+            <h2>The Ruin Is Conquered</h2>
+          </div>
+          <div class="dedication-body">
+            <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The company has walked every mile the ruin had to offer, and there are no more.</p>
+            <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
+            <blockquote class="dedication">thank you for always and forever. The end.</blockquote>
+            <button class="action" id="next-region">Continue the Campaign</button>
+          </div>
+        </div>`;
+        document.getElementById('next-region').addEventListener('click', ()=>{
+          region += 1;
+          generateMap();
+          showMap();
+        });
+      } else if(isBoss && DEDICATION_ECHOES[region]){
+        const echo = DEDICATION_ECHOES[region];
+        playSfx('victory');
+        const milestone = MILESTONE_ACH[region+1];
+        if(milestone) unlockAchievement(milestone);
+        const sig = regionInfo(region).sigil;
+        slot.innerHTML = `<div class="banner dedication-banner">
+          <div class="dedication-art">
+            <svg class="dedication-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg>
+            <div class="dedication-badge"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg></div>
+            <h2>${echo.title}</h2>
+          </div>
+          <div class="dedication-body">
+            <p>${echo.body}</p>
+            <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
+            <blockquote class="dedication">thank you for always and forever ...</blockquote>
+            <button class="action" id="next-region">Continue the Campaign</button>
+          </div>
         </div>`;
         document.getElementById('next-region').addEventListener('click', ()=>{
           region += 1;
@@ -2415,6 +3139,7 @@
       const hall = recordRunEnd();
       clearSave();
       playSfx('defeat');
+      vibrate([100,60,150]);
       slot.innerHTML = `<div class="banner">
         <h2>Your Sovereign has fallen</h2>
         <p>The company is broken in Region ${region}: ${regionInfo(region).name}. This is campaign ${hall.runs}; the deepest any company has reached is Region ${hall.bestRegion}.</p>
@@ -2495,10 +3220,7 @@
           wrap.className='piece tooltip' + (u.ascended? ' ascended':'');
           wrap.dataset.uid = u.id;
           wrap.dataset.tip = `${u.ascended? ASCEND_TITLES[u.type] : CLASSES[u.type].name}: ${CLASSES[u.type].desc}`;
-          const g = document.createElement('div');
-          g.className = 'glyph ' + u.team;
-          g.textContent = CLASSES[u.type].glyph;
-          wrap.appendChild(g);
+          wrap.insertAdjacentHTML('beforeend', pieceIconHTML(u.type, u.team));
           const bar = document.createElement('div');
           bar.className = 'hp-bar' + (u.hp/u.maxHp<0.35?' low':'');
           const i = document.createElement('i');
@@ -2517,7 +3239,26 @@
             sq.appendChild(fn);
           });
         }
+        const coord = String.fromCharCode(97+c) + (8-r);
+        let label = coord;
+        if(u){
+          label += `, ${u.team==='player'?'your':'enemy'} ${CLASSES[u.type].name}, ${Math.max(0,u.hp)} of ${u.maxHp} health`;
+          if(u.acted) label += ', already acted';
+        } else {
+          label += ', empty';
+        }
+        if(move){
+          label += move.type==='attack' ? ', attack' : move.type==='heal' ? ', heal' : ', move here';
+        } else if(u && u.team==='player' && side==='player' && !u.acted && !gameOver){
+          label += ', select';
+        }
+        sq.setAttribute('role','button');
+        sq.setAttribute('tabindex','0');
+        sq.setAttribute('aria-label', label);
         sq.addEventListener('click', ()=>onSquareClick(r,c));
+        sq.addEventListener('keydown', e=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); onSquareClick(r,c); }
+        });
         boardEl.appendChild(sq);
       }
     }
@@ -2544,7 +3285,7 @@
     const playerUnits = units.filter(u=>u.team==='player');
     roster.innerHTML = playerUnits.map(u=>`
       <div class="unit-card tooltip ${u.acted?'acted':''}" tabindex="0" data-tip="${CLASSES[u.type].desc}">
-        <div class="g${u.ascended?' ascended':''}">${CLASSES[u.type].glyph}</div>
+        <div class="g${u.ascended?' ascended':''}">${pieceIconHTML(u.type,'player')}</div>
         <div>
           <div class="name">${u.ascended? ASCEND_TITLES[u.type] : CLASSES[u.type].name} <span class="mono" style="font-size:10px;color:var(--ink-dim)">Lv${u.level}</span></div>
           <div class="cls">${u.type}${u.ascended?' · ascended':''}</div>
@@ -2559,7 +3300,7 @@
       const u = selected.unit;
       const c = CLASSES[u.type];
       info.innerHTML = `<div class="unit-card">
-        <div class="g${u.ascended?' ascended':''}">${c.glyph}</div>
+        <div class="g${u.ascended?' ascended':''}">${pieceIconHTML(u.type,'player')}</div>
         <div><div class="name">${u.ascended? ASCEND_TITLES[u.type] : c.name}</div><div class="cls">${u.type} · Lv${u.level}${u.ascended?' · ascended':''}</div></div>
         <div class="stats">${u.hp}/${u.maxHp}<br/>MGT ${u.atk} &middot; GRD ${u.def}</div>
       </div>
@@ -2571,11 +3312,11 @@
     // promotion prompt
     if(awaitingPromotion){
       const u = awaitingPromotion;
-      info.innerHTML = `<p style="font-size:13px;margin:0 0 8px;">A Recruit has reached the far rank. Choose its Order:</p>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <button class="action" data-p="knight">Ranger</button>
-          <button class="action" data-p="bishop">Cleric</button>
-          <button class="action" data-p="rook">Warden</button>
+      info.innerHTML = `<p style="font-size:13px;margin:0 0 10px;">A Recruit has reached the far rank. Choose its Order:</p>
+        <div class="promo-choices">
+          <button class="promo-choice" data-p="knight"><span class="g">${pieceIconHTML('knight','player')}</span><span class="promo-label">Ranger</span></button>
+          <button class="promo-choice" data-p="bishop"><span class="g">${pieceIconHTML('bishop','player')}</span><span class="promo-label">Cleric</span></button>
+          <button class="promo-choice" data-p="rook"><span class="g">${pieceIconHTML('rook','player')}</span><span class="promo-label">Warden</span></button>
         </div>`;
       info.querySelectorAll('[data-p]').forEach(btn=>{
         btn.addEventListener('click', ()=>{
@@ -2587,6 +3328,7 @@
     }
 
     document.getElementById('end-turn').disabled = side!=='player' || gameOver || !!awaitingPromotion;
+    saveCampaign();
   }
 
   showTitle();
