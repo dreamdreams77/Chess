@@ -867,37 +867,63 @@
   .shrine-panel p{ margin:0 0 12px; font-size:13.5px; color:var(--ink-dim); }
   .shrine-choices{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .shrine-choices button{ width:auto; min-width:150px; }
-  .champion-intro{
-    border-color:var(--ember);
-    text-align:left;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:16px 18px;
+  /* ---------------- Boss/elite intro panel (comic-splash treatment) ---------------- */
+  .boss-panel{
+    margin:16px auto 0;
+    max-width:640px;
+    border:3px solid var(--ink);
+    border-radius:6px;
+    overflow:hidden;
+    background:var(--panel-2);
+    box-shadow:var(--shadow-deep);
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);
   }
-  .champion-medallion{
-    width:64px; height:64px; border-radius:50%; flex:none;
+  .boss-panel-art{
+    position:relative;
     background:
-      radial-gradient(circle at 32% 26%, rgba(255,255,255,.12), transparent 55%),
-      radial-gradient(circle at 50% 68%, var(--panel-2), var(--panel) 78%);
-    border:1px solid var(--line);
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.3), inset 0 -1px 0 rgba(255,255,255,.06);
-    display:flex; align-items:center; justify-content:center;
+      radial-gradient(ellipse 90% 70% at 30% 20%, rgba(255,255,255,.14), transparent 60%),
+      linear-gradient(165deg, var(--region-accent, var(--ember)) 0%, rgba(0,0,0,.55) 130%);
+    display:flex; align-items:flex-end; justify-content:center;
+    padding:18px 10px 0;
+    min-height:190px;
+    overflow:hidden;
   }
-  .champion-medallion .glyph-svg{
-    width:32px; height:32px;
-    filter:drop-shadow(0 2px 1px rgba(15,8,6,.5));
+  .boss-panel-sigil-bg{
+    position:absolute; top:50%; left:50%; width:230%; height:230%;
+    transform:translate(-50%,-50%);
+    color:rgba(255,255,255,.14);
+    pointer-events:none;
   }
-  .champion-text{ flex:1; min-width:180px; }
-  .champion-intro h3{ color:var(--ember); font-family:'Cinzel',serif; letter-spacing:.04em; text-transform:uppercase; font-size:12.5px; margin:0 0 4px; }
-  .champion-intro .champion-name{ font-family:'Cinzel',serif; font-size:19px; color:var(--ink); margin:0 0 8px; }
-  .champion-intro .champion-quote{ font-style:italic; font-size:15px; color:var(--ink-dim); margin:0; line-height:1.5; }
-  .champion-intro .shrine-choices{ flex-basis:100%; justify-content:flex-start; }
-  @media (max-width:480px){
-    .champion-intro{ text-align:center; justify-content:center; }
-    .champion-intro .shrine-choices{ justify-content:center; }
+  .boss-panel-figure{
+    position:relative; width:auto; height:100%; max-height:210px;
+    color:var(--ink);
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));
   }
-
+  .boss-panel-text{ padding:18px 20px 20px; text-align:left; }
+  .boss-panel .eyebrow{
+    color:var(--ember); font-family:'Cinzel',serif; letter-spacing:.08em; text-transform:uppercase;
+    font-size:11.5px; margin:0 0 4px;
+  }
+  .boss-panel-name{ font-family:'Cinzel',serif; font-size:clamp(22px,4vw,28px); line-height:1.1; color:var(--ink); margin:0 0 12px; }
+  .boss-panel-quote{
+    position:relative;
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    padding:10px 14px;
+    font-style:italic; font-size:14px; line-height:1.5; color:var(--ink);
+    margin:0 0 16px;
+    box-shadow:3px 3px 0 rgba(0,0,0,.18);
+  }
+  .boss-panel .shrine-choices{ justify-content:flex-start; }
+  @media (max-width:560px){
+    .boss-panel{ grid-template-columns:1fr; }
+    .boss-panel-art{ min-height:150px; padding-top:14px; }
+    .boss-panel-figure{ max-height:150px; }
+    .boss-panel-text{ text-align:center; }
+    .boss-panel .shrine-choices{ justify-content:center; }
+  }
   /* ---------- Sidebar ---------- */
   .panel{
     background:transparent;
@@ -1039,24 +1065,52 @@
   .banner p.run-stats{ margin:-8px 0 14px; font-size:12.5px; font-family:'JetBrains Mono',monospace; letter-spacing:.02em; }
   .banner button{ max-width:220px; margin:0 auto; }
   .dedication-banner{
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201,162,75,.14), transparent 65%),
-      var(--panel-2);
-    border-color:var(--brass-bright);
-    padding-top:34px;
-    padding-bottom:32px;
+    padding:0;
+    overflow:hidden;
+    border:3px solid var(--ink);
+    border-radius:6px;
   }
-  .dedication-banner h2{ font-size:26px; color:var(--brass-ink); }
+  .dedication-art{
+    position:relative;
+    background:
+      radial-gradient(ellipse 90% 80% at 50% 15%, rgba(255,255,255,.18), transparent 60%),
+      linear-gradient(165deg, var(--region-accent, var(--brass-bright)) 0%, rgba(0,0,0,.55) 150%);
+    padding:28px 16px 22px;
+    overflow:hidden;
+  }
+  .dedication-sigil-bg{
+    position:absolute; top:50%; left:50%; width:220%; height:280%;
+    transform:translate(-50%,-50%);
+    color:rgba(255,255,255,.14);
+    pointer-events:none;
+  }
+  .dedication-badge{
+    position:relative; width:56px; height:56px; margin:0 auto 12px; border-radius:50%;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.2), transparent 55%), rgba(0,0,0,.28);
+    border:1.5px solid rgba(255,255,255,.55);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    box-shadow:0 3px 10px rgba(0,0,0,.3);
+  }
+  .dedication-badge svg{ width:30px; height:30px; }
+  .dedication-art h2{
+    position:relative; margin:0; font-size:26px; color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.45);
+  }
+  .dedication-body{ padding:22px 20px 26px; text-align:center; }
   .dedication{
-    margin:18px auto 22px;
+    margin:0 auto 18px;
     max-width:44ch;
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    padding:12px 18px;
+    box-shadow:3px 3px 0 rgba(0,0,0,.16);
     font-family:'Crimson Pro',Georgia,serif;
     font-style:italic;
-    font-size:19px;
+    font-size:18px;
     line-height:1.6;
     color:var(--ink);
-    border:none;
-    padding:0;
   }
 
   /* ---------- Codex ---------- */
@@ -1307,6 +1361,99 @@
         <circle cx="23" cy="8" r="1"/>
         <circle cx="27" cy="14" r=".8"/>
         <circle cx="25" cy="21" r="1.1"/>
+      </g>
+    </symbol>
+
+    <!-- Champion silhouettes: flat geometric figures for the pre-battle intro panel. -->
+    <symbol id="sil-thorne" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="56" cy="26" r="12"/>
+        <path d="M28 42 L44 42 L36 52 L26 52 Z"/>
+        <path d="M68 42 L84 42 L86 52 L74 52 Z"/>
+        <path d="M32 44 L80 44 L88 68 L78 130 L34 130 L24 68 Z"/>
+        <path d="M34 130 L46 130 L42 195 L30 195 Z"/>
+        <path d="M66 130 L78 130 L82 195 L70 195 Z"/>
+        <path d="M98 18 L102 18 L102 172 L98 172 Z"/>
+        <path d="M100 8 L108 30 L100 46 L92 30 Z"/>
+        <path d="M84 38 L100 30 L100 42 L88 48 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-ysolt" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="52" cy="24" r="11"/>
+        <path d="M40 38 L64 38 L60 150 L44 150 Z"/>
+        <path d="M40 38 L14 60 L20 150 L44 150 L48 60 Z"/>
+        <path d="M64 38 L96 46 L90 130 L60 150 Z"/>
+        <path d="M46 150 L58 150 L54 195 L44 195 Z"/>
+        <path d="M90 62 L112 50 L114 56 L94 70 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-vesk" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <path d="M56 6 L70 30 L42 30 Z"/>
+        <path d="M46 30 L66 30 L82 100 L76 150 L68 130 L60 150 L52 130 L44 150 L36 100 Z"/>
+        <path d="M46 150 L56 150 L52 195 L42 195 Z"/>
+        <path d="M96 20 L100 20 L100 175 L96 175 Z"/>
+        <path d="M98 6 Q112 16 98 32 Q84 16 98 6 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-maren" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="58" cy="26" r="12"/>
+        <path d="M44 40 L72 40 L90 150 Q58 162 26 150 Z"/>
+        <path d="M40 60 L20 90 L26 96 L44 70 Z"/>
+        <path d="M20 40 L28 40 L28 100 L20 100 Z"/>
+        <circle cx="24" cy="36" r="7"/>
+      </g>
+    </symbol>
+    <symbol id="sil-sovereign" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="58" cy="26" r="12"/>
+        <path d="M40 12 L46 12 L46 2 L52 12 L58 0 L64 12 L70 2 L70 12 L76 12 L76 16 L40 16 Z"/>
+        <path d="M40 40 L76 40 L100 155 Q58 168 16 155 Z"/>
+        <path d="M42 60 L36 60 L34 130 L40 130 Z"/>
+        <path d="M74 60 L80 60 L82 130 L76 130 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-osric" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="66" cy="44" r="11"/>
+        <path d="M40 56 L82 60 L76 150 L40 148 Z"/>
+        <path d="M34 78 L64 68 L68 90 L38 100 Z"/>
+        <path d="M50 150 L62 150 L58 195 L46 195 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-wren" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <ellipse cx="56" cy="24" rx="22" ry="6"/>
+        <circle cx="56" cy="26" r="10"/>
+        <path d="M44 38 L70 38 L82 150 L32 150 Z"/>
+        <path d="M22 92 L38 92 L40 122 L20 122 Z"/>
+        <path d="M46 150 L58 150 L54 195 L44 195 Z"/>
+        <path d="M96 10 L100 10 L98 150 L94 150 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-elite-guard" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="56" cy="26" r="12"/>
+        <path d="M30 42 L82 42 L88 68 L78 130 L34 130 L24 68 Z"/>
+        <path d="M34 130 L46 130 L42 195 L30 195 Z"/>
+        <path d="M66 130 L78 130 L82 195 L70 195 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-elite-rider" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <circle cx="52" cy="24" r="11"/>
+        <path d="M40 38 L64 38 L60 150 L44 150 Z"/>
+        <path d="M40 38 L14 60 L20 150 L44 150 L48 60 Z"/>
+        <path d="M64 38 L96 46 L90 130 L60 150 Z"/>
+        <path d="M46 150 L58 150 L54 195 L44 195 Z"/>
+      </g>
+    </symbol>
+    <symbol id="sil-elite-mystic" viewBox="0 0 120 200">
+      <g fill="currentColor">
+        <path d="M58 6 L72 30 L44 30 Z"/>
+        <path d="M48 30 L68 30 L84 100 L76 150 Q58 160 40 150 L32 100 Z"/>
       </g>
     </symbol>
 
@@ -1773,7 +1920,7 @@
       battleFlavor:'A patrol blocks the gate road.',
       eliteFlavor:'{name} holds the gate with a hardened company.',
       clearFlavor:'The gate falls open. Nothing guards the road behind it now.',
-      boss:'Thorne the Unyielding', bossTitle:'Warden of the Broken Gate', bossGlyph:'rook',
+      boss:'Thorne the Unyielding', bossTitle:'Warden of the Broken Gate', bossGlyph:'rook', bossSil:'sil-thorne',
       bossFlavor:'{name} takes the field, and the gate itself seems to lean in to watch.',
       bossQuote:'None pass the gate. Not living, not dead, not you.',
     },
@@ -1784,7 +1931,7 @@
       battleFlavor:'A company wades out of the reeds to meet you.',
       eliteFlavor:'{name} commands the marsh from a rise of dry ground.',
       clearFlavor:'The marches go quiet. Somewhere under the water, the old cavalry finally rests.',
-      boss:'Ysolt the Pale Rider', bossTitle:'Last Rider of the Marches', bossGlyph:'knight',
+      boss:'Ysolt the Pale Rider', bossTitle:'Last Rider of the Marches', bossGlyph:'knight', bossSil:'sil-ysolt',
       bossFlavor:'{name} takes the field on foot. There has been no horse for a long time.',
       bossQuote:'I rode faster than the fall. It caught me anyway.',
     },
@@ -1795,7 +1942,7 @@
       battleFlavor:'Figures move through the ash haze, closing in.',
       eliteFlavor:'{name} stands where the fire burned hottest.',
       clearFlavor:'The ash settles. Halfway through the ruin, and the company is still standing.',
-      boss:'Vesk the Hollow Blade', bossTitle:'Ashbound Battlemage', bossGlyph:'queen',
+      boss:'Vesk the Hollow Blade', bossTitle:'Ashbound Battlemage', bossGlyph:'queen', bossSil:'sil-vesk',
       bossFlavor:'{name} takes the field, and the air around them still tastes of old fire.',
       bossQuote:'Power was supposed to save us. Ask the ash how that went.',
     },
@@ -1806,7 +1953,7 @@
       battleFlavor:'A company forms up between the flooded columns.',
       eliteFlavor:'{name} guards a stairway that no longer leads anywhere dry.',
       clearFlavor:'The water stills. Somewhere above it, the last stretch of road waits.',
-      boss:'Maren of the Broken Rank', bossTitle:'Keeper of the Drowned Court', bossGlyph:'bishop',
+      boss:'Maren of the Broken Rank', bossTitle:'Keeper of the Drowned Court', bossGlyph:'bishop', bossSil:'sil-maren',
       bossFlavor:'{name} takes the field between the flooded pillars of a throne room with no throne.',
       bossQuote:'I healed kings until there were none left to heal.',
     },
@@ -1817,7 +1964,7 @@
       battleFlavor:'The last of the loyal guard forms a line, more out of habit than hope.',
       eliteFlavor:'{name} fights for a throne that no longer exists.',
       clearFlavor:'The throne room empties out. It should feel like the end of something.',
-      boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin', bossGlyph:'king',
+      boss:'The Hollow Sovereign', bossTitle:'Last King of the Ruin', bossGlyph:'king', bossSil:'sil-sovereign',
       bossFlavor:'{name} takes the field at last, alone, exactly as it wanted.',
       bossQuote:'Sit the throne if you want it. See how long you last.',
     },
@@ -1828,7 +1975,7 @@
       battleFlavor:'A company rises from the dark stair to meet you, pale, like they have not seen the field above in years.',
       eliteFlavor:'{name} has guarded this stair longer than the throne room above remembers having one.',
       clearFlavor:'The undercroft empties out. Whatever this place was keeping, it is not keeping it anymore.',
-      boss:'Osric the Unwritten', bossTitle:'Keeper of the Undercroft', bossGlyph:'pawn',
+      boss:'Osric the Unwritten', bossTitle:'Keeper of the Undercroft', bossGlyph:'pawn', bossSil:'sil-osric',
       bossFlavor:'{name} takes the field surrounded by shelves of records no living hand has touched in years.',
       bossQuote:'Every story needs an ending. No one gave me permission to write one.',
     },
@@ -1839,12 +1986,13 @@
       battleFlavor:'A company forms up at the very edge of anything mapped, unsure it should exist here at all.',
       eliteFlavor:"{name} holds a line that, by any honest map, should not be here to hold.",
       clearFlavor:'',
-      boss:'Wren the Last Cartographer', bossTitle:"Keeper of the Map's End", bossGlyph:'queen',
+      boss:'Wren the Last Cartographer', bossTitle:"Keeper of the Map's End", bossGlyph:'queen', bossSil:'sil-wren',
       bossFlavor:'{name} takes the field where the last ink on the last map runs dry.',
       bossQuote:'I drew as far as I dared. Past here, you are drawing for yourself.',
     },
   ];
   const FINAL_REGION = REGIONS.length;
+  const BOSS_SILS = REGIONS.map(rg=>rg.bossSil);
   // Past the authored campaign (region > FINAL_REGION), the codex promises the run
   // "continues indefinitely as a personal high-score". These entries are synthesized
   // once per depth and cached, so the endless mode still has a name, a boss, and a line.
@@ -1870,6 +2018,7 @@
       boss: ELITE_NAMES[Math.floor(Math.random()*ELITE_NAMES.length)],
       bossTitle: ENDLESS_TITLES[Math.floor(Math.random()*ENDLESS_TITLES.length)],
       bossGlyph: ['king','queen','rook','bishop','knight'][Math.floor(Math.random()*5)],
+      bossSil: BOSS_SILS[Math.floor(Math.random()*BOSS_SILS.length)],
       bossFlavor:'{name} takes the field, one more nameless line in an endless one.',
       bossQuote: ENDLESS_QUOTES[Math.floor(Math.random()*ENDLESS_QUOTES.length)],
     };
@@ -2105,13 +2254,19 @@
     } else if(node.type==='elite' || node.type==='boss'){
       playSfx('click');
       const rg = regionInfo(region);
-      const eliteGlyphs = ['knight','bishop','rook'];
+      const eliteArchetypes = [
+        { glyph:'knight', sil:'sil-elite-rider' },
+        { glyph:'bishop', sil:'sil-elite-mystic' },
+        { glyph:'rook',   sil:'sil-elite-guard' },
+      ];
+      const archetype = eliteArchetypes[Math.floor(Math.random()*eliteArchetypes.length)];
       pendingIntro = {
         node,
         name: node.championName,
         title: node.type==='boss' ? rg.bossTitle : 'Elite Champion',
         quote: node.type==='boss' ? rg.bossQuote : ELITE_TAUNTS[Math.floor(Math.random()*ELITE_TAUNTS.length)],
-        glyph: node.type==='boss' ? rg.bossGlyph : eliteGlyphs[Math.floor(Math.random()*eliteGlyphs.length)],
+        glyph: node.type==='boss' ? rg.bossGlyph : archetype.glyph,
+        sil: node.type==='boss' ? rg.bossSil : archetype.sil,
       };
       renderMap();
     } else {
@@ -2332,15 +2487,19 @@
 
     const shrineSlot = document.getElementById('shrine-slot');
     if(pendingIntro){
-      shrineSlot.innerHTML = `<div class="shrine-panel champion-intro">
-        <div class="champion-medallion">${pieceIconHTML(pendingIntro.glyph,'enemy')}</div>
-        <div class="champion-text">
-          <h3>${pendingIntro.title}</h3>
-          <p class="champion-name">${pendingIntro.name}</p>
-          <p class="champion-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+      const introSigil = regionInfo(region).sigil;
+      shrineSlot.innerHTML = `<div class="boss-panel">
+        <div class="boss-panel-art">
+          <svg class="boss-panel-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${introSigil}"></use></svg>
+          <svg class="boss-panel-figure" viewBox="0 0 120 200" role="img" aria-label="${pendingIntro.name}"><use href="#${pendingIntro.sil}"></use></svg>
         </div>
-        <div class="shrine-choices">
-          <button class="action" id="begin-battle-btn">Begin the Battle</button>
+        <div class="boss-panel-text">
+          <p class="eyebrow">${pendingIntro.title}</p>
+          <h3 class="boss-panel-name">${pendingIntro.name}</h3>
+          <p class="boss-panel-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+          <div class="shrine-choices">
+            <button class="action" id="begin-battle-btn">Begin the Battle</button>
+          </div>
         </div>
       </div>`;
       document.getElementById('begin-battle-btn').addEventListener('click', ()=>{
@@ -2908,12 +3067,19 @@
       if(isBoss && region===FINAL_REGION){
         unlockAchievement('ruin_conqueror');
         playSfx('victory');
+        const sig = regionInfo(region).sigil;
         slot.innerHTML = `<div class="banner dedication-banner">
-          <h2>The Ruin Is Conquered</h2>
-          <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The company has walked every mile the ruin had to offer, and there are no more.</p>
-          <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
-          <blockquote class="dedication">thank you for always and forever. The end.</blockquote>
-          <button class="action" id="next-region">Continue the Campaign</button>
+          <div class="dedication-art">
+            <svg class="dedication-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg>
+            <div class="dedication-badge"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg></div>
+            <h2>The Ruin Is Conquered</h2>
+          </div>
+          <div class="dedication-body">
+            <p>${regionInfo(region).bossTitle} falls, and the board finally falls quiet. The company has walked every mile the ruin had to offer, and there are no more.</p>
+            <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
+            <blockquote class="dedication">thank you for always and forever. The end.</blockquote>
+            <button class="action" id="next-region">Continue the Campaign</button>
+          </div>
         </div>`;
         document.getElementById('next-region').addEventListener('click', ()=>{
           region += 1;
@@ -2925,12 +3091,19 @@
         playSfx('victory');
         const milestone = MILESTONE_ACH[region+1];
         if(milestone) unlockAchievement(milestone);
+        const sig = regionInfo(region).sigil;
         slot.innerHTML = `<div class="banner dedication-banner">
-          <h2>${echo.title}</h2>
-          <p>${echo.body}</p>
-          <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
-          <blockquote class="dedication">thank you for always and forever ...</blockquote>
-          <button class="action" id="next-region">Continue the Campaign</button>
+          <div class="dedication-art">
+            <svg class="dedication-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg>
+            <div class="dedication-badge"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${sig}"></use></svg></div>
+            <h2>${echo.title}</h2>
+          </div>
+          <div class="dedication-body">
+            <p>${echo.body}</p>
+            <p class="run-stats">${runStats.kills} enemy pieces fell along the way.</p>
+            <blockquote class="dedication">thank you for always and forever ...</blockquote>
+            <button class="action" id="next-region">Continue the Campaign</button>
+          </div>
         </div>`;
         document.getElementById('next-region').addEventListener('click', ()=>{
           region += 1;
