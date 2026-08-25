@@ -1590,6 +1590,9 @@
     }
     return audioCtx;
   }
+  function vibrate(pattern){
+    if(navigator.vibrate) navigator.vibrate(pattern);
+  }
   function playSfx(kind){
     if(settings.sound!=='on') return;
     const ctx = getAudioCtx();
@@ -2014,6 +2017,16 @@
     try{
       const nodes = map.nodes.map(n=>({ id:n.id, layer:n.layer, index:n.index, type:n.type, cleared:n.cleared, next:n.next, championName:n.championName||null }));
       const payload = { v:1, region, currentNodeId, nodes, party: persistedParty.map(u=>({...u})), difficulty: settings.difficulty, regionDeaths, runStats };
+      // Mid-battle progress: only meaningful while a fight against a still-open node is
+      // actually underway. A stray render() after victory (node already cleared) or defeat
+      // (gameOver) must NOT re-attach a stale snapshot here.
+      if(activeNode && !activeNode.cleared && !gameOver && board && units){
+        payload.battle = {
+          nodeId: activeNode.id, round, side,
+          units: units.map(u=>({...u})),
+          awaitingPromotionId: awaitingPromotion ? awaitingPromotion.id : null,
+        };
+      }
       localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
     }catch(e){ /* per-viewer convenience only */ }
   }
@@ -2037,7 +2050,26 @@
     if(save.difficulty) settings.difficulty = save.difficulty;
     regionDeaths = save.regionDeaths || 0;
     runStats = save.runStats || { kills:0 };
-    showMap();
+    const node = save.battle && map.byId[save.battle.nodeId];
+    if(node && !node.cleared){
+      activeNode = node;
+      board = emptyBoard();
+      units = save.battle.units.map(u=>({...u}));
+      units.forEach(u=> place(u.r, u.c, u));
+      round = save.battle.round;
+      side = save.battle.side;
+      gameOver = false;
+      selected = null; legalMoves = [];
+      awaitingPromotion = save.battle.awaitingPromotionId
+        ? units.find(u=>u.id===save.battle.awaitingPromotionId) || null
+        : null;
+      showCombat();
+      render();
+      log('Picking the fight back up.');
+      if(side==='enemy') setTimeout(enemyRound, 500);
+    } else {
+      showMap();
+    }
     return true;
   }
 
@@ -2455,6 +2487,7 @@
     lastHit = {r:target.r, c:target.c};
     pendingFloats.push({r:target.r, c:target.c, text:'-'+dmg, cls: crit? 'crit':''});
     playSfx(crit? 'crit' : 'hit');
+    vibrate(crit? [18,35,22] : 15);
     log(`${sideLabel(att)} ${CLASSES[att.type].name} strikes ${sideLabel(target)} ${CLASSES[target.type].name} for <span class="dmg">${dmg}</span>${crit? ' (critical!)':''}.`);
     if(target.hp<=0){
       target.hp=0;
@@ -2745,6 +2778,7 @@
       const hall = recordRunEnd();
       clearSave();
       playSfx('defeat');
+      vibrate([100,60,150]);
       slot.innerHTML = `<div class="banner">
         <h2>Your Sovereign has fallen</h2>
         <p>The company is broken in Region ${region}: ${regionInfo(region).name}. This is campaign ${hall.runs}; the deepest any company has reached is Region ${hall.bestRegion}.</p>
@@ -2933,6 +2967,7 @@
     }
 
     document.getElementById('end-turn').disabled = side!=='player' || gameOver || !!awaitingPromotion;
+    saveCampaign();
   }
 
   showTitle();
