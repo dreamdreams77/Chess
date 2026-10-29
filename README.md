@@ -29,6 +29,6 @@ Progress (your current run and your all-time Hall of Champions record) is saved 
 
 ## Credits
 
-Piece artwork is the "cburnett" chess set by [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett), used under [GPLv2+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) as published by [lichess.org](https://github.com/lichess-org/lila).
+Piece artwork is original to this project: faceted silhouettes drawn as inline SVG.
 
 Fonts (Cinzel, Crimson Pro, JetBrains Mono) are loaded from Google Fonts.
