@@ -1234,6 +1234,7 @@
 
   /* ================= Lamplit War Table: art-direction layer ================= */
   :root{
+    --wood-grain-fine: repeating-linear-gradient(0deg, rgba(110,75,30,.04) 0 1px, transparent 1px 5px);
     --bg:#2a190d;
     --on-table:#efdcb0;
     --on-table-dim:#bfa072;
@@ -1514,6 +1515,170 @@
   }
   .unit-card .g .glyph-svg, #selected-info .g .glyph-svg, .promo-choice .g .glyph-svg{ width:28px; height:28px; filter:drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
   .class-card .g .glyph-svg{ width:28px; height:28px; filter:drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+
+  /* ---------- Map: parchment chart with seal tokens ---------- */
+  .map-wrap{
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 42%, rgba(255,250,232,.5), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(120,85,35,.035) 0 1px, transparent 1px 4px),
+      radial-gradient(ellipse 100% 100% at 50% 50%, var(--panel-2) 40%, var(--panel) 80%, #b99d63 135%);
+    background-size:auto, auto, auto; background-blend-mode:normal;
+    border:1px solid var(--gold-deep);
+    border-radius:3px;
+    box-shadow:0 30px 60px -24px rgba(0,0,0,.85), 0 0 0 4px rgba(20,10,3,.55), 0 0 0 5px var(--gold-deep);
+    color:var(--region-accent, var(--brass));
+    margin-top:6px;
+  }
+  .map-wrap > *{ color:var(--ink); }
+  .map-wrap::after{ box-shadow:inset 0 0 70px 8px rgba(70,40,8,.28); border-radius:3px; }
+  .map-wrap::before{ display:none; }
+  .map-art{ color:var(--region-accent, var(--brass)); }
+  .map-head h2{ font-size:clamp(22px,3.4vw,30px); }
+  .region-sigil{ width:48px; height:48px; }
+  .region-sigil svg{ width:28px; height:28px; }
+  .map-edge{ stroke:var(--ink-dim); stroke-opacity:.45; stroke-width:2; stroke-dasharray:2 7; }
+  .map-edge.reachable{ stroke:var(--gold-deep); stroke-opacity:1; stroke-width:3; stroke-dasharray:8 6; }
+  .map-edge.cleared{ stroke:var(--sage); stroke-opacity:.85; stroke-width:3; stroke-dasharray:none; }
+  .map-node circle.disc-shadow{ fill:rgba(20,10,3,.35); }
+  .map-node circle.disc-pulse{ fill:none; stroke:var(--gold-deep); stroke-width:2; opacity:0; }
+  .map-node circle.disc-rim{ fill:#6b4c1a; }
+  .map-node circle.disc{ fill:#24160a; stroke:rgba(255,225,160,.25); stroke-width:1; }
+  .map-node circle.disc-sheen{ fill:rgba(255,235,190,.10); }
+  .map-node use.icon{ color:#c9ab6c; pointer-events:none; }
+  .map-node.nt-elite use.icon{ color:#e0795c; }
+  .map-node.nt-rest use.icon{ color:#9cc58a; }
+  .map-node.nt-shrine use.icon, .map-node.nt-boss use.icon{ color:#f0d58a; }
+  .map-node.nt-wayfarer use.icon{ color:#93bddb; }
+  .map-node.nt-elite circle.disc-rim{ fill:#7a2c1a; }
+  .map-node.nt-boss circle.disc-rim{ fill:#a67c26; }
+  .map-node.clickable circle.disc-rim{ fill:var(--brass-bright); }
+  .map-node.nt-elite.clickable circle.disc-rim{ fill:#c4472c; }
+  .map-node.clickable circle.disc{ stroke:rgba(255,225,160,.45); stroke-width:1; }
+  .map-node.current circle.disc-rim{ fill:#f0d58a; }
+  .map-node.current circle.disc{ stroke:#f0d58a; stroke-width:1.5; }
+  .map-node.cleared circle.disc{ fill:#24160a; opacity:.8; stroke:var(--sage); }
+  .map-node.cleared circle.disc-rim{ fill:var(--sage); opacity:.9; }
+  .map-node.cleared use.icon{ opacity:.45; }
+  .map-node.locked circle.disc-rim, .map-node.locked circle.disc{ opacity:.62; }
+  .map-node.locked use.icon{ opacity:.55; }
+  .map-node text.label{
+    font-family:'IM Fell English SC',Georgia,serif; font-size:12.5px; letter-spacing:.06em;
+    fill:var(--ink); paint-order:stroke; stroke:var(--panel-2); stroke-width:3px; stroke-linejoin:round; text-transform:none;
+  }
+  .map-node:focus-visible circle.disc-rim{ stroke:var(--ink); stroke-width:3; }
+  @media (prefers-reduced-motion:no-preference){
+    .map-node.clickable circle.disc-pulse{ animation:node-pulse 2.2s ease-out infinite; }
+  }
+  @keyframes node-pulse{ 0%{ opacity:.9; transform:scale(.9); } 100%{ opacity:0; transform:scale(1.25); } }
+  .map-node circle.disc-pulse{ transform-box:fill-box; transform-origin:center; }
+  .map-legend{ font-family:'IM Fell English SC',Georgia,serif; font-size:13px; letter-spacing:.04em; }
+
+  /* ---------- Title: hero scene ---------- */
+  .title-wrap{
+    max-width:1000px; margin:6px auto 0; padding:0; text-align:center; overflow:hidden;
+    background:#0a0604; border:1px solid var(--gold-deep); border-radius:3px;
+    box-shadow:0 34px 70px -26px rgba(0,0,0,.9), 0 0 0 4px rgba(20,10,3,.55), 0 0 0 5px var(--gold-deep);
+    color:#efdcb0;
+  }
+  .title-wrap::before,.title-wrap::after,.title-wrap .corner-br{ display:none; }
+  .hero-stage{ position:relative; min-height:clamp(600px,80vh,700px); display:flex; align-items:flex-end; justify-content:center; }
+  .hero-scene{ position:absolute; inset:0; width:100%; height:100%; }
+  .hero-ash{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .hero-fig{ fill:#0c0704; stroke:#8a4a1c; stroke-width:1; }
+  .hero-text{ position:relative; z-index:2; padding:0 clamp(18px,5vw,48px) clamp(26px,5vw,44px); max-width:900px; }
+  .hero-eyebrow{ margin:0 0 6px; font-family:'IM Fell English SC',Georgia,serif; letter-spacing:.22em; font-size:clamp(11px,1.6vw,14px); color:#e8c675; text-shadow:0 1px 6px rgba(0,0,0,.9), 0 0 14px rgba(0,0,0,.7); }
+  .title-wrap .hero-title{
+    margin:0 0 10px; font-weight:400; font-size:clamp(38px,8.2vw,80px); line-height:.98; letter-spacing:.015em;
+    color:#f4d98c; text-shadow:0 3px 0 rgba(0,0,0,.65), 0 0 40px rgba(255,150,60,.35);
+  }
+  .hero-title span{ color:#d9b15c; font-size:.72em; padding:0 .06em; }
+  .title-tagline{ color:#e7d3a6; font-size:clamp(15px,2vw,18px); max-width:54ch; margin:0 auto 22px; text-shadow:0 1px 8px rgba(0,0,0,.8); }
+  .hero-cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .hero-cta .action{ width:auto; min-width:min(260px,100%); max-width:none; margin:0; padding:12px 26px; font-size:15px; }
+  .hero-cta .action.ghost{ color:#f0d58a; border-color:rgba(240,213,138,.7); background:rgba(8,4,1,.55); }
+  .hero-cta .action.ghost:hover{ background:rgba(240,213,138,.14); }
+  .title-wrap .hall{
+    margin:0; padding:16px 20px 18px; border-top:1px solid rgba(217,177,92,.4); background:#0a0604;
+    color:#cdb68a; text-align:center;
+  }
+  .title-wrap .hall .hall-title{ color:#d9b15c; font-size:13px; letter-spacing:.14em; }
+  .title-wrap .ach-badge{ background:rgba(255,230,170,.07); border-color:rgba(217,177,92,.4); color:#e7d3a6; }
+  .title-wrap .ach-empty{ color:#a8916a; }
+  @media (prefers-reduced-motion:no-preference){
+    .hero-win{ animation:win-flicker 4.6s ease-in-out infinite; }
+    .hero-win:nth-of-type(2n){ animation-delay:-1.3s; animation-duration:5.7s; }
+  }
+  @keyframes win-flicker{ 0%,100%{ opacity:.95; } 45%{ opacity:.55; } 60%{ opacity:.9; } 80%{ opacity:.7; } }
+
+  @media (max-width:480px){
+    header.top{ padding-bottom:12px; margin-bottom:12px; gap:8px; }
+    header.top h1{ font-size:26px; }
+    header.top .subtitle{ display:none; }
+    .tabs{ gap:5px; }
+    .tabs .tab-btn{ min-height:40px; padding:6px 8px; font-size:12px; letter-spacing:.06em; }
+  }
+
+  /* ---------- Combat feedback ---------- */
+  .sq.fx-crit::before{ background:#ffd26a; }
+  .sq.fx-heal::before{ background:#8fd47a; }
+  .sq.fx-kill::before{ background:#ff7a4a; }
+  .fx-slash,.fx-burst,.fx-heal{ position:absolute; inset:0; pointer-events:none; z-index:4; opacity:0; overflow:visible; }
+  .fx-slash::before,.fx-slash::after{
+    content:""; position:absolute; left:-12%; top:46%; width:124%; height:3px; border-radius:2px;
+    background:linear-gradient(90deg, transparent, #fff 35%, #ffe9b0 60%, transparent);
+    box-shadow:0 0 10px 2px rgba(255,220,150,.75);
+    transform:rotate(-38deg) scaleX(0); transform-origin:left center;
+  }
+  .fx-slash::after{ display:none; }
+  .fx-crit .fx-slash::before, .fx-crit .fx-slash::after{ height:5px; background:linear-gradient(90deg, transparent, #fff 30%, #ffc94a 65%, transparent); box-shadow:0 0 16px 4px rgba(255,190,60,.85); }
+  .fx-crit .fx-slash::after{ display:block; transform:rotate(38deg) scaleX(0); }
+  .fx-burst::before{
+    content:""; position:absolute; inset:14%; border-radius:50%;
+    border:3px solid #ffb35a; box-shadow:0 0 18px 4px rgba(255,140,60,.8), inset 0 0 14px rgba(255,200,120,.7);
+    transform:scale(.2);
+  }
+  .fx-burst::after{
+    content:""; position:absolute; inset:-18%;
+    background:
+      radial-gradient(circle 3px at 18% 22%, #ffd9a0 98%, transparent) , radial-gradient(circle 2.5px at 82% 18%, #ffb35a 98%, transparent),
+      radial-gradient(circle 3px at 90% 70%, #ffd9a0 98%, transparent), radial-gradient(circle 2.5px at 12% 78%, #ffb35a 98%, transparent),
+      radial-gradient(circle 2px at 50% 6%, #fff 98%, transparent), radial-gradient(circle 2px at 52% 96%, #fff 98%, transparent);
+    transform:scale(.5);
+  }
+  .fx-heal::before{
+    content:""; position:absolute; inset:10%; border-radius:50%;
+    background:radial-gradient(circle, rgba(170,240,140,.75), rgba(120,200,100,.25) 55%, transparent 72%);
+    transform:scale(.4);
+  }
+  .fx-heal::after{
+    content:"+"; position:absolute; left:50%; top:30%; font:700 22px 'IM Fell English SC',serif; color:#c9f5b0; text-shadow:0 0 8px #5cae4a;
+    transform:translateX(-50%);
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .fx-slash{ animation:fx-fade .5s ease-out; }
+    .fx-slash::before{ animation:fx-slash .32s cubic-bezier(.2,.7,.2,1) forwards; }
+    .fx-crit .fx-slash::after{ animation:fx-slash-b .34s .06s cubic-bezier(.2,.7,.2,1) forwards; }
+    .fx-burst{ animation:fx-fade .7s ease-out; }
+    .fx-burst::before{ animation:fx-ring .6s ease-out forwards; }
+    .fx-burst::after{ animation:fx-sparks .65s ease-out forwards; }
+    .fx-heal{ animation:fx-fade .9s ease-out; }
+    .fx-heal::before{ animation:fx-ring .8s ease-out forwards; }
+    .fx-heal::after{ animation:fx-rise .9s ease-out forwards; }
+    .sq.fx-hit .piece, .sq.fx-crit .piece{ animation:hit-jolt .32s ease-out; }
+    .sq.fx-kill .piece{ animation:land-pop .42s cubic-bezier(.2,.8,.3,1.3); }
+    .sq.fx-crit .piece{ animation-duration:.42s; }
+  }
+  @keyframes fx-fade{ 0%{ opacity:1; } 70%{ opacity:1; } 100%{ opacity:0; } }
+  @keyframes fx-slash{ 0%{ transform:rotate(-38deg) scaleX(0); } 100%{ transform:rotate(-38deg) scaleX(1); } }
+  @keyframes fx-slash-b{ 0%{ transform:rotate(38deg) scaleX(0); } 100%{ transform:rotate(38deg) scaleX(1); } }
+  @keyframes fx-ring{ 0%{ transform:scale(.2); opacity:1; } 100%{ transform:scale(1.5); opacity:0; } }
+  @keyframes fx-sparks{ 0%{ transform:scale(.5); opacity:1; } 100%{ transform:scale(1.25); opacity:0; } }
+  @keyframes fx-rise{ 0%{ transform:translate(-50%,10px); opacity:0; } 30%{ opacity:1; } 100%{ transform:translate(-50%,-22px); opacity:0; } }
+  @keyframes hit-jolt{ 0%{ transform:translateX(0); } 20%{ transform:translateX(-5px) rotate(-3deg); } 45%{ transform:translateX(4px) rotate(2deg); } 70%{ transform:translateX(-2px); } 100%{ transform:none; } }
+  @keyframes land-pop{ 0%{ transform:scale(.55); } 60%{ transform:scale(1.12); } 100%{ transform:scale(1); } }
+
+  .sq.acted{ filter:none; }
+  .sq.acted .piece{ filter:saturate(.5) brightness(.88); opacity:.9; }
 </style>
 </head>
 <body>
@@ -1588,6 +1753,15 @@
         <path fill="none" stroke="#000" stroke-opacity=".28" stroke-width="1" stroke-linecap="round" d="M22 11 L27 14 M23 15.5 L29 18 M24 20 L31 23"/>
       </g>
     </symbol>
+
+    <!-- Map waypoint icons: engraved line marks, drawn in currentColor. -->
+    <symbol id="nodeico-battle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 L18 6 M16 4.5 L19.5 8 M3.5 16.5 L7.5 20.5"/><path d="M19 19 L6 6 M8 4.5 L4.5 8 M20.5 16.5 L16.5 20.5"/></g></symbol>
+    <symbol id="nodeico-elite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3.5 a7 7 0 0 0 -7 7 c0 2.5 1.2 4.2 3 5.2 V19.5 h8 v-3.8 c1.8 -1 3 -2.7 3 -5.2 a7 7 0 0 0 -7 -7z"/><path d="M12 13.6 l-1.1 2 h2.2z M10 19.5 v-2 M14 19.5 v-2"/></g><circle cx="9" cy="11" r="1.8" fill="currentColor"/><circle cx="15" cy="11" r="1.8" fill="currentColor"/></symbol>
+    <symbol id="nodeico-rest" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3 C12.8 7 18 9 18 14 a6 6 0 0 1 -12 0 c0 -2.5 1.5 -4 3 -5.5 c.3 1.6 1 2.4 1.8 2.8 C11.4 8 11.5 5.5 12 3z"/><path d="M4 21 L20 18 M4 18 L20 21"/></g></symbol>
+    <symbol id="nodeico-shrine" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.5 L19.5 12 L12 21.5 L4.5 12Z"/><path d="M12 8 L15.2 12 L12 16 L8.8 12Z"/></g></symbol>
+    <symbol id="nodeico-cache" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M3.5 10.5 a8.5 6 0 0 1 17 0 V19.5 H3.5Z"/><path d="M3.5 12.5 H20.5"/><path d="M10.5 11 h3 v3.6 h-3z"/></g></symbol>
+    <symbol id="nodeico-wayfarer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.5 V21.5"/><path d="M6 5.5 H17 L20 8 L17 10.5 H6Z"/><path d="M18 12.5 H7 L4 15 L7 17.5 H18Z"/></g></symbol>
+    <symbol id="nodeico-boss" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M4 18 L3 8 L8.2 12 L12 4.5 L15.8 12 L21 8 L20 18Z"/><path d="M4 21 H20"/></g></symbol>
 
     <!-- Region sigils: simple engraved line marks, not illustrations, tinted per region via currentColor. -->
     <symbol id="sigil-gate" viewBox="0 0 32 32">
@@ -1809,20 +1983,25 @@
 
     <div id="view-title">
       <div class="title-wrap">
-        <div class="corner-br" aria-hidden="true"></div>
-        <svg class="crest" viewBox="0 0 120 120" aria-hidden="true">
-          <circle cx="60" cy="60" r="57" class="crest-ring-outer"></circle>
-          <circle cx="60" cy="60" r="54" class="crest-ring"></circle>
-          <circle cx="60" cy="60" r="44" class="crest-ring-inner"></circle>
-          <circle cx="60" cy="60" r="44" class="crest-sheen"></circle>
-          <text x="60" y="70" class="crest-glyph">♚</text>
-          <text x="34" y="46" class="crest-small">♞</text>
-          <text x="86" y="46" class="crest-small">♞</text>
-        </svg>
-        <h2>Checkmate &amp; Ruin</h2>
-        <p class="title-tagline">Chess for its geometry. An RPG for its consequences. One company, one board, one road through the ruin.</p>
-        <button class="action ghost" id="continue-campaign" hidden>Continue Campaign</button>
-        <button class="action" id="begin-campaign">Begin the Campaign</button>
+        <div class="hero-stage">
+          <svg class="hero-scene" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
+<linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#06040a"/><stop offset=".3" stop-color="#150b0e"/><stop offset=".5" stop-color="#4d230a"/><stop offset=".585" stop-color="#7a3a10"/><stop offset="1" stop-color="#7a3a10"/></linearGradient>
+<radialGradient id="hglow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffb35a" stop-opacity=".85"/><stop offset=".35" stop-color="#e0702a" stop-opacity=".4"/><stop offset="1" stop-color="#e0702a" stop-opacity="0"/></radialGradient>
+<radialGradient id="hvig" cx=".5" cy=".48" r=".75"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".78"/></radialGradient>
+<linearGradient id="hscrim" x1="0" y1="0" x2="0" y2="1"><stop offset=".55" stop-color="#050302" stop-opacity="0"/><stop offset="1" stop-color="#050302" stop-opacity=".88"/></linearGradient>
+<linearGradient id="hfloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb060" stop-opacity=".30"/><stop offset=".6" stop-color="#ffb060" stop-opacity=".04"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient>
+</defs><rect width="1000" height="700" fill="url(#hsky)"/><circle cx="341" cy="46" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="59" cy="26" r="1.2" fill="#ffe8c0" opacity="0.25"/><circle cx="384" cy="157" r="0.7" fill="#ffe8c0" opacity="0.6"/><circle cx="229" cy="17" r="0.7" fill="#ffe8c0" opacity="0.4"/><circle cx="438" cy="25" r="0.7" fill="#ffe8c0" opacity="0.25"/><circle cx="574" cy="116" r="0.7" fill="#ffe8c0" opacity="0.6"/><circle cx="136" cy="65" r="1.2" fill="#ffe8c0" opacity="0.6"/><circle cx="606" cy="23" r="1.2" fill="#ffe8c0" opacity="0.6"/><circle cx="416" cy="20" r="0.7" fill="#ffe8c0" opacity="0.25"/><circle cx="580" cy="42" r="0.9" fill="#ffe8c0" opacity="0.4"/><circle cx="157" cy="146" r="0.7" fill="#ffe8c0" opacity="0.6"/><circle cx="325" cy="151" r="1.2" fill="#ffe8c0" opacity="0.25"/><circle cx="115" cy="156" r="1.2" fill="#ffe8c0" opacity="0.6"/><circle cx="202" cy="103" r="0.7" fill="#ffe8c0" opacity="0.6"/><circle cx="739" cy="24" r="1.2" fill="#ffe8c0" opacity="0.25"/><circle cx="643" cy="60" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="554" cy="117" r="0.9" fill="#ffe8c0" opacity="0.4"/><circle cx="609" cy="124" r="0.9" fill="#ffe8c0" opacity="0.4"/><circle cx="264" cy="54" r="1.2" fill="#ffe8c0" opacity="0.25"/><circle cx="93" cy="155" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="516" cy="95" r="1.2" fill="#ffe8c0" opacity="0.4"/><circle cx="304" cy="163" r="0.7" fill="#ffe8c0" opacity="0.25"/><circle cx="534" cy="115" r="0.7" fill="#ffe8c0" opacity="0.4"/><circle cx="165" cy="133" r="0.9" fill="#ffe8c0" opacity="0.25"/><circle cx="694" cy="27" r="1.2" fill="#ffe8c0" opacity="0.6"/><circle cx="818" cy="88" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="368" cy="160" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="826" cy="124" r="0.7" fill="#ffe8c0" opacity="0.25"/><circle cx="977" cy="77" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="690" cy="24" r="0.7" fill="#ffe8c0" opacity="0.6"/><circle cx="728" cy="87" r="1.2" fill="#ffe8c0" opacity="0.6"/><circle cx="707" cy="122" r="0.9" fill="#ffe8c0" opacity="0.6"/><circle cx="405" cy="179" r="0.9" fill="#ffe8c0" opacity="0.25"/><circle cx="973" cy="126" r="0.9" fill="#ffe8c0" opacity="0.25"/><circle cx="500" cy="388" r="300" fill="url(#hglow)"/><polygon points="0,410 0,343 33,343 33,365 67,365 67,313 124,313 124,363 167,363 167,368 210,368 210,381 235,347 260,381 260,341 278,307 295,341 295,370 314,336 332,370 332,298 362,264 392,298 392,358 426,358 426,271 455,271 455,319 516,319 516,387 544,353 572,387 572,356 592,322 611,356 611,298 626,264 640,298 640,351 656,317 672,351 672,381 711,381 711,360 735,326 759,360 759,361 816,361 816,357 861,357 861,282 882,248 903,282 903,303 930,303 930,342 990,342 990,374 1021,374 1000,410" fill="#1a0c07" opacity=".92"/><polygon points="0,430 0,392 23,389 23,380 58,386 58,374 86,371 86,366 123,362 123,389 148,386 148,381 172,386 172,368 201,358 201,397 219,402 219,402 245,411 245,386 274,387 274,409 303,406 303,400 324,405 324,393 348,389 348,375 381,384 381,384 399,394 399,373 428,365 428,407 467,409 467,366 507,362 507,403 540,406 540,393 578,385 578,385 608,387 608,368 628,363 628,406 651,396 651,377 673,381 673,405 711,414 711,384 748,385 748,379 770,386 770,413 792,403 792,408 830,414 830,387 852,383 852,413 876,411 876,396 900,402 900,366 925,374 925,398 953,405 953,406 984,397 984,385 1013,393 1000,430" fill="#0f0705"/><g><path d="M318 424 V232 H436 V300 Q470 270 500 270 Q530 270 564 300 V250 H682 V424 Z" fill="#0b0604"/><path d="M318 232 l8 -16 h20 l6 12 h18 l6 -12 h20 l8 16z M564 250 l10 -14 h18 l6 10 h22 l6 -10 h18 l2 14z" fill="#0b0604"/><path d="M452 424 V330 Q452 292 500 292 Q548 292 548 330 V424Z" fill="#ffb060" opacity=".9"/><path d="M452 424 V330 Q452 292 500 292 Q548 292 548 330 V424Z" fill="url(#hglow)" opacity=".7"/><rect class="hero-win" x="358" y="280" width="9" height="16" rx="4" fill="#ffae55"/><rect class="hero-win" x="392" y="300" width="9" height="16" rx="4" fill="#ffae55"/><rect class="hero-win" x="606" y="296" width="9" height="16" rx="4" fill="#ffae55"/><rect class="hero-win" x="640" y="276" width="9" height="16" rx="4" fill="#ffae55"/><rect class="hero-win" x="622" y="330" width="9" height="16" rx="4" fill="#ffae55"/><path d="M436 424 V300 L452 312 V424Z M564 424 V300 L548 312 V424Z" fill="#050302"/></g><rect x="0" y="408" width="1000" height="292" fill="#120a05"/><polygon points="444,408 448,408 351,420 340,420" fill="#3a2210"/><polygon points="448,408 452,408 363,420 351,420" fill="#150b05"/><polygon points="452,408 456,408 374,420 363,420" fill="#3a2210"/><polygon points="456,408 460,408 386,420 374,420" fill="#150b05"/><polygon points="460,408 464,408 397,420 386,420" fill="#3a2210"/><polygon points="464,408 468,408 408,420 397,420" fill="#150b05"/><polygon points="468,408 472,408 420,420 408,420" fill="#3a2210"/><polygon points="472,408 476,408 431,420 420,420" fill="#150b05"/><polygon points="476,408 480,408 443,420 431,420" fill="#3a2210"/><polygon points="480,408 484,408 454,420 443,420" fill="#150b05"/><polygon points="484,408 488,408 466,420 454,420" fill="#3a2210"/><polygon points="488,408 492,408 477,420 466,420" fill="#150b05"/><polygon points="492,408 496,408 489,420 477,420" fill="#3a2210"/><polygon points="496,408 500,408 500,420 489,420" fill="#150b05"/><polygon points="500,408 504,408 511,420 500,420" fill="#3a2210"/><polygon points="504,408 508,408 523,420 511,420" fill="#150b05"/><polygon points="508,408 512,408 534,420 523,420" fill="#3a2210"/><polygon points="512,408 516,408 546,420 534,420" fill="#150b05"/><polygon points="516,408 520,408 557,420 546,420" fill="#3a2210"/><polygon points="520,408 524,408 569,420 557,420" fill="#150b05"/><polygon points="524,408 528,408 580,420 569,420" fill="#3a2210"/><polygon points="528,408 532,408 592,420 580,420" fill="#150b05"/><polygon points="532,408 536,408 603,420 592,420" fill="#3a2210"/><polygon points="536,408 540,408 614,420 603,420" fill="#150b05"/><polygon points="540,408 544,408 626,420 614,420" fill="#3a2210"/><polygon points="544,408 548,408 637,420 626,420" fill="#150b05"/><polygon points="548,408 552,408 649,420 637,420" fill="#3a2210"/><polygon points="552,408 556,408 660,420 649,420" fill="#150b05"/><polygon points="556,408 560,408 672,420 660,420" fill="#3a2210"/><polygon points="560,408 564,408 683,420 672,420" fill="#150b05"/><polygon points="340,420 351,420 206,438 184,438" fill="#150b05"/><polygon points="351,420 363,420 229,438 206,438" fill="#3a2210"/><polygon points="363,420 374,420 251,438 229,438" fill="#150b05"/><polygon points="374,420 386,420 274,438 251,438" fill="#3a2210"/><polygon points="386,420 397,420 297,438 274,438" fill="#150b05"/><polygon points="397,420 408,420 319,438 297,438" fill="#3a2210"/><polygon points="408,420 420,420 342,438 319,438" fill="#150b05"/><polygon points="420,420 431,420 364,438 342,438" fill="#3a2210"/><polygon points="431,420 443,420 387,438 364,438" fill="#150b05"/><polygon points="443,420 454,420 410,438 387,438" fill="#3a2210"/><polygon points="454,420 466,420 432,438 410,438" fill="#150b05"/><polygon points="466,420 477,420 455,438 432,438" fill="#3a2210"/><polygon points="477,420 489,420 477,438 455,438" fill="#150b05"/><polygon points="489,420 500,420 500,438 477,438" fill="#3a2210"/><polygon points="500,420 511,420 523,438 500,438" fill="#150b05"/><polygon points="511,420 523,420 545,438 523,438" fill="#3a2210"/><polygon points="523,420 534,420 568,438 545,438" fill="#150b05"/><polygon points="534,420 546,420 590,438 568,438" fill="#3a2210"/><polygon points="546,420 557,420 613,438 590,438" fill="#150b05"/><polygon points="557,420 569,420 636,438 613,438" fill="#3a2210"/><polygon points="569,420 580,420 658,438 636,438" fill="#150b05"/><polygon points="580,420 592,420 681,438 658,438" fill="#3a2210"/><polygon points="592,420 603,420 703,438 681,438" fill="#150b05"/><polygon points="603,420 614,420 726,438 703,438" fill="#3a2210"/><polygon points="614,420 626,420 749,438 726,438" fill="#150b05"/><polygon points="626,420 637,420 771,438 749,438" fill="#3a2210"/><polygon points="637,420 649,420 794,438 771,438" fill="#150b05"/><polygon points="649,420 660,420 816,438 794,438" fill="#3a2210"/><polygon points="660,420 672,420 839,438 816,438" fill="#150b05"/><polygon points="672,420 683,420 862,438 839,438" fill="#3a2210"/><polygon points="184,438 206,438 -19,466 -59,466" fill="#3a2210"/><polygon points="206,438 229,438 20,466 -19,466" fill="#150b05"/><polygon points="229,438 251,438 60,466 20,466" fill="#3a2210"/><polygon points="251,438 274,438 100,466 60,466" fill="#150b05"/><polygon points="274,438 297,438 140,466 100,466" fill="#3a2210"/><polygon points="297,438 319,438 180,466 140,466" fill="#150b05"/><polygon points="319,438 342,438 220,466 180,466" fill="#3a2210"/><polygon points="342,438 364,438 260,466 220,466" fill="#150b05"/><polygon points="364,438 387,438 300,466 260,466" fill="#3a2210"/><polygon points="387,438 410,438 340,466 300,466" fill="#150b05"/><polygon points="410,438 432,438 380,466 340,466" fill="#3a2210"/><polygon points="432,438 455,438 420,466 380,466" fill="#150b05"/><polygon points="455,438 477,438 460,466 420,466" fill="#3a2210"/><polygon points="477,438 500,438 500,466 460,466" fill="#150b05"/><polygon points="500,438 523,438 540,466 500,466" fill="#3a2210"/><polygon points="523,438 545,438 580,466 540,466" fill="#150b05"/><polygon points="545,438 568,438 620,466 580,466" fill="#3a2210"/><polygon points="568,438 590,438 660,466 620,466" fill="#150b05"/><polygon points="590,438 613,438 700,466 660,466" fill="#3a2210"/><polygon points="613,438 636,438 740,466 700,466" fill="#150b05"/><polygon points="636,438 658,438 780,466 740,466" fill="#3a2210"/><polygon points="658,438 681,438 820,466 780,466" fill="#150b05"/><polygon points="681,438 703,438 860,466 820,466" fill="#3a2210"/><polygon points="703,438 726,438 900,466 860,466" fill="#150b05"/><polygon points="726,438 749,438 940,466 900,466" fill="#3a2210"/><polygon points="749,438 771,438 980,466 940,466" fill="#150b05"/><polygon points="771,438 794,438 1019,466 980,466" fill="#3a2210"/><polygon points="794,438 816,438 1059,466 1019,466" fill="#150b05"/><polygon points="140,466 180,466 -18,506 -83,506" fill="#3a2210"/><polygon points="180,466 220,466 47,506 -18,506" fill="#150b05"/><polygon points="220,466 260,466 111,506 47,506" fill="#3a2210"/><polygon points="260,466 300,466 176,506 111,506" fill="#150b05"/><polygon points="300,466 340,466 241,506 176,506" fill="#3a2210"/><polygon points="340,466 380,466 306,506 241,506" fill="#150b05"/><polygon points="380,466 420,466 370,506 306,506" fill="#3a2210"/><polygon points="420,466 460,466 435,506 370,506" fill="#150b05"/><polygon points="460,466 500,466 500,506 435,506" fill="#3a2210"/><polygon points="500,466 540,466 565,506 500,506" fill="#150b05"/><polygon points="540,466 580,466 630,506 565,506" fill="#3a2210"/><polygon points="580,466 620,466 694,506 630,506" fill="#150b05"/><polygon points="620,466 660,466 759,506 694,506" fill="#3a2210"/><polygon points="660,466 700,466 824,506 759,506" fill="#150b05"/><polygon points="700,466 740,466 889,506 824,506" fill="#3a2210"/><polygon points="740,466 780,466 953,506 889,506" fill="#150b05"/><polygon points="780,466 820,466 1018,506 953,506" fill="#3a2210"/><polygon points="820,466 860,466 1083,506 1018,506" fill="#150b05"/><polygon points="111,506 176,506 21,556 -75,556" fill="#3a2210"/><polygon points="176,506 241,506 117,556 21,556" fill="#150b05"/><polygon points="241,506 306,506 213,556 117,556" fill="#3a2210"/><polygon points="306,506 370,506 308,556 213,556" fill="#150b05"/><polygon points="370,506 435,506 404,556 308,556" fill="#3a2210"/><polygon points="435,506 500,506 500,556 404,556" fill="#150b05"/><polygon points="500,506 565,506 596,556 500,556" fill="#3a2210"/><polygon points="565,506 630,506 692,556 596,556" fill="#150b05"/><polygon points="630,506 694,506 787,556 692,556" fill="#3a2210"/><polygon points="694,506 759,506 883,556 787,556" fill="#150b05"/><polygon points="759,506 824,506 979,556 883,556" fill="#3a2210"/><polygon points="824,506 889,506 1075,556 979,556" fill="#150b05"/><polygon points="117,556 213,556 105,614 -27,614" fill="#150b05"/><polygon points="213,556 308,556 237,614 105,614" fill="#3a2210"/><polygon points="308,556 404,556 368,614 237,614" fill="#150b05"/><polygon points="404,556 500,556 500,614 368,614" fill="#3a2210"/><polygon points="500,556 596,556 632,614 500,614" fill="#150b05"/><polygon points="596,556 692,556 763,614 632,614" fill="#3a2210"/><polygon points="692,556 787,556 895,614 763,614" fill="#150b05"/><polygon points="787,556 883,556 1027,614 895,614" fill="#3a2210"/><polygon points="105,614 237,614 130,700 -55,700" fill="#150b05"/><polygon points="237,614 368,614 315,700 130,700" fill="#3a2210"/><polygon points="368,614 500,614 500,700 315,700" fill="#150b05"/><polygon points="500,614 632,614 685,700 500,700" fill="#3a2210"/><polygon points="632,614 763,614 870,700 685,700" fill="#150b05"/><polygon points="763,614 895,614 1055,700 870,700" fill="#3a2210"/><rect x="0" y="408" width="1000" height="292" fill="url(#hfloor)"/><ellipse cx="250" cy="600" rx="120" ry="12" fill="#000" opacity=".5"/><g transform="translate(250 600) rotate(-82) scale(3.4 3.4)"><use class="hero-fig" href="#pc-king" x="-22.5" y="-40" width="45" height="45"/></g><ellipse cx="790" cy="564" rx="70" ry="9" fill="#000" opacity=".5"/><g transform="translate(800 560) rotate(0) scale(2.9 2.9)"><use class="hero-fig" href="#pc-rook" x="-22.5" y="-40" width="45" height="45"/></g><g transform="translate(712 520) rotate(0) scale(2.0 2.0)"><use class="hero-fig" href="#pc-pawn" x="-22.5" y="-40" width="45" height="45"/></g><g transform="translate(110 540) rotate(0) scale(1.9 1.9)"><use class="hero-fig" href="#pc-pawn" x="-22.5" y="-40" width="45" height="45"/></g><g transform="translate(915 630) rotate(-14) scale(-2.6 2.6)"><use class="hero-fig" href="#pc-knight" x="-22.5" y="-40" width="45" height="45"/></g><rect width="1000" height="700" fill="url(#hscrim)"/><rect width="1000" height="700" fill="url(#hvig)"/></svg>
+          <canvas class="hero-ash" id="ash-canvas" aria-hidden="true"></canvas>
+          <div class="hero-text">
+            <p class="hero-eyebrow">A tactics RPG upon the chessboard</p>
+            <h2 class="hero-title">Checkmate <span>&amp;</span> Ruin</h2>
+            <p class="title-tagline">Chess for its geometry. An RPG for its consequences. One company, one board, one road through the ruin.</p>
+            <div class="hero-cta">
+              <button class="action ghost" id="continue-campaign" hidden>Continue Campaign</button>
+              <button class="action" id="begin-campaign">Begin the Campaign</button>
+            </div>
+          </div>
+        </div>
         <div class="hall" id="hall-readout"></div>
       </div>
     </div>
@@ -2182,13 +2361,13 @@
 
   /* ---------------- Overworld map ---------------- */
   const NODE_TYPES = {
-    battle:   { icon:'♟', label:'Battle' },
-    elite:    { icon:'☠', label:'Elite' },
-    rest:     { icon:'✚', label:'Rest' },
-    shrine:   { icon:'◆', label:'Shrine' },
-    cache:    { icon:'❖', label:'Cache' },
-    wayfarer: { icon:'❢', label:'Wayfarer' },
-    boss:     { icon:'♚', label:'Boss' },
+    battle:   { icon:'battle', label:'Battle' },
+    elite:    { icon:'elite', label:'Elite' },
+    rest:     { icon:'rest', label:'Rest' },
+    shrine:   { icon:'shrine', label:'Shrine' },
+    cache:    { icon:'cache', label:'Cache' },
+    wayfarer: { icon:'wayfarer', label:'Wayfarer' },
+    boss:     { icon:'boss', label:'Boss' },
   };
   // The campaign's authored regions, in order. Each region's boss is a fixed, named
   // character (not drawn from the elite pool) so the story has a consistent cast.
@@ -2666,6 +2845,59 @@
     return true;
   }
 
+
+  // Drifting ash and embers over the title scene. Runs only while the title is on screen.
+  const ash = { raf:0, parts:[], w:0, h:0, dpr:1 };
+  function ashReduced(){
+    return document.body.classList.contains('motion-off') || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  function ashResize(c){
+    const r = c.getBoundingClientRect();
+    ash.dpr = Math.min(window.devicePixelRatio||1, 1.5);
+    ash.w = Math.max(1, Math.round(r.width)); ash.h = Math.max(1, Math.round(r.height));
+    c.width = Math.round(ash.w*ash.dpr); c.height = Math.round(ash.h*ash.dpr);
+  }
+  function ashSpawn(initial){
+    return {
+      x: Math.random()*ash.w, y: initial ? Math.random()*ash.h : ash.h+10,
+      vx: .12+Math.random()*.45, vy: -(.18+Math.random()*.7),
+      r: .6+Math.random()*1.9, ph: Math.random()*6.28, hue: 18+Math.random()*26, ember: Math.random()<.45
+    };
+  }
+  function startAsh(){
+    const c = document.getElementById('ash-canvas');
+    if(!c || ash.raf) return;
+    const ctx = c.getContext && c.getContext('2d');
+    if(!ctx) return;
+    ashResize(c);
+    if(ashReduced()){ ctx.clearRect(0,0,c.width,c.height); return; }
+    const count = ash.w < 600 ? 38 : 70;
+    ash.parts = Array.from({length:count}, ()=>ashSpawn(true));
+    let last = performance.now();
+    const frame = (now)=>{
+      if(document.getElementById('view-title').hidden || document.hidden || ashReduced()){ ash.raf = 0; ctx.clearRect(0,0,c.width,c.height); return; }
+      const dt = Math.min(2.2, (now-last)/16.7); last = now;
+      ctx.setTransform(ash.dpr,0,0,ash.dpr,0,0);
+      ctx.clearRect(0,0,ash.w,ash.h);
+      for(const p of ash.parts){
+        p.ph += .04*dt;
+        p.x += (p.vx + Math.sin(p.ph)*.25)*dt; p.y += p.vy*dt;
+        if(p.y < -12 || p.x > ash.w+12){ Object.assign(p, ashSpawn(false)); p.x = Math.random()*ash.w*.9; }
+        const fade = Math.min(1, Math.max(0, p.y/(ash.h*.5)));
+        const a = (.25 + .45*Math.abs(Math.sin(p.ph*1.7)))*(.35+.65*fade);
+        ctx.beginPath();
+        ctx.fillStyle = p.ember ? `hsla(${p.hue},100%,62%,${a})` : `rgba(230,214,190,${a*.55})`;
+        if(p.ember){ ctx.shadowColor = `hsla(${p.hue},100%,55%,.8)`; ctx.shadowBlur = 6; } else { ctx.shadowBlur = 0; }
+        ctx.arc(p.x, p.y, p.r, 0, 6.283);
+        ctx.fill();
+      }
+      ash.raf = requestAnimationFrame(frame);
+    };
+    ash.raf = requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize', ()=>{ const c=document.getElementById('ash-canvas'); if(c && ash.raf) ashResize(c); });
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && !document.getElementById('view-title').hidden) startAsh(); });
+
   function showTitle(){
     document.getElementById('view-title').hidden = false;
     document.getElementById('view-map').hidden = true;
@@ -2685,6 +2917,7 @@
     const continueBtn = document.getElementById('continue-campaign');
     const hasSave = !!loadSave();
     continueBtn.hidden = !hasSave;
+    startAsh();
   }
 
   function showMap(){
@@ -2707,6 +2940,47 @@
     if(!seen) document.getElementById('tutorial-backdrop').hidden = false;
   }
 
+  // Decorative terrain drawn behind the waypoints, themed per region (all in currentColor).
+  function mapArt(sigil){
+    const rows = (n, f)=>Array.from({length:n}, (_,i)=>f(i)).join('');
+    let g = '<g fill="none" stroke="currentColor" stroke-width="1" opacity=".16"><path d="M0 120 C120 90 220 150 340 120 S560 80 700 118 S820 140 870 120"/><path d="M0 250 C140 220 260 280 400 250 S640 215 760 252 S850 262 870 250"/><path d="M0 330 C160 305 300 350 450 328 S700 300 870 335"/></g>';
+    let s = '';
+    switch(sigil){
+      case 'gate':
+        s = '<path d="M30 380 V292 Q30 244 78 244 Q126 244 126 292 V380 H106 V296 Q106 266 78 266 Q50 266 50 296 V380Z"/><path d="M126 380 V334 H146 V322 H168 V338 H214 V380Z"/><path d="M742 380 V286 H752 V274 H764 V286 H776 V274 H788 V286 H800 V274 H812 V286 H822 V380Z"/><path d="M822 380 V340 H870 V380Z"/>';
+        break;
+      case 'marsh':
+        s = rows(26, i=>{ const x=14+i*34+(i%3)*5, h=46+(i*37%34); return `<path d="M${x} 380 q-5 -${h*.55} 2 -${h}" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="${x+2}" cy="${380-h}" rx="2.4" ry="7"/>`; })
+          + '<path d="M60 345 q30 -8 60 0 q-30 8 -60 0M380 352 q36 -9 72 0 q-36 9 -72 0M640 340 q28 -8 56 0 q-28 8 -56 0" fill="none" stroke="currentColor" stroke-width="1.4"/>';
+        break;
+      case 'ember':
+        s = '<path d="M0 380 L80 304 L122 334 L192 252 L262 334 L332 294 L404 380Z"/><path d="M500 380 L596 282 L640 320 L716 238 L796 330 L870 298 V380Z"/>'
+          + rows(18, i=>`<circle cx="${40+i*47%820}" cy="${200+(i*53%150)}" r="${1+(i%3)*.6}"/>`);
+        break;
+      case 'drowned':
+        s = '<path d="M118 380 V324 L128 308 L138 324 V380Z"/><path d="M696 380 V300 H712 V284 L722 272 L732 284 V300 H748 V380Z"/><path d="M420 380 V344 H432 V332 L440 324 L448 332 V344 H460 V380Z"/>'
+          + rows(4, r=>`<path d="M0 ${330+r*14} ${rows(20,()=>'q22 -12 44 0 ').replace(/ $/,'')}" fill="none" stroke="currentColor" stroke-width="1.4" opacity="${.9-r*.18}"/>`);
+        break;
+      case 'throne':
+        s = rows(5, i=>`<rect x="${34+i*36}" y="${262+i*6}" width="14" height="${118-i*6}"/>`) + rows(5, i=>`<rect x="${676+i*36}" y="${262+(4-i)*6}" width="14" height="${118-(4-i)*6}"/>`)
+          + '<path d="M408 380 V312 H420 V286 H450 V312 H462 V380Z"/>';
+        break;
+      case 'undercroft':
+        s = rows(14, i=>{ const x=i*64+8, h=26+(i*29%36); return `<path d="M${x} 0 H${x+56} L${x+28} ${h}Z"/>`; })
+          + '<path d="M300 380 V330 Q300 300 330 300 Q360 300 360 330 V380Z"/><path d="M560 380 V324 Q560 292 592 292 Q624 292 624 324 V380Z"/>';
+        break;
+      case 'edge':
+        s = '<path d="M0 380 V306 L120 292 L204 324 L268 380Z"/><path d="M640 380 L722 330 L780 344 L870 296 V380Z"/>'
+          + rows(14, i=>`<circle cx="${60+i*61%800}" cy="${24+(i*37%110)}" r="1.4"/>`) + '<path d="M520 70 q8 -7 16 0 q8 -7 16 0 M560 96 q6 -5 12 0 q6 -5 12 0" fill="none" stroke="currentColor" stroke-width="1.4"/>';
+        break;
+      default:
+        s = '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 7"><circle cx="435" cy="190" r="120"/><circle cx="435" cy="190" r="175"/><circle cx="435" cy="190" r="235"/></g>';
+    }
+    const compass = '<g class="map-compass"><circle cx="824" cy="336" r="24" fill="none" stroke="currentColor" stroke-width="1"/><path d="M824 306 L829 331 L854 336 L829 341 L824 366 L819 341 L794 336 L819 331Z"/></g>';
+    return `<g class="map-art" aria-hidden="true">${g}<g fill="currentColor" opacity=".2">${s}</g><g fill="currentColor" stroke="none" opacity=".38">${compass}</g>`
+      + '<rect x="6" y="6" width="858" height="368" rx="2" fill="none" stroke="currentColor" stroke-width="1" opacity=".3"/></g>';
+  }
+
   function renderMap(){
     const rgInfo = regionInfo(region);
     document.getElementById('region-num').textContent = region;
@@ -2723,7 +2997,7 @@
       const y = H/2 + (node.index - (count-1)/2) * 100;
       return {x,y};
     };
-    let svgHtml = '';
+    let svgHtml = mapArt(rgInfo.sigil);
     // edges first (under nodes)
     map.nodes.forEach(node=>{
       const p1 = posFor(node);
@@ -2748,14 +3022,17 @@
       if(node.cleared) cls += ' cleared';
       if(!isAvail && !node.cleared && !isCurrent) cls += ' locked';
       const title = node.championName ? `${t.label}: ${node.championName}` : t.label;
-      svgHtml += `<g class="${cls}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
+      const R = node.type==='boss' ? 31 : 25, isz = node.type==='boss' ? 32 : 26;
+      svgHtml += `<g class="${cls} nt-${node.type}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
         <title>${title}</title>
-        ${isAvail?`<circle class="disc-hit" cx="${x}" cy="${y}" r="34" fill="transparent" pointer-events="all"></circle>`:''}
-        <circle class="disc-rim" cx="${x}" cy="${y}" r="25"></circle>
-        <circle class="disc" cx="${x}" cy="${y}" r="21"></circle>
-        <circle class="disc-sheen" cx="${x-7}" cy="${y-9}" r="9"></circle>
-        <text class="icon" x="${x}" y="${y-2}">${t.icon}</text>
-        <text class="label" x="${x}" y="${y+22}">${t.label}</text>
+        ${isAvail?`<circle class="disc-hit" cx="${x}" cy="${y}" r="36" fill="transparent" pointer-events="all"></circle>`:''}
+        <circle class="disc-shadow" cx="${x+1}" cy="${y+3}" r="${R+2}"></circle>
+        ${isAvail?`<circle class="disc-pulse" cx="${x}" cy="${y}" r="${R+5}"></circle>`:''}
+        <circle class="disc-rim" cx="${x}" cy="${y}" r="${R}"></circle>
+        <circle class="disc" cx="${x}" cy="${y}" r="${R-4}"></circle>
+        <circle class="disc-sheen" cx="${x-6}" cy="${y-8}" r="${R*.38}"></circle>
+        <use class="icon" href="#nodeico-${t.icon}" x="${x-isz/2}" y="${y-isz/2}" width="${isz}" height="${isz}"></use>
+        <text class="label" x="${x}" y="${y+R+15}">${t.label}</text>
       </g>`;
     });
     svg.innerHTML = svgHtml;
@@ -3081,13 +3358,14 @@
     }
     const {dmg, crit} = rollDamage(att, target);
     target.hp -= dmg;
-    lastHit = {r:target.r, c:target.c};
+    lastHit = {r:target.r, c:target.c, kind: crit? 'crit':'hit'};
     pendingFloats.push({r:target.r, c:target.c, text:'-'+dmg, cls: crit? 'crit':''});
     playSfx(crit? 'crit' : 'hit');
     vibrate(crit? [18,35,22] : 15);
     log(`${sideLabel(att)} ${CLASSES[att.type].name} strikes ${sideLabel(target)} ${CLASSES[target.type].name} for <span class="dmg">${dmg}</span>${crit? ' (critical!)':''}.`);
     if(target.hp<=0){
       target.hp=0;
+      lastHit.kind = 'kill';
       log(`${sideLabel(target)} ${CLASSES[target.type].name} falls.`, 'dmg');
       removeUnit(target);
       if(att.team==='player'){ grantXP(att, xpMultiplier()*(8 + target.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
@@ -3100,7 +3378,7 @@
         const raw = rollDamage(target, att);
         const counterDmg = Math.max(1, Math.round(raw.dmg * (target.ascended? 1 : 0.5)));
         att.hp -= counterDmg;
-        lastHit = {r:att.r, c:att.c};
+        lastHit = {r:att.r, c:att.c, kind:'hit'};
         pendingFloats.push({r:att.r, c:att.c, text:'-'+counterDmg, cls:''});
         log(`${sideLabel(target)} Warden counters for <span class="dmg">${counterDmg}</span>.`);
         if(att.hp<=0){
@@ -3117,7 +3395,7 @@
     const pct = caster.ascended ? 0.45 : 0.3;
     const amt = Math.round(ally.maxHp*pct);
     ally.hp = Math.min(ally.maxHp, ally.hp+amt);
-    lastHit = {r:ally.r, c:ally.c};
+    lastHit = {r:ally.r, c:ally.c, kind:'heal'};
     pendingFloats.push({r:ally.r, c:ally.c, text:'+'+amt, cls:'heal'});
     playSfx('heal');
     log(`${sideLabel(caster)} Cleric mends ${CLASSES[ally.type].name} for <span class="heal">${amt}</span>.`, null);
@@ -3494,7 +3772,16 @@
           }
         }
         if(selected && selected.r===r && selected.c===c) sq.classList.add('selected');
-        if(flashPos && flashPos.r===r && flashPos.c===c) sq.classList.add('impact');
+        if(flashPos && flashPos.r===r && flashPos.c===c){
+          sq.classList.add('impact', 'fx-'+(flashPos.kind||'hit'));
+          if(settings.motion!=='off'){
+            const k = flashPos.kind||'hit';
+            const fx = document.createElement('div');
+            fx.className = k==='heal' ? 'fx-heal' : k==='kill' ? 'fx-burst' : 'fx-slash';
+            fx.setAttribute('aria-hidden','true');
+            sq.appendChild(fx);
+          }
+        }
         if(u){
           const wrap = document.createElement('div');
           wrap.className='piece tooltip' + (u.ascended? ' ascended':'');
