@@ -25,10 +25,11 @@ Progress (your current run and your all-time Hall of Champions record) is saved 
 - **Growth and promotion.** Surviving pieces gain experience and level up; a pawn that reaches the far rank promotes into a chosen class instead of an automatic queen.
 - **A Chronicle tab** that tells the campaign's story in-game, unlocking each region's lore as your own save actually reaches it.
 - **Achievements and a Hall of Champions**, tracked locally across runs.
+- **A lamplit war-table look**: original faceted pieces, a walnut-and-maple board on a dark table, an animated title scene, and a parchment map with terrain art for each region.
 - Light/dark themes, reduced-motion support, and keyboard/screen-reader-accessible play.
 
 ## Credits
 
-Piece artwork is the "cburnett" chess set by [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett), used under [GPLv2+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) as published by [lichess.org](https://github.com/lichess-org/lila).
+Piece artwork is original to this project: faceted silhouettes drawn as inline SVG.
 
-Fonts (Cinzel, Crimson Pro, JetBrains Mono) are loaded from Google Fonts.
+Fonts (IM Fell English SC, Crimson Pro, JetBrains Mono) are loaded from Google Fonts. Everything else (pieces, board, title scene, map terrain, effects) is drawn in-file with inline SVG, CSS, and a small canvas.
