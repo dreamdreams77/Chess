@@ -1912,7 +1912,8 @@
   .boss-panel-sigil-bg{ color:rgba(236,208,138,.08); }
   .boss-panel-figure{ color:#05060a; filter:drop-shadow(0 0 1px #ff8a8e) drop-shadow(0 0 12px rgba(226,72,79,.7)); }
   .boss-panel-quote{ background:none; border:none; color:var(--ink); font-style:italic; }
-  .map-legend svg{ transform:translateY(-3px); }
+  .class-port{ flex:0 0 52px; width:52px; height:52px; border-radius:50%; padding:2px; background:linear-gradient(160deg,#ecd08a,#6b4f22); box-shadow:0 4px 10px rgba(60,30,0,.4); }
+  .class-card .piece-of{ font-family:var(--f-head); letter-spacing:.14em; text-transform:uppercase; font-size:11px; }
 </style>
 </head>
 <body>
@@ -2369,13 +2370,13 @@
         </div>
         <div class="map-scroll"><svg class="map-svg" id="map-svg" viewBox="0 0 870 380" role="group" aria-label="Region map"></svg></div>
         <div class="map-legend">
-          <span class="nt-battle"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-round"></use></svg>Battle</span>
-          <span class="nt-elite"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-shield"></use></svg>Elite</span>
-          <span class="nt-rest"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-hex"></use></svg>Rest</span>
-          <span class="nt-shrine"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-diamond"></use></svg>Shrine</span>
-          <span class="nt-cache"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-chest"></use></svg>Cache</span>
-          <span class="nt-wayfarer"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-octa"></use></svg>Wayfarer</span>
-          <span class="nt-boss"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-keep"></use></svg>Region Boss</span>
+          <span class="nt-battle"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-round" x="-32" y="-32" width="64" height="64"></use></svg>Battle</span>
+          <span class="nt-elite"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-shield" x="-32" y="-32" width="64" height="64"></use></svg>Elite</span>
+          <span class="nt-rest"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-hex" x="-32" y="-32" width="64" height="64"></use></svg>Rest</span>
+          <span class="nt-shrine"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-diamond" x="-32" y="-32" width="64" height="64"></use></svg>Shrine</span>
+          <span class="nt-cache"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-chest" x="-32" y="-32" width="64" height="64"></use></svg>Cache</span>
+          <span class="nt-wayfarer"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-octa" x="-32" y="-32" width="64" height="64"></use></svg>Wayfarer</span>
+          <span class="nt-boss"><svg viewBox="-32 -32 64 64" aria-hidden="true"><use class="tk" href="#tok-keep" x="-32" y="-32" width="64" height="64"></use></svg>Region Boss</span>
         </div>
         <div id="shrine-slot"></div>
       </div>
@@ -2577,7 +2578,7 @@
     const grid = document.getElementById('codex-classes');
     grid.innerHTML = Object.entries(CLASSES).map(([key,c])=>`
       <div class="class-card">
-        <div class="h"><span class="g">${pieceIconHTML(key,'neutral')}</span><div>
+        <div class="h"><span class="class-port">${portraitHTML(key)}</span><div>
           <div class="n">${c.name}</div>
           <div class="piece-of">from the ${c.of}</div>
         </div></div>
