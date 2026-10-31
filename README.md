@@ -25,11 +25,11 @@ Progress (your current run and your all-time Hall of Champions record) is saved 
 - **Growth and promotion.** Surviving pieces gain experience and level up; a pawn that reaches the far rank promotes into a chosen class instead of an automatic queen.
 - **A Chronicle tab** that tells the campaign's story in-game, unlocking each region's lore as your own save actually reaches it.
 - **Achievements and a Hall of Champions**, tracked locally across runs.
-- **A flat, ink-printed graphic-novel look**: original faceted pieces, a maple-and-walnut board with hard-edged shadows, an animated title poster, and a parchment map with terrain art for each region. On a phone it uses a bottom tab bar, a compact HUD above the board, and a sticky End Round button.
+- **A dark-fantasy presentation**: a moonlit title screen with drifting fog and embers, an ivory-and-obsidian stone board in a gilded frame, class portraits and detailed unit cards (health, experience, Might, Guard, ability, ascension and status), an illustrated parchment campaign map with terrain for each region and a distinct token for every kind of waypoint, and warnings when either Sovereign can be struck. On a phone it uses a bottom tab bar and a pinned End Round button.
 - Light/dark themes, reduced-motion support, and keyboard/screen-reader-accessible play.
 
 ## Credits
 
 Piece artwork is original to this project: faceted silhouettes drawn as inline SVG.
 
-Fonts (Fraunces, Barlow Condensed, Crimson Pro, JetBrains Mono) are loaded from Google Fonts. Everything else (pieces, board, title scene, map terrain, effects) is drawn in-file with inline SVG, CSS, and a small canvas.
+Fonts (Cinzel Decorative, Cinzel, Crimson Pro, JetBrains Mono) are loaded from Google Fonts. Everything else (pieces, board, title scene, map terrain, effects) is drawn in-file with inline SVG, CSS, and a small canvas.
