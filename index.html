@@ -1914,6 +1914,200 @@
   .boss-panel-quote{ background:none; border:none; color:var(--ink); font-style:italic; }
   .class-port{ flex:0 0 52px; width:52px; height:52px; border-radius:50%; padding:2px; background:linear-gradient(160deg,#ecd08a,#6b4f22); box-shadow:0 4px 10px rgba(60,30,0,.4); }
   .class-card .piece-of{ font-family:var(--f-head); letter-spacing:.14em; text-transform:uppercase; font-size:11px; }
+
+  /* ================= Polish: life, weight and ceremony ================= */
+  @property --glow-a{ syntax:'<number>'; inherits:true; initial-value:1; }
+
+  /* scene curtain (title cards between scenes) */
+  .scene-curtain{ position:fixed; inset:0; z-index:300; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0; visibility:hidden;
+    background:radial-gradient(ellipse at 50% 45%, #161c2b, #05070c 72%); }
+  .scene-curtain.play{ visibility:visible; pointer-events:auto; cursor:pointer; animation:curtain 1.45s ease both; }
+  .scene-curtain.play.long{ animation-name:curtain-long; animation-duration:2.4s; }
+  @keyframes curtain{ 0%,48%{ opacity:1; } 100%{ opacity:0; } }
+  @keyframes curtain-long{ 0%,68%{ opacity:1; } 100%{ opacity:0; } }
+  .sc-inner{ text-align:center; padding:0 24px; }
+  .sc-eyebrow{ margin:0 0 12px; font-family:var(--f-head); font-weight:600; font-size:12px; letter-spacing:.42em; text-transform:uppercase; color:#cdb27a; animation:fade-up .7s .05s both; }
+  .sc-rule{ display:block; width:min(220px,60vw); height:1px; margin:0 auto 14px; background:linear-gradient(90deg, transparent, #c9a24a, transparent); animation:rule-in .8s .1s both; }
+  .sc-title{ margin:0; font-family:var(--f-logo); font-weight:900; font-size:clamp(30px,6.4vw,64px); line-height:1.05;
+    background:linear-gradient(180deg,#fff6d6,#ecd08a 40%,#9c6f26 66%,#f0d38a); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 3px 0 #1a1004); animation:title-in .9s .1s cubic-bezier(.2,.8,.3,1) both; }
+  .sc-sub{ margin:12px 0 0; color:#cdbfa3; font-style:italic; font-size:clamp(15px,2vw,19px); animation:fade-up .8s .4s both; }
+  @keyframes rule-in{ from{ transform:scaleX(0); opacity:0; } to{ transform:none; opacity:1; } }
+  @keyframes title-in{ from{ opacity:0; letter-spacing:.22em; filter:drop-shadow(0 3px 0 #1a1004) blur(3px); } to{ opacity:1; letter-spacing:normal; } }
+
+  /* encounter introduction */
+  .encounter{ position:fixed; inset:0; z-index:250; display:grid; grid-template-rows:auto minmax(0,1fr) auto auto; overflow:auto;
+    background:radial-gradient(ellipse 70% 60% at 50% 40%, rgba(30,14,20,.92), rgba(3,4,8,.97) 75%); --enc-glow:rgba(226,72,79,.62); --enc-rim:#ff9a9e; --enc-accent:#ff8a8e; }
+  .encounter.enc-elite{ --enc-glow:rgba(201,162,74,.5); --enc-rim:#fbeab8; --enc-accent:#ecd08a; }
+  .enc-bar{ height:clamp(22px,6vh,60px); background:#000; }
+  .enc-top{ transform-origin:top; } .enc-bottom{ transform-origin:bottom; }
+  .enc-stage{ position:relative; display:flex; align-items:flex-end; justify-content:center; min-height:min(46vh,440px); overflow:hidden; }
+  .enc-light{ position:absolute; inset:0; background:radial-gradient(ellipse 32% 58% at 50% 78%, var(--enc-glow), transparent 72%), radial-gradient(ellipse 60% 30% at 50% 100%, rgba(0,0,0,.6), transparent 70%); }
+  .enc-sigil{ position:absolute; left:50%; top:52%; width:min(64vh,520px); height:auto; transform:translate(-50%,-50%); color:rgba(236,208,138,.07); }
+  .enc-figure{ position:relative; height:min(42vh,400px); width:auto; color:#05060a; filter:drop-shadow(0 0 1px var(--enc-rim)) drop-shadow(0 0 18px var(--enc-glow)); }
+  .enc-embers{ position:absolute; inset:0; pointer-events:none; opacity:.8;
+    background:radial-gradient(circle 1.6px at 22% 80%, #ffb38a 98%, transparent), radial-gradient(circle 1.2px at 64% 70%, #ffd1a0 98%, transparent), radial-gradient(circle 1.4px at 40% 92%, #ff8a6a 98%, transparent), radial-gradient(circle 1.1px at 78% 88%, #ffc58a 98%, transparent), radial-gradient(circle 1.3px at 12% 60%, #ffb38a 98%, transparent), radial-gradient(circle 1px at 86% 62%, #ffe0b0 98%, transparent); }
+  .enc-text{ text-align:center; padding:18px 20px 22px; max-width:680px; margin:0 auto; }
+  .enc-eyebrow{ margin:0; font-family:var(--f-head); font-weight:600; font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--enc-accent); }
+  .enc-name{ margin:6px 0 10px; font-family:var(--f-logo); font-weight:900; font-size:clamp(30px,6vw,58px); line-height:1.05;
+    background:linear-gradient(180deg,#fff6d6,#ecd08a 40%,#9c6f26 66%,#f0d38a); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 3px 0 #120a02) drop-shadow(0 10px 22px #000); }
+  .enc-quote{ margin:0 auto; max-width:46ch; color:#dccfb4; font-style:italic; font-size:clamp(16px,2vw,19px); line-height:1.5; }
+  .enc-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+  .enc-actions .action{ min-width:200px; }
+  @media (prefers-reduced-motion:no-preference){
+    .encounter{ animation:fade-in .4s ease-out both; }
+    .enc-bar{ animation:bar-in .6s cubic-bezier(.2,.8,.3,1) both; }
+    .enc-light{ animation:light-bloom 1.6s .2s ease-out both; }
+    .enc-sigil{ animation:sigil-in 1.6s .2s ease-out both, sigil-spin 80s 1.8s linear infinite; }
+    .enc-figure{ animation:figure-rise 1.3s .3s cubic-bezier(.2,.8,.3,1) both, figure-breathe 5s 1.8s ease-in-out infinite; }
+    .enc-embers{ animation:embers-rise 6s linear infinite; }
+    .enc-eyebrow{ animation:fade-up .7s .95s both; }
+    .enc-name{ animation:title-in 1.1s 1.05s cubic-bezier(.2,.8,.3,1) both; }
+    .enc-quote{ animation:fade-up .8s 1.55s both; }
+    .enc-actions{ animation:fade-up .7s 1.85s both; }
+  }
+  @keyframes fade-in{ from{ opacity:0; } to{ opacity:1; } }
+  @keyframes bar-in{ from{ transform:scaleY(0); } to{ transform:none; } }
+  @keyframes light-bloom{ from{ opacity:0; transform:scale(.8); } to{ opacity:1; transform:none; } }
+  @keyframes sigil-in{ from{ opacity:0; transform:translate(-50%,-50%) scale(.85) rotate(-10deg); } to{ opacity:1; transform:translate(-50%,-50%); } }
+  @keyframes sigil-spin{ from{ transform:translate(-50%,-50%) rotate(0); } to{ transform:translate(-50%,-50%) rotate(360deg); } }
+  @keyframes figure-rise{ from{ opacity:0; transform:translateY(40px) scale(.96); filter:drop-shadow(0 0 1px var(--enc-rim)) drop-shadow(0 0 0 transparent) brightness(0); } to{ opacity:1; transform:none; } }
+  @keyframes figure-breathe{ 0%,100%{ transform:none; } 50%{ transform:translateY(-3px) scale(1.008); } }
+  @keyframes embers-rise{ from{ transform:translateY(20%); opacity:0; } 20%{ opacity:.9; } to{ transform:translateY(-40%); opacity:0; } }
+
+  /* champions on the board */
+  .piece.champion .glyph-svg{ width:78%; max-width:72px; }
+  .piece.champion::before{ border-color:#ecd08a; box-shadow:0 0 0 2px #2a0a0e, 0 0 0 3px #c9a24a, 0 3px 8px rgba(0,0,0,.7); }
+  .champ-aura{ position:absolute; z-index:0; left:50%; bottom:0; width:92%; height:34%; transform:translateX(-50%); border-radius:50%; pointer-events:none;
+    background:radial-gradient(ellipse, rgba(226,72,79,.75) 0%, rgba(226,72,79,.18) 45%, transparent 70%); }
+  .piece.champion-elite .champ-aura{ background:radial-gradient(ellipse, rgba(236,208,138,.7) 0%, rgba(236,208,138,.16) 45%, transparent 70%); }
+  .champ-mark{ position:absolute; z-index:3; top:-3%; left:50%; width:36%; max-width:24px; height:auto; transform:translateX(-50%); color:#ecd08a; filter:drop-shadow(0 1px 1px #000) drop-shadow(0 0 4px rgba(236,208,138,.8)); pointer-events:none; }
+  .piece.champion-elite .champ-mark{ color:#ff9a9e; filter:drop-shadow(0 1px 1px #000) drop-shadow(0 0 4px rgba(226,72,79,.9)); }
+  @media (prefers-reduced-motion:no-preference){
+    .champ-aura{ animation:aura 2.8s ease-in-out infinite; }
+    .champ-mark{ animation:mark-float 3.2s ease-in-out infinite; }
+  }
+  @keyframes aura{ 0%,100%{ opacity:.55; transform:translateX(-50%) scale(.92); } 50%{ opacity:1; transform:translateX(-50%) scale(1.06); } }
+  @keyframes mark-float{ 0%,100%{ transform:translateX(-50%) translateY(0); } 50%{ transform:translateX(-50%) translateY(-3px); } }
+
+  .champion-bar{ order:-2; width:100%; display:grid; grid-template-columns:48px 1fr; gap:12px; align-items:center; padding:8px 14px 10px; margin:0 0 10px;
+    background:linear-gradient(90deg, rgba(74,13,19,.92), rgba(20,24,33,.95) 62%, rgba(20,24,33,.7)); border:1px solid var(--crimson);
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), 0 10px 24px -12px #000; color:var(--text); }
+  .champion-bar[hidden]{ display:none; }
+  .champion-bar.cb-elite{ background:linear-gradient(90deg, rgba(74,56,18,.9), rgba(20,24,33,.95) 62%, rgba(20,24,33,.7)); border-color:var(--gold-deep); }
+  .cb-sil{ height:54px; display:flex; justify-content:center; overflow:hidden; }
+  .cb-sil svg{ height:100%; width:auto; color:#05060a; filter:drop-shadow(0 0 1px #ff9a9e) drop-shadow(0 0 6px rgba(226,72,79,.75)); }
+  .cb-elite .cb-sil svg{ filter:drop-shadow(0 0 1px #fbeab8) drop-shadow(0 0 6px rgba(236,208,138,.7)); }
+  .cb-head{ display:flex; justify-content:space-between; gap:10px; font-family:var(--f-head); font-weight:600; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:#ff9b9f; }
+  .cb-elite .cb-head{ color:#ecd08a; }
+  .cb-hp{ color:var(--text); font-weight:700; letter-spacing:.06em; white-space:nowrap; }
+  .cb-name{ margin:1px 0 6px; font-family:var(--f-logo); font-weight:900; font-size:clamp(15px,2.2vw,19px); color:var(--gold-bright); line-height:1.15; }
+  .champion-bar .cb-hpbar{ width:100%; height:9px; margin:0; }
+  .champion-bar .cb-hpbar > i{ background:linear-gradient(180deg,#ff9a9e,#c3303a 50%,#6e0f17); }
+  .champion-bar.fallen{ opacity:.8; }
+  .champion-bar.fallen .cb-name{ text-decoration:line-through; text-decoration-color:rgba(226,72,79,.85); text-decoration-thickness:2px; }
+  .champion-bar.fallen .cb-sil svg{ opacity:.4; }
+  @media (prefers-reduced-motion:no-preference){ .champion-bar.struck{ animation:cb-struck .4s ease-out; } }
+  @keyframes cb-struck{ 0%{ transform:none; box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), 0 0 0 0 rgba(226,72,79,.9); } 25%{ transform:translateX(-4px); } 50%{ transform:translateX(3px); box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), 0 0 18px 2px rgba(226,72,79,.7); } 100%{ transform:none; } }
+
+  /* combat weight */
+  .sq.just-acted{ box-shadow:inset 0 0 0 2px rgba(255,138,142,.85), inset 0 0 22px rgba(226,72,79,.45); }
+  .sq.fx-lunge{ z-index:4; }
+  .float-num.crit::before{ content:"Critical"; display:block; font-size:9.5px; letter-spacing:.26em; text-transform:uppercase; color:#ffd45a; text-align:center; margin-bottom:-2px; }
+  .board-frame::before{ content:""; position:absolute; inset:0; z-index:6; pointer-events:none; opacity:0; }
+  .board-frame.crit-flash::before{ background:radial-gradient(ellipse at center, rgba(255,215,120,0) 35%, rgba(255,196,80,.5) 100%); }
+  @media (prefers-reduced-motion:no-preference){
+    .sq.fx-lunge .piece{ animation:lunge .36s cubic-bezier(.3,.7,.3,1); }
+    .sq.fx-hit .glyph-svg, .sq.fx-crit .glyph-svg{ animation:hit-flash .26s ease-out; }
+    .board-frame.crit-flash::before{ animation:frame-flash .55s ease-out; }
+    .float-num{ animation:float-pop 1.2s cubic-bezier(.2,.8,.3,1) forwards; }
+    .sq.selected .piece .glyph-svg{ animation:hover-bob 2.2s ease-in-out infinite; }
+    .sq.deal .piece{ animation:deal-in .55s var(--deal,0ms) cubic-bezier(.2,.8,.3,1.25) both; }
+  }
+  @keyframes lunge{ 0%{ transform:none; } 40%{ transform:translate(calc(var(--lx,0) * 28%), calc(var(--ly,0) * 28%)) scale(1.06); } 100%{ transform:none; } }
+  @keyframes hit-flash{ 0%{ filter:brightness(3.4) saturate(0); } 100%{ } }
+  @keyframes frame-flash{ 0%{ opacity:1; } 100%{ opacity:0; } }
+  @keyframes float-pop{ 0%{ opacity:0; transform:translate(-50%,6px) scale(.55); } 14%{ opacity:1; transform:translate(-50%,-2px) scale(1.25); } 28%{ transform:translate(-50%,-4px) scale(1); } 100%{ opacity:0; transform:translate(-50%,-32px) scale(.96); } }
+  @keyframes hover-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+  @keyframes deal-in{ from{ opacity:0; transform:translateY(-18px) scale(.86); } to{ opacity:1; transform:none; } }
+
+  /* end of battle */
+  .board-frame.triumph::before{ opacity:0; background:linear-gradient(105deg, transparent 38%, rgba(255,236,180,.4) 50%, transparent 62%); background-size:260% 100%; }
+  .board-frame.defeated .board{ filter:grayscale(.85) brightness(.66); transition:filter 1.4s ease; }
+  .board-frame.defeated::before{ opacity:1; background:radial-gradient(ellipse at center, transparent 40%, rgba(110,10,18,.55) 100%); }
+  @media (prefers-reduced-motion:no-preference){
+    .board-frame.triumph::before{ animation:sweep 1.7s .25s ease-out both; }
+    .board-frame.triumph .piece.team-player .glyph-svg{ animation:triumph-hop .62s calc(var(--col,0) * 75ms + 250ms) cubic-bezier(.3,.7,.3,1) 2 both; }
+    .board-frame.defeated::before{ animation:fade-in 1.4s ease-out both; }
+  }
+  @keyframes sweep{ 0%{ opacity:1; background-position:120% 0; } 100%{ opacity:1; background-position:-60% 0; } }
+  @keyframes triumph-hop{ 0%,100%{ transform:none; } 45%{ transform:translateY(-22%); } }
+
+  .victory-cine{ position:fixed; inset:0; z-index:260; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; cursor:pointer;
+    background:radial-gradient(ellipse at 50% 45%, rgba(46,32,8,.88), rgba(3,4,8,.96) 70%); animation:fade-in .5s both; }
+  .victory-cine.out{ animation:fade-out .55s forwards; }
+  @keyframes fade-out{ to{ opacity:0; } }
+  .vc-rays{ position:absolute; left:50%; top:44%; width:170vmax; height:170vmax; transform:translate(-50%,-50%);
+    background:repeating-conic-gradient(rgba(236,208,138,.11) 0 5deg, transparent 5deg 14deg);
+    -webkit-mask:radial-gradient(circle, #000 8%, transparent 55%); mask:radial-gradient(circle, #000 8%, transparent 55%); animation:rays-spin 40s linear infinite; }
+  @keyframes rays-spin{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+  .vc-sil{ position:relative; height:min(34vh,300px); width:auto; color:#06070b; filter:drop-shadow(0 0 1px #ff9a9e) drop-shadow(0 0 16px rgba(226,72,79,.7)); animation:sil-fall 2.6s .35s ease-in forwards; }
+  @keyframes sil-fall{ 0%,35%{ opacity:1; transform:none; } 100%{ opacity:0; transform:translateY(34px) scale(1.06); filter:drop-shadow(0 0 1px #ffcf7a) drop-shadow(0 0 30px rgba(255,190,90,.9)) blur(5px); } }
+  .vc-text{ position:relative; text-align:center; margin-top:-6vh; padding:0 20px; }
+  .vc-eyebrow{ margin:0 0 4px; font-family:var(--f-head); font-weight:600; font-size:12px; letter-spacing:.34em; text-transform:uppercase; color:#ff9b9f; animation:fade-up .6s .9s both; }
+  .vc-title{ margin:0; font-family:var(--f-logo); font-weight:900; font-size:clamp(52px,12vw,128px); line-height:1;
+    background:linear-gradient(180deg,#fff6d6,#ecd08a 40%,#9c6f26 66%,#f0d38a); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 4px 0 #1a1004) drop-shadow(0 0 30px rgba(236,208,138,.35)); animation:vc-title 1.2s .7s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes vc-title{ from{ opacity:0; transform:scale(1.35); letter-spacing:.2em; } to{ opacity:1; transform:none; letter-spacing:.02em; } }
+  .vc-sub{ margin:8px 0 0; color:#e9dfc8; font-style:italic; font-size:clamp(17px,2.4vw,22px); animation:fade-up .7s 1.3s both; }
+  .vc-tap{ margin:22px 0 0; font-family:var(--f-head); font-size:10.5px; letter-spacing:.3em; text-transform:uppercase; color:#a69c88; animation:fade-up .6s 2s both; }
+
+  /* campaign map life */
+  .map-standard .ms-pole{ stroke:#2a1a08; stroke-width:1.8; stroke-linecap:round; }
+  .map-standard .ms-finial{ fill:#c9a24a; stroke:#3a2410; stroke-width:.6; }
+  .map-standard .ms-flag{ fill:#8a1f26; stroke:#3a0a10; stroke-width:.8; }
+  .map-standard .ms-crest{ fill:#ecd08a; }
+  .map-birds{ fill:none; stroke:#3a2410; stroke-width:1.3; stroke-linecap:round; opacity:0; }
+  @media (prefers-reduced-motion:no-preference){
+    .map-svg.enter .map-node{ animation:node-in .55s calc(var(--layer,0) * 110ms + 250ms) cubic-bezier(.2,.8,.3,1.2) both; }
+    .map-svg.enter .map-road, .map-svg.enter .map-edge{ animation:fade-in 1s .1s both; }
+    .map-svg.enter .map-standard{ animation:node-in .6s 1s both; }
+    .map-standard .ms-flag, .map-standard .ms-crest{ transform-box:fill-box; transform-origin:0 50%; animation:flag-wave 2.6s ease-in-out infinite; }
+    .map-standard .ms-crest{ transform-origin:-6px 50%; }
+    .map-birds{ animation:birds 34s linear 4s infinite; }
+    .map-birds path{ transform-box:fill-box; transform-origin:center; animation:flap .5s ease-in-out infinite alternate; }
+  }
+  @keyframes node-in{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  @keyframes flag-wave{ 0%,100%{ transform:none; } 50%{ transform:skewY(-5deg) scaleX(.93); } }
+  @keyframes birds{ 0%{ transform:translate(-40px,150px); opacity:0; } 4%{ opacity:.65; } 55%{ transform:translate(900px,40px); opacity:.65; } 58%,100%{ transform:translate(940px,30px); opacity:0; } }
+  @keyframes flap{ from{ transform:scaleY(1); } to{ transform:scaleY(.45); } }
+
+  /* portraits breathe; their eyes and relics glow and fade */
+  .p-glow, .p-orb{ fill-opacity:var(--glow-a,1); }
+  .p-slit, .p-cross{ stroke-opacity:var(--glow-a,1); }
+  .co-card svg.portrait{ transition:transform .3s ease; }
+  .co-card:hover svg.portrait{ transform:scale(1.07); }
+  @media (prefers-reduced-motion:no-preference){
+    .hc-port{ animation:glow-pulse 3.8s ease-in-out infinite; }
+    .hc-port svg.portrait{ animation:breathe 5.5s ease-in-out infinite; }
+    .co-card.is-selected .co-port{ animation:glow-pulse 3.8s ease-in-out infinite; }
+  }
+  @keyframes glow-pulse{ 0%,100%{ --glow-a:1; } 50%{ --glow-a:.4; } }
+  @keyframes breathe{ 0%,100%{ transform:none; } 50%{ transform:scale(1.03) translateY(-1px); } }
+
+  @media (max-width:820px){
+    .encounter{ grid-template-rows:auto minmax(0,1fr) auto auto; }
+    .enc-stage{ min-height:36vh; }
+    .enc-figure{ height:min(34vh,300px); }
+    .enc-actions{ flex-direction:column-reverse; align-items:stretch; width:min(100%,320px); margin-left:auto; margin-right:auto; }
+    .enc-actions .action{ min-width:0; width:100%; }
+    .champion-bar{ grid-template-columns:40px 1fr; padding:7px 10px 9px; }
+    .cb-sil{ height:46px; }
+  }
+  .encounter{ background:radial-gradient(ellipse 70% 60% at 50% 40%, #1e0e14, #030408 75%); }
+  .enc-actions .action{ width:auto; }
+  @media (max-width:820px){ .tabs{ box-shadow:0 -1px 0 rgba(0,0,0,.7), 0 -6px 10px -6px rgba(0,0,0,.5); } }
+  .cb-name, .enc-name, .sc-title, .banner h2, .codex h2.codex-title, .boss-panel-name{ font-family:var(--f-head); font-weight:800; letter-spacing:.04em; }
 </style>
 </head>
 <body>
@@ -2398,6 +2592,7 @@
             </div>
             <div class="files"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
           </div>
+          <div class="champion-bar" id="champion-bar" role="status" hidden></div>
           <div class="board-caption">
             <span class="pill">Region <span id="floor-num" class="mono">1</span></span>
             <span class="pill" id="node-type-pill">Battle</span>
@@ -2492,6 +2687,9 @@
   </div>
 </div>
 
+<div id="encounter-layer"></div>
+<div id="cinematic-layer"></div>
+<div class="scene-curtain" id="scene-curtain" aria-hidden="true"></div>
 <script>
 (function(){
   "use strict";
@@ -2558,12 +2756,62 @@
     }
     return res;
   }
+
+  function motionAllowed(){
+    return settings.motion!=='off' && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  // A short fade-from-black title card between scenes. Tap to skip; skipped entirely without motion.
+  let curtainTimer = 0;
+  function playCurtain(eyebrow, title, sub, long){
+    const el = document.getElementById('scene-curtain');
+    if(!el || !motionAllowed()) return;
+    el.innerHTML = `<div class="sc-inner"><p class="sc-eyebrow">${eyebrow}</p><i class="sc-rule" aria-hidden="true"></i><h2 class="sc-title">${title}</h2>${sub?`<p class="sc-sub">${sub}</p>`:''}</div>`;
+    el.classList.remove('play','long'); void el.offsetWidth;
+    el.classList.add('play'); if(long) el.classList.add('long');
+    playSfx('whoosh');
+    clearTimeout(curtainTimer);
+    curtainTimer = setTimeout(()=>el.classList.remove('play','long'), long ? 2500 : 1500);
+  }
+  document.addEventListener('click', e=>{
+    const el = document.getElementById('scene-curtain');
+    if(el && el.classList.contains('play') && el.contains(e.target)) el.classList.remove('play','long');
+  });
+  function championFor(u){ return u && u.champion ? u.champion : null; }
+  // End-of-battle staging: a triumph wave or a defeat pall on the board, and for a boss a short
+  // full-screen victory scene over the banner. Presentation only.
+  function celebrate(kind, wasBoss, meta){
+    const frame = document.querySelector('.board-frame');
+    if(frame){
+      frame.classList.remove('triumph','defeated');
+      void frame.offsetWidth;
+      frame.classList.add(kind==='victory' ? 'triumph' : 'defeated');
+    }
+    if(kind==='victory' && wasBoss && meta && motionAllowed()){
+      const layer = document.getElementById('cinematic-layer');
+      layer.innerHTML = `<div class="victory-cine" role="status" aria-live="polite">
+        <div class="vc-rays" aria-hidden="true"></div>
+        <svg class="vc-sil" viewBox="0 0 120 200" aria-hidden="true"><use href="#${meta.sil}"></use></svg>
+        <div class="vc-text">
+          <p class="vc-eyebrow">${meta.title}</p>
+          <h2 class="vc-title">Victory</h2>
+          <p class="vc-sub">${meta.name} has fallen</p>
+          <p class="vc-tap">Tap to continue</p>
+        </div>
+      </div>`;
+      const close = ()=>{ const v = layer.querySelector('.victory-cine'); if(v){ v.classList.add('out'); setTimeout(()=>{ if(layer.contains(v)) layer.innerHTML=''; }, 600); } };
+      layer.querySelector('.victory-cine').addEventListener('click', close);
+      setTimeout(close, 4600);
+      setTimeout(()=>playSfx('gong'), 900);
+    }
+  }
+
   function selectFromRoster(u){
     if(!u || !units.includes(u)) return;
     if(!gameOver && side==='player' && !awaitingPromotion && !u.acted){
       selected = {r:u.r, c:u.c, unit:u};
       legalMoves = movesFor(u);
       inspected = null;
+      playSfx('select');
     } else {
       inspected = u;
     }
@@ -2648,6 +2896,7 @@
     });
     const soundBtn = document.getElementById('sound-toggle');
     soundBtn.textContent = settings.sound==='on' ? 'Sound On' : 'Sound Off';
+    if(typeof setAmbience==='function') setAmbience(ambKind);
     soundBtn.setAttribute('aria-pressed', String(settings.sound==='on'));
   }
 
@@ -2707,38 +2956,156 @@
   function vibrate(pattern){
     if(navigator.vibrate) navigator.vibrate(pattern);
   }
+  // ---- Sound: small synthesized mix with a reverb send, plus quiet ambient beds per screen ----
+  let audioBus = null;
+  function makeImpulse(ctx, secs, decay){
+    const len = Math.floor(ctx.sampleRate*secs);
+    const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    for(let ch=0; ch<2; ch++){
+      const d = buf.getChannelData(ch);
+      for(let i=0;i<len;i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, decay);
+    }
+    return buf;
+  }
+  function getBus(){
+    const ctx = getAudioCtx();
+    if(!ctx) return null;
+    if(audioBus) return audioBus;
+    const master = ctx.createGain(); master.gain.value = 0.9;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.ratio.value = 4; comp.attack.value = 0.004; comp.release.value = 0.2;
+    master.connect(comp); comp.connect(ctx.destination);
+    const reverb = ctx.createConvolver(); reverb.buffer = makeImpulse(ctx, 2.6, 2.8);
+    const revOut = ctx.createGain(); revOut.gain.value = 0.34;
+    reverb.connect(revOut); revOut.connect(master);
+    const sfx = ctx.createGain(); sfx.gain.value = 0.8; sfx.connect(master);
+    const amb = ctx.createGain(); amb.gain.value = 0.55; amb.connect(master); amb.connect(reverb);
+    const noiseBuf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
+    const nd = noiseBuf.getChannelData(0);
+    for(let i=0;i<nd.length;i++) nd[i] = Math.random()*2-1;
+    audioBus = { ctx, master, sfx, send:reverb, amb, noiseBuf };
+    return audioBus;
+  }
+  // One enveloped voice: an oscillator or a noise burst, optionally filtered, with a reverb send.
+  function voice(bus, o){
+    const { ctx } = bus;
+    const t0 = ctx.currentTime + (o.t||0);
+    const d = o.d||0.2, a = o.a||0.005, g = o.g||0.1;
+    let src;
+    if(o.noise){
+      src = ctx.createBufferSource(); src.buffer = bus.noiseBuf; src.loop = true;
+    } else {
+      src = ctx.createOscillator(); src.type = o.type||'sine';
+      src.frequency.setValueAtTime(o.f, t0);
+      if(o.f2) src.frequency.exponentialRampToValueAtTime(o.f2, t0+d);
+      if(o.detune) src.detune.value = o.detune;
+    }
+    let node = src;
+    if(o.filter){
+      const fl = ctx.createBiquadFilter(); fl.type = o.filter; fl.Q.value = o.q||0.8;
+      fl.frequency.setValueAtTime(o.ff||1200, t0);
+      if(o.ff2) fl.frequency.exponentialRampToValueAtTime(o.ff2, t0+d);
+      node.connect(fl); node = fl;
+    }
+    const env = ctx.createGain();
+    env.gain.setValueAtTime(0.0001, t0);
+    env.gain.linearRampToValueAtTime(g, t0+a);
+    env.gain.exponentialRampToValueAtTime(0.0001, t0+a+d);
+    node.connect(env); env.connect(bus.sfx);
+    if(o.wet){ const w = ctx.createGain(); w.gain.value = o.wet; env.connect(w); w.connect(bus.send); }
+    src.start(t0); src.stop(t0+a+d+0.05);
+  }
+  const SFX = {
+    click:  [{f:1150, d:0.04, g:0.035}, {noise:true, filter:'highpass', ff:4200, d:0.02, g:0.025}],
+    select: [{noise:true, filter:'bandpass', ff:2600, ff2:6200, q:5, d:0.14, g:0.06, wet:0.2}, {f:1760, d:0.09, g:0.012, wet:0.3}],
+    move:   [{noise:true, filter:'lowpass', ff:900, d:0.08, g:0.12}, {f:150, f2:88, d:0.1, g:0.11}],
+    hit:    [{f:150, f2:44, d:0.2, g:0.36}, {noise:true, filter:'bandpass', ff:1700, q:1.2, d:0.07, g:0.26, wet:0.15}, {noise:true, filter:'lowpass', ff:420, d:0.12, g:0.18}],
+    crit:   [{f:160, f2:40, d:0.24, g:0.4}, {noise:true, filter:'bandpass', ff:2200, q:1.4, d:0.08, g:0.3}, {noise:true, filter:'highpass', ff:5200, d:0.16, g:0.07, wet:0.3},
+             {f:1318, d:0.9, g:0.055, wet:0.55, t:0.02}, {f:1976, d:0.7, g:0.04, wet:0.55, t:0.02}, {f:2637, d:0.5, g:0.025, wet:0.5, t:0.03}],
+    fell:   [{f:96, f2:34, d:0.55, g:0.34, t:0.06}, {noise:true, filter:'lowpass', ff:320, d:0.42, g:0.22, t:0.06}, {f:220, f2:104, type:'triangle', d:0.7, g:0.05, wet:0.5, t:0.08}],
+    heal:   [784,1175,1568,2349].map((f,i)=>({f, t:i*0.055, d:1.1, g:0.045, wet:0.6})),
+    levelup:[523,659,784,1047,1319].map((f,i)=>({f, type:'triangle', t:i*0.07, d:0.38, g:0.06, wet:0.5})).concat([{f:2093, t:0.36, d:1.0, g:0.025, wet:0.7}]),
+    clear:  [196,247,294,392].map(f=>({f, type:'sawtooth', filter:'lowpass', ff:700, ff2:1500, a:0.08, d:0.9, g:0.028, wet:0.45})),
+    turn:   [{f:84, f2:52, d:0.32, g:0.22}, {noise:true, filter:'lowpass', ff:260, d:0.2, g:0.1}],
+    whoosh: [{noise:true, filter:'bandpass', ff:380, ff2:2600, q:0.8, a:0.22, d:0.5, g:0.06, wet:0.4}],
+    gong:   [98,147,196,233,311,415,523].map((f,i)=>({f:f*(1+(i%2?0.004:-0.003)), d:3.6-i*0.3, g:0.09/(1+i*0.55), wet:0.75, a:0.004}))
+             .concat([{noise:true, filter:'lowpass', ff:700, ff2:160, a:0.01, d:1.6, g:0.08, wet:0.6}, {f:62, f2:44, d:0.8, g:0.3}]),
+    horn:   [{f:147, type:'sawtooth', filter:'lowpass', ff:380, ff2:1400, a:0.28, d:1.3, g:0.06, wet:0.5}, {f:220, type:'sawtooth', filter:'lowpass', ff:380, ff2:1300, a:0.32, d:1.2, g:0.04, wet:0.5},
+             {f:74, f2:46, d:0.34, g:0.3}, {f:74, f2:46, d:0.34, g:0.3, t:0.46}],
+    victory:[].concat(
+             [[262,330,392,0,0.34],[349,440,523,0.38,0.34],[392,494,587,0.76,0.3],[523,659,784,1.1,1.5]].flatMap(([x,y,z,t,d])=>[x,y,z].map(f=>({f, type:'sawtooth', filter:'lowpass', ff:1500, a:0.03, t, d, g:0.032, wet:0.4}))),
+             [0,0.76,1.1].map(t=>({f:98, f2:72, t, d:0.5, g:0.3})), [{noise:true, filter:'highpass', ff:6000, t:1.1, a:0.02, d:1.4, g:0.03, wet:0.7}]),
+    defeat: [110,131,165].map(f=>({f, type:'sawtooth', filter:'lowpass', ff:520, ff2:240, a:0.4, d:2.4, g:0.04, wet:0.6}))
+             .concat([{f:147, t:0.2, d:3.2, g:0.09, wet:0.7}, {f:294, t:0.2, d:2.6, g:0.035, wet:0.7}, {f:441, t:0.2, d:1.8, g:0.02, wet:0.7}]),
+  };
   function playSfx(kind){
     if(settings.sound!=='on') return;
-    const ctx = getAudioCtx();
-    if(!ctx) return;
-    if(ctx.state==='suspended') ctx.resume();
-    const now = ctx.currentTime;
-    const specs = {
-      click:   [{f:520, t:0,    d:0.05, g:0.05, type:'triangle'}],
-      move:    [{f:340, t:0,    d:0.06, g:0.04, type:'sine'}],
-      hit:     [{f:180, t:0,    d:0.09, g:0.14, type:'square'}, {f:90, t:0.02, d:0.1, g:0.1, type:'sine'}],
-      crit:    [{f:260, t:0,    d:0.05, g:0.16, type:'sawtooth'}, {f:520, t:0.05, d:0.12, g:0.14, type:'square'}],
-      heal:    [{f:520, t:0,    d:0.1,  g:0.1,  type:'sine'}, {f:660, t:0.08, d:0.14, g:0.1, type:'sine'}],
-      levelup: [{f:440, t:0,    d:0.08, g:0.12, type:'triangle'}, {f:660, t:0.08, d:0.1, g:0.12, type:'triangle'}, {f:880, t:0.16, d:0.16, g:0.12, type:'triangle'}],
-      clear:   [{f:392, t:0,    d:0.1,  g:0.1,  type:'triangle'}, {f:494, t:0.09, d:0.16, g:0.1, type:'triangle'}],
-      victory: [{f:440, t:0,    d:0.12, g:0.12, type:'triangle'}, {f:554, t:0.1, d:0.12, g:0.12, type:'triangle'}, {f:660, t:0.2, d:0.24, g:0.12, type:'triangle'}],
-      defeat:  [{f:220, t:0,    d:0.18, g:0.14, type:'sawtooth'}, {f:165, t:0.16, d:0.3, g:0.12, type:'sawtooth'}],
-    };
-    const spec = specs[kind];
-    if(!spec) return;
-    spec.forEach(note=>{
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = note.type;
-      osc.frequency.setValueAtTime(note.f, now+note.t);
-      gain.gain.setValueAtTime(0.0001, now+note.t);
-      gain.gain.linearRampToValueAtTime(note.g, now+note.t+0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now+note.t+note.d);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(now+note.t);
-      osc.stop(now+note.t+note.d+0.02);
-    });
+    const bus = getBus();
+    if(!bus) return;
+    if(bus.ctx.state==='suspended') bus.ctx.resume();
+    const spec = SFX[kind];
+    if(spec) spec.forEach(o=>voice(bus, o));
   }
+
+  // Ambient beds: filtered wind with a slow sweep, under a quiet drone. One bed per screen kind,
+  // crossfaded on change. Nothing plays while sound is off or the tab is hidden.
+  var ambKind = null, ambBed = null; // var: applySettings can run before this point
+  const AMB = {
+    title:  { wind:520, drone:[55, 82.4], level:1 },
+    map:    { wind:760, drone:[73.4, 110], level:0.75 },
+    battle: { wind:420, drone:[61.7, 92.5], level:0.7 },
+    boss:   { wind:360, drone:[49, 73.4], level:0.95, pulse:0.85 },
+  };
+  function stopBed(bed, fade){
+    if(!bed) return;
+    const now = bed.ctx.currentTime;
+    bed.out.gain.cancelScheduledValues(now);
+    bed.out.gain.setValueAtTime(bed.out.gain.value, now);
+    bed.out.gain.linearRampToValueAtTime(0.0001, now+fade);
+    setTimeout(()=>{ bed.nodes.forEach(n=>{ try{ n.stop(); }catch(e){} }); bed.out.disconnect(); }, fade*1000+100);
+  }
+  function setAmbience(kind){
+    ambKind = kind;
+    if(settings.sound!=='on' || !kind || !AMB[kind]){ stopBed(ambBed, 1.2); ambBed = null; return; }
+    if(ambBed && ambBed.kind===kind) return;
+    const bus = getBus();
+    if(!bus) return;
+    const { ctx } = bus;
+    const spec = AMB[kind];
+    const out = ctx.createGain(); out.gain.value = 0.0001; out.connect(bus.amb);
+    const nodes = [];
+    const wind = ctx.createBufferSource(); wind.buffer = bus.noiseBuf; wind.loop = true;
+    const wf = ctx.createBiquadFilter(); wf.type = 'lowpass'; wf.frequency.value = spec.wind; wf.Q.value = 0.6;
+    const wg = ctx.createGain(); wg.gain.value = 0.05;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.07;
+    const lfoAmt = ctx.createGain(); lfoAmt.gain.value = spec.wind*0.45;
+    lfo.connect(lfoAmt); lfoAmt.connect(wf.frequency);
+    wind.connect(wf); wf.connect(wg); wg.connect(out);
+    nodes.push(wind, lfo);
+    const dg = ctx.createGain(); dg.gain.value = 0.026; dg.connect(out);
+    spec.drone.forEach((f,i)=>{
+      const o = ctx.createOscillator(); o.type = i ? 'triangle' : 'sine'; o.frequency.value = f; o.detune.value = i ? 4 : -3;
+      o.connect(dg); nodes.push(o);
+    });
+    if(spec.pulse){
+      const pl = ctx.createOscillator(); pl.frequency.value = spec.pulse;
+      const pa = ctx.createGain(); pa.gain.value = 0.014;
+      pl.connect(pa); pa.connect(dg.gain); nodes.push(pl);
+    }
+    nodes.forEach(n=>n.start());
+    const now = ctx.currentTime;
+    out.gain.linearRampToValueAtTime(spec.level, now+2.2);
+    stopBed(ambBed, 1.6);
+    ambBed = { kind, ctx, out, nodes };
+  }
+  // Browsers only allow audio after a user gesture: wake the context on the first one.
+  ['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev, function wake(){
+    if(settings.sound==='on'){ const bus = getBus(); if(bus && bus.ctx.state==='suspended') bus.ctx.resume(); if(ambKind && !ambBed) setAmbience(ambKind); }
+  }, { passive:true }));
+  document.addEventListener('visibilitychange', ()=>{
+    if(!audioCtx) return;
+    if(document.hidden) audioCtx.suspend(); else if(settings.sound==='on') audioCtx.resume();
+  });
 
   /* ---------------- Tabs ---------------- */
   const tabBattle = document.getElementById('tab-battle');
@@ -2772,6 +3139,12 @@
   let legalMoves = [];  // {r,c,type:'move'|'attack'|'heal'}
   let inspected = null; // UI only: a unit shown in the detail card without being selected to act
   const hpMemo = new Map(); // UI only: last drawn health % per bar, for the damage-trail animation
+  let nextChampion = null;   // UI only: who to crown as the champion when the next battle is set up
+  let championSeen = null;   // UI only: last champion shown in the HUD, so its fall can be shown too
+  let dealIn = false;        // UI only: animate pieces taking their places on the next render
+  let mapEnter = false;      // UI only: animate the map's waypoints in on the next render
+  let lastActorId = null;    // UI only: the enemy piece that just acted
+  var lastCardRegion = 0;    // UI only: last region whose title card was shown
   let gameOver = false;
   let awaitingPromotion = null; // {r,c,unit}
   let persistedParty = null;
@@ -3136,6 +3509,7 @@
         { glyph:'rook',   sil:'sil-elite-guard' },
       ];
       const archetype = eliteArchetypes[Math.floor(Math.random()*eliteArchetypes.length)];
+      playSfx(node.type==='boss' ? 'gong' : 'horn');
       pendingIntro = {
         node,
         name: node.championName,
@@ -3317,6 +3691,7 @@
 
   function showTitle(){
     document.body.dataset.view = 'title';
+    setAmbience('title');
     document.getElementById('view-title').hidden = false;
     document.getElementById('view-map').hidden = true;
     document.getElementById('view-combat').hidden = true;
@@ -3340,6 +3715,13 @@
 
   function showMap(){
     document.body.dataset.view = 'map';
+    setAmbience('map');
+    mapEnter = true;
+    if(region!==lastCardRegion){
+      lastCardRegion = region;
+      const rgc = regionInfo(region);
+      playCurtain(`Region ${region}`, rgc.name, rgc.tagline, true);
+    }
     gameOver = false; // combat-scoped flag; must not block map navigation between battles
     document.getElementById('view-title').hidden = true;
     document.getElementById('view-map').hidden = false;
@@ -3352,6 +3734,10 @@
   const TUTORIAL_KEY = 'checkmateAndRuinTutorialSeen';
   function showCombat(){
     document.body.dataset.view = 'combat';
+    setAmbience(activeNode && (activeNode.type==='boss' || activeNode.type==='elite') ? 'boss' : 'battle');
+    const cineFrame = document.querySelector('.board-frame');
+    if(cineFrame) cineFrame.classList.remove('triumph','defeated');
+    document.getElementById('cinematic-layer').innerHTML = '';
     document.getElementById('view-title').hidden = true;
     document.getElementById('view-map').hidden = true;
     document.getElementById('view-combat').hidden = false;
@@ -3459,7 +3845,7 @@
       const title = node.championName ? `${t.label}: ${node.championName}` : t.label;
       const R = node.type==='boss' ? 34 : 26, isz = node.type==='boss' ? 30 : 24;
       const shape = TOKEN_SHAPE[node.type] || 'round';
-      svgHtml += `<g class="${cls} nt-${node.type}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
+      svgHtml += `<g class="${cls} nt-${node.type}" style="--layer:${node.layer}" data-id="${node.id}" ${isAvail?'tabindex="0" role="button" aria-label="'+title+' waypoint"':''}>
         <title>${title}${node.cleared?' (cleared)':''}</title>
         ${isAvail?`<circle class="disc-hit" cx="${x}" cy="${y}" r="38" fill="transparent" pointer-events="all"></circle>`:''}
         <g class="tk-lift">
@@ -3475,7 +3861,19 @@
     const nodePts = map.nodes.map(n=>({ ...posFor(n), r: n.type==='boss' ? 40 : 32 }));
     nodePts.forEach(p=>{ p.r += 14; });
     svgHtml = mapTerrain(rgInfo.sigil, region*97 + map.nodes.length, nodePts, roadPts) + svgHtml;
+    // The company's standard planted at its current waypoint, and the odd crow crossing the map.
+    if(currentNodeId && map.byId[currentNodeId]){
+      const cp = posFor(map.byId[currentNodeId]);
+      const R0 = map.byId[currentNodeId].type==='boss' ? 34 : 26;
+      svgHtml += `<g transform="translate(${cp.x+R0-6} ${cp.y-R0-2})" aria-hidden="true"><g class="map-standard">
+        <path class="ms-pole" d="M0 0 V-34"/><circle class="ms-finial" cx="0" cy="-35" r="2.2"/>
+        <path class="ms-flag" d="M0.8 -33 H20 L15.5 -26.5 L20 -20 H0.8 Z"/><path class="ms-crest" d="M6 -23.5 L6.8 -29 L9 -26.5 L10.5 -30 L12 -26.5 L14.2 -29 L15 -23.5 Z"/>
+      </g></g>`;
+    }
+    svgHtml += `<g class="map-birds" aria-hidden="true"><path d="M0 0 q4 -4 8 0 q4 -4 8 0"/><path d="M14 10 q3 -3 6 0 q3 -3 6 0"/><path d="M-10 14 q3 -3 6 0 q3 -3 6 0"/></g>`;
     svg.innerHTML = svgHtml;
+    svg.classList.toggle('enter', mapEnter && motionAllowed());
+    mapEnter = false;
     svg.querySelectorAll('.map-node.clickable').forEach(el=>{
       const node = map.byId[el.dataset.id];
       el.addEventListener('click', ()=>handleNodeClick(node));
@@ -3483,28 +3881,50 @@
     });
 
     const shrineSlot = document.getElementById('shrine-slot');
+    const encLayer = document.getElementById('encounter-layer');
+    if(!pendingIntro) encLayer.innerHTML = '';
     if(pendingIntro){
       const introSigil = regionInfo(region).sigil;
-      shrineSlot.innerHTML = `<div class="boss-panel">
-        <div class="boss-panel-art">
-          <svg class="boss-panel-sigil-bg" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${introSigil}"></use></svg>
-          <svg class="boss-panel-figure" viewBox="0 0 120 200" role="img" aria-label="${pendingIntro.name}"><use href="#${pendingIntro.sil}"></use></svg>
+      const kind = pendingIntro.node.type==='boss' ? 'boss' : 'elite';
+      shrineSlot.innerHTML = '';
+      encLayer.innerHTML = `<div class="encounter enc-${kind}" role="dialog" aria-modal="true" aria-labelledby="enc-name">
+        <div class="enc-bar enc-top" aria-hidden="true"></div>
+        <div class="enc-stage">
+          <div class="enc-light" aria-hidden="true"></div>
+          <svg class="enc-sigil" viewBox="0 0 32 32" aria-hidden="true"><use href="#sigil-${introSigil}"></use></svg>
+          <svg class="enc-figure" viewBox="0 0 120 200" role="img" aria-label="${pendingIntro.name||'Champion'}"><use href="#${pendingIntro.sil}"></use></svg>
+          <div class="enc-embers" aria-hidden="true"></div>
         </div>
-        <div class="boss-panel-text">
-          <p class="eyebrow">${pendingIntro.title}</p>
-          <h3 class="boss-panel-name">${pendingIntro.name}</h3>
-          <p class="boss-panel-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
-          <div class="shrine-choices">
+        <div class="enc-text">
+          <p class="enc-eyebrow">${kind==='boss' ? `Region Boss &middot; ${pendingIntro.title}` : pendingIntro.title}</p>
+          <h3 class="enc-name" id="enc-name">${pendingIntro.name||'A Named Champion'}</h3>
+          <p class="enc-quote">&ldquo;${pendingIntro.quote}&rdquo;</p>
+          <div class="enc-actions">
+            <button class="action ghost" id="enc-retreat">Turn Back</button>
             <button class="action" id="begin-battle-btn">Begin the Battle</button>
           </div>
         </div>
+        <div class="enc-bar enc-bottom" aria-hidden="true"></div>
       </div>`;
-      document.getElementById('begin-battle-btn').addEventListener('click', ()=>{
+      const beginBtn = document.getElementById('begin-battle-btn');
+      beginBtn.addEventListener('click', ()=>{
         playSfx('click');
-        const node = pendingIntro.node;
+        const intro = pendingIntro;
+        const node = intro.node;
+        nextChampion = { glyph:intro.glyph, name:intro.name || 'A Named Champion', title:intro.title, sil:intro.sil, kind:node.type==='boss'?'boss':'elite' };
         pendingIntro = null;
+        encLayer.innerHTML = '';
         startBattle(node);
       });
+      document.getElementById('enc-retreat').addEventListener('click', ()=>{
+        playSfx('click');
+        pendingIntro = null;
+        renderMap();
+      });
+      encLayer.querySelector('.encounter').addEventListener('keydown', e=>{
+        if(e.key==='Escape'){ e.preventDefault(); document.getElementById('enc-retreat').click(); }
+      });
+      setTimeout(()=>{ if(document.body.contains(beginBtn)) beginBtn.focus({preventScroll:true}); }, 50);
     } else if(pendingShrine){
       shrineSlot.innerHTML = `<div class="shrine-panel">
         <h3>A shrine awaits</h3>
@@ -3564,6 +3984,8 @@
     activeNode = node;
     setupBattle(node);
     showCombat();
+    const label = NODE_TYPES[node.type] ? NODE_TYPES[node.type].label : 'Battle';
+    playCurtain(`Region ${region} &middot; ${label}`, node.championName || regionInfo(region).name, null, false);
   }
 
   function setupBattle(node){
@@ -3613,6 +4035,17 @@
     // collect all placed units from board (source of truth)
     units = [];
     for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){ if(board[r][c]) units.push(board[r][c]); }
+
+    // Crown the champion named in the encounter: one enemy piece of its kind, nearest the centre.
+    // A label for the HUD and board only; its stats are exactly those of its rank.
+    if(nextChampion && (node.type==='elite' || node.type==='boss')){
+      const pool = units.filter(u=>u.team==='enemy' && u.type===nextChampion.glyph);
+      const pick = (pool.length ? pool : units.filter(u=>u.team==='enemy' && u.type!=='pawn'))
+        .sort((x,y)=>Math.abs(x.c-3.5)-Math.abs(y.c-3.5) || x.r-y.r)[0];
+      if(pick) pick.champion = { name:nextChampion.name, title:nextChampion.title, sil:nextChampion.sil, kind:nextChampion.kind };
+    }
+    nextChampion = null;
+    dealIn = true;
 
     const rg = regionInfo(region);
     const fill = (tpl, name) => tpl.replace('{name}', name);
@@ -3798,7 +4231,7 @@
     }
     const {dmg, crit} = rollDamage(att, target);
     target.hp -= dmg;
-    lastHit = {r:target.r, c:target.c, kind: crit? 'crit':'hit'};
+    lastHit = {r:target.r, c:target.c, kind: crit? 'crit':'hit', from:{r:att.r, c:att.c}};
     pendingFloats.push({r:target.r, c:target.c, text:'-'+dmg, cls: crit? 'crit':''});
     playSfx(crit? 'crit' : 'hit');
     vibrate(crit? [18,35,22] : 15);
@@ -3807,6 +4240,7 @@
       target.hp=0;
       lastHit.kind = 'kill';
       lastHit.victim = { type:target.type, team:target.team };
+      playSfx('fell');
       log(`${sideLabel(target)} ${CLASSES[target.type].name} falls.`, 'dmg');
       removeUnit(target);
       if(att.team==='player'){ grantXP(att, xpMultiplier()*(8 + target.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
@@ -3819,13 +4253,14 @@
         const raw = rollDamage(target, att);
         const counterDmg = Math.max(1, Math.round(raw.dmg * (target.ascended? 1 : 0.5)));
         att.hp -= counterDmg;
-        lastHit = {r:att.r, c:att.c, kind:'hit'};
+        lastHit = {r:att.r, c:att.c, kind:'hit', from:{r:target.r, c:target.c}};
         pendingFloats.push({r:att.r, c:att.c, text:'-'+counterDmg, cls:''});
         log(`${sideLabel(target)} Warden counters for <span class="dmg">${counterDmg}</span>.`);
         if(att.hp<=0){
           att.hp=0;
           lastHit.kind = 'kill';
           lastHit.victim = { type:att.type, team:att.team };
+          playSfx('fell');
           log(`${sideLabel(att)} ${CLASSES[att.type].name} falls to the counter.`, 'dmg');
           removeUnit(att);
           if(target.team==='player'){ grantXP(target, xpMultiplier()*(8 + att.level*3)); unlockAchievement('first_blood'); runStats.kills += 1; }
@@ -3888,6 +4323,7 @@
   }
 
   function enemyRound(){
+    playSfx('turn');
     const acting = units.filter(u=>u.team==='enemy' && !u.acted);
     let i=0;
     function step(){
@@ -3910,6 +4346,7 @@
   }
 
   function aiAct(u){
+    lastActorId = u.id;
     const moves = movesFor(u);
     u.acted = true;
     if(moves.length===0) return;
@@ -4013,6 +4450,7 @@
           board[att.r][att.c]=null;
           place(r,c,att);
           att.acted = true;
+          playSfx('move');
           attemptPromotion(att);
         } else if(move.type==='attack'){
           const target = board[r][c];
@@ -4030,6 +4468,7 @@
       if(occ && occ.team==='player' && !occ.acted){
         selected = {r,c,unit:occ};
         legalMoves = movesFor(occ);
+        playSfx('select');
         render();
         return;
       }
@@ -4040,6 +4479,7 @@
     if(occ && occ.team==='player' && !occ.acted){
       selected = {r,c,unit:occ};
       legalMoves = movesFor(occ);
+      playSfx('select');
       render();
     }
   }
@@ -4060,6 +4500,13 @@
   };
 
   function showBanner(kind){
+    const wasBoss = !!(activeNode && activeNode.type==='boss');
+    const champ = units.find(u=>u.champion);
+    const meta = champ ? champ.champion : (championSeen && activeNode && championSeen.key===activeNode.id ? championSeen.meta : null);
+    showBannerCore(kind);
+    celebrate(kind, wasBoss, meta || (wasBoss ? { name:regionInfo(region).boss || 'The champion', title:regionInfo(region).bossTitle, sil:regionInfo(region).bossSil } : null));
+  }
+  function showBannerCore(kind){
     const slot = document.getElementById('banner-slot');
     if(kind==='victory'){
       persistedParty = units.filter(u=>u.team==='player');
@@ -4183,6 +4630,28 @@
     const e = units.filter(u=>u.team==='enemy').length;
     document.getElementById('units-left').textContent = `${p} vs ${e}`;
     const threat = sovereignThreats();
+    const champ = units.find(u=>u.champion);
+    if(champ && activeNode) championSeen = { meta:champ.champion, key:activeNode.id, id:champ.id, maxHp:champ.maxHp };
+    const cb = document.getElementById('champion-bar');
+    const cbShow = champ || (championSeen && activeNode && championSeen.key===activeNode.id);
+    if(cbShow){
+      const m = champ ? champ.champion : championSeen.meta;
+      const pct = champ ? Math.max(0, champ.hp/champ.maxHp*100) : 0;
+      const struck = champ && lastHit && lastHit.r===champ.r && lastHit.c===champ.c;
+      cb.hidden = false;
+      cb.className = `champion-bar cb-${m.kind}${champ?'':' fallen'}${struck && motionAllowed()?' struck':''}`;
+      cb.innerHTML = `<div class="cb-sil" aria-hidden="true"><svg viewBox="0 0 120 200"><use href="#${m.sil}"></use></svg></div>
+        <div class="cb-body">
+          <div class="cb-head"><span class="cb-title">${m.title}</span><span class="cb-hp">${champ ? `${champ.hp} / ${champ.maxHp}` : 'Fallen'}</span></div>
+          <div class="cb-name">${m.name}</div>
+          <div class="hp-bar cb-hpbar${pct<35?' low':''}">${hpBarInner('c'+(champ?champ.id:championSeen.id), pct)}</div>
+        </div>`;
+    } else {
+      cb.hidden = true;
+      cb.innerHTML = '';
+    }
+    const dealing = dealIn && motionAllowed();
+    dealIn = false;
     const tp = document.getElementById('threat-pill');
     tp.hidden = !(threat.own || threat.foe);
     tp.dataset.kind = threat.own ? 'own' : 'foe';
@@ -4207,6 +4676,7 @@
       for(let c=0;c<COLS;c++){
         const sq = document.createElement('div');
         sq.className = 'sq ' + (((r+c)%2===0)?'light':'dark');
+        sq.style.setProperty('--col', c);
         const u = board[r][c];
         const move = legalMoves.find(m=>m.r===r&&m.c===c);
         if(move){
@@ -4240,12 +4710,23 @@
         }
         if(u){
           const wrap = document.createElement('div');
-          wrap.className='piece tooltip team-'+u.team + (u.ascended? ' ascended':'');
+          wrap.className='piece tooltip team-'+u.team + (u.ascended? ' ascended':'') + (u.champion? ' champion champion-'+u.champion.kind : '');
           if(threat.own===u) sq.classList.add('danger');
           if(threat.foe===u) sq.classList.add('check');
           wrap.dataset.uid = u.id;
           wrap.dataset.tip = `${u.ascended? ASCEND_TITLES[u.type] : CLASSES[u.type].name}: ${CLASSES[u.type].desc}`;
+          if(u.champion){
+            wrap.insertAdjacentHTML('beforeend', `<span class="champ-aura" aria-hidden="true"></span><svg class="champ-mark" viewBox="0 0 24 24" aria-hidden="true"><use href="#nodeico-${u.champion.kind==='boss'?'boss':'elite'}"></use></svg>`);
+            wrap.dataset.tip = `${u.champion.name}, ${u.champion.title}. ` + wrap.dataset.tip;
+          }
           wrap.insertAdjacentHTML('beforeend', pieceIconHTML(u.type, u.team));
+          if(dealing){ sq.classList.add('deal'); sq.style.setProperty('--deal', ((u.team==='enemy' ? r : 7-r)*90 + c*22) + 'ms'); }
+          if(u.team==='enemy' && u.id===lastActorId && side==='enemy') sq.classList.add('just-acted');
+          if(flashPos && flashPos.from && flashPos.from.r===r && flashPos.from.c===c && !(flashPos.r===r && flashPos.c===c) && settings.motion!=='off'){
+            sq.classList.add('fx-lunge');
+            sq.style.setProperty('--lx', Math.sign(flashPos.c-c));
+            sq.style.setProperty('--ly', Math.sign(flashPos.r-r));
+          }
           const bar = document.createElement('div');
           bar.className = 'hp-bar' + (u.hp/u.maxHp<0.35?' low':'');
           bar.innerHTML = hpBarInner('b'+u.id, Math.max(0,u.hp/u.maxHp*100));
@@ -4269,6 +4750,7 @@
           if(u.acted) label += ', already acted';
           if(threat.own===u) label += ', under threat';
           if(threat.foe===u) label += ', within your reach';
+          if(u.champion) label += `, ${u.champion.name}, ${u.champion.title}`;
         } else {
           label += ', empty';
         }
@@ -4290,11 +4772,14 @@
 
     if(flashPos && (flashPos.kind==='crit' || flashPos.kind==='kill') && settings.motion!=='off'){
       const frame = boardEl.closest('.board-frame');
-      if(frame){ frame.classList.remove('shake'); void frame.offsetWidth; frame.classList.add('shake'); }
+      if(frame){
+        frame.classList.remove('shake','crit-flash'); void frame.offsetWidth;
+        frame.classList.add('shake'); if(flashPos.kind==='crit') frame.classList.add('crit-flash');
+      }
     }
 
     // FLIP playback: slide any piece that changed square from its old screen position to its new one.
-    if(settings.motion!=='off'){
+    if(settings.motion!=='off' && !dealing){
       boardEl.querySelectorAll('.piece[data-uid]').forEach(el=>{
         const old = oldRects[el.dataset.uid];
         if(!old) return;
