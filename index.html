@@ -2108,6 +2108,47 @@
   .enc-actions .action{ width:auto; }
   @media (max-width:820px){ .tabs{ box-shadow:0 -1px 0 rgba(0,0,0,.7), 0 -6px 10px -6px rgba(0,0,0,.5); } }
   .cb-name, .enc-name, .sc-title, .banner h2, .codex h2.codex-title, .boss-panel-name{ font-family:var(--f-head); font-weight:800; letter-spacing:.04em; }
+
+  /* ================= Enemy intent ================= */
+  .intent-badge, .target-mark{
+    position:absolute; z-index:5; top:3%; width:30%; max-width:22px; min-width:13px; aspect-ratio:1/1; border-radius:50%;
+    display:grid; place-items:center; pointer-events:none; box-shadow:0 1px 3px rgba(0,0,0,.75);
+  }
+  .intent-badge svg, .target-mark svg{ width:72%; height:72%; }
+  .intent-badge{ left:3%; background:radial-gradient(circle at 40% 35%, #3a1218, #12050a 80%); border:1.5px solid #c3303a; color:#ffb3b6; }
+  .intent-badge.ib-advance, .intent-badge.ib-guard, .intent-badge.ib-withdraw, .intent-badge.ib-hold{
+    background:radial-gradient(circle at 40% 35%, #242a38, #0c0e14 80%); border-color:#6b5426; color:#cdb27a; opacity:.88;
+  }
+  .intent-badge.ib-promote{ background:radial-gradient(circle at 40% 35%, #3a2a10, #120c04 80%); border-color:#c9a24a; color:#ecd08a; }
+  .intent-badge.ib-maybe{ border-style:dashed; }
+  .intent-badge.ib-champ{ max-width:26px; border:1.5px solid #ecd08a; box-shadow:0 0 0 2px #2a0a0e, 0 0 8px rgba(236,208,138,.6), 0 1px 3px rgba(0,0,0,.75); }
+  .target-mark{ right:3%; background:radial-gradient(circle at 40% 35%, #3a1218, #12050a 80%); border:1.5px solid #e2484f; color:#ff8a8e; }
+  .target-mark b{ position:absolute; right:-5px; bottom:-5px; min-width:13px; height:13px; padding:0 2px; border-radius:7px; background:#e2484f; color:#fff; font:700 9px/13px var(--f-head); text-align:center; box-shadow:0 1px 2px #000; }
+  .target-mark.tm-maybe{ border-style:dashed; }
+  .target-mark.tm-danger{ color:#ffd0d2; background:radial-gradient(circle at 40% 35%, #7a1820, #2a070c 80%); }
+  .target-mark.tm-lethal{ color:#fff; background:radial-gradient(circle at 40% 35%, #c3303a, #4a0d13 80%); border-color:#ffb3b6; }
+  .target-mark.tm-champ{ box-shadow:0 0 0 1.5px #ecd08a, 0 1px 3px rgba(0,0,0,.75); }
+  @media (prefers-reduced-motion:no-preference){
+    .target-mark.tm-lethal{ animation:lethal-pulse 1.3s ease-in-out infinite; }
+    .intent-lines .il{ animation:il-flow 1s linear infinite; }
+  }
+  @keyframes lethal-pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(226,72,79,.0), 0 1px 3px rgba(0,0,0,.75); } 50%{ box-shadow:0 0 0 4px rgba(226,72,79,.35), 0 1px 3px rgba(0,0,0,.75); } }
+  .intent-lines{ position:absolute; inset:0; width:100%; height:100%; z-index:4; pointer-events:none; overflow:visible; }
+  .intent-lines .il{ fill:none; stroke-linecap:round; stroke-width:.075; stroke-dasharray:.18 .1; }
+  .intent-lines .il-strike{ stroke:#ff6b70; filter:drop-shadow(0 0 .04px #000); }
+  .intent-lines .il-move{ stroke:#ecd08a; stroke-dasharray:.08 .12; }
+  .intent-lines .il-champ{ stroke:#ecd08a; stroke-width:.09; }
+  .intent-lines .il-maybe{ stroke-dasharray:.06 .12; }
+  .intent-lines .il-alt{ stroke:#ff6b70; stroke-width:.04; stroke-dasharray:.05 .12; opacity:.6; }
+  @keyframes il-flow{ to{ stroke-dashoffset:-.28; } }
+  .cb-intent{ display:flex; gap:6px; align-items:flex-start; margin:-2px 0 6px; font-size:13px; line-height:1.35; color:#e9dfc8; font-style:italic; }
+  .cb-ii{ flex:none; width:14px; height:14px; margin-top:2px; color:#ff9b9f; }
+  .hc-intent{ margin:4px 0 10px; padding:9px 11px; border:1px solid var(--line); border-left:3px solid var(--gold-deep); background:rgba(0,0,0,.14); }
+  .hc-intent.is-strike{ border-left-color:var(--crimson-bright); }
+  .hc-intent p{ margin:4px 0 0; font-size:14.5px; line-height:1.45; color:var(--ink); }
+  .hc-intent .stat-ico{ width:14px; height:14px; vertical-align:-2px; margin-right:4px; color:var(--crimson-bright); }
+  .hero-card.is-enemy .hc-port{ background:conic-gradient(from 200deg, #ff9a9e, #6e0f17, #e2484f, #3a0a10, #ff9a9e); }
+  @media (max-width:820px){ .cb-intent{ font-size:12px; } .target-mark b{ right:-6px; bottom:-6px; } }
 </style>
 </head>
 <body>
@@ -2244,6 +2285,15 @@
     <!-- Stat and status icons. -->
     <symbol id="ico-might" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5 L12 4 L13.5 2.5 M10.5 2.8 L13.3 2.7 L13.2 5.5"/><path d="M2.2 10.6 L5.4 13.8 M3.8 12.2 L2 14"/></g></symbol>
     <symbol id="ico-guard" viewBox="0 0 16 16"><path d="M8 1.3 L13.6 3.4 V8 Q13.6 12.6 8 14.7 Q2.4 12.6 2.4 8 V3.4 Z" fill="currentColor" opacity=".9"/><path d="M8 3.6 V12.4" stroke="rgba(0,0,0,.35)" stroke-width="1.2"/></symbol>
+    <!-- Enemy intent icons. -->
+    <symbol id="ii-strike" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3 L11.5 11.5 M13 9.5 L9.5 13 M10.8 12.2 L13.4 14.8"/><path d="M3 3 L3.6 6 M3 3 L6 3.6"/></g></symbol>
+    <symbol id="ii-advance" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4 L8 8 L12 4 M4 8.5 L8 12.5 L12 8.5"/></g></symbol>
+    <symbol id="ii-withdraw" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 12 V8 Q12.5 4.5 9 4.5 H4"/><path d="M6.5 2 L4 4.5 L6.5 7"/></g></symbol>
+    <symbol id="ii-guard" viewBox="0 0 16 16"><path d="M8 1.8 L13.2 3.8 V8 Q13.2 12.2 8 14.2 Q2.8 12.2 2.8 8 V3.8 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4.6 V11.4" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="ii-hold" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6 H12 M4 10 H12"/></g></symbol>
+    <symbol id="ii-promote" viewBox="0 0 16 16"><path d="M2.5 12 L2 5 L5.5 7.6 L8 3 L10.5 7.6 L14 5 L13.5 12 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="ii-target" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="4.6"/><path d="M8 1 V4 M8 12 V15 M1 8 H4 M12 8 H15"/></g><circle cx="8" cy="8" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="ii-lethal" viewBox="0 0 16 16"><path d="M8 1.8 a5.2 5.2 0 0 0 -5.2 5.2 c0 1.9 .9 3.1 2.2 3.8 V13.4 h6 v-2.6 c1.3 -.7 2.2 -1.9 2.2 -3.8 a5.2 5.2 0 0 0 -5.2 -5.2z" fill="currentColor"/><circle cx="6" cy="7.4" r="1.25" fill="#16070a"/><circle cx="10" cy="7.4" r="1.25" fill="#16070a"/><path d="M7.4 13.4 v-1.4 M8.6 13.4 v-1.4" stroke="#16070a" stroke-width=".7"/></symbol>
     <symbol id="ico-check" viewBox="0 0 16 16"><path d="M3.6 8.6 L6.8 11.6 L12.6 4.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 
     <!-- Waypoint token frames: one shape per waypoint kind, so they read apart at a glance. -->
@@ -2484,6 +2534,13 @@
       </div>
     </div>
     <div class="settings-row">
+      <span class="settings-label">Enemy Intent</span>
+      <div class="segmented" data-setting="intent">
+        <button data-value="on">Shown</button>
+        <button data-value="off">Hidden</button>
+      </div>
+    </div>
+    <div class="settings-row">
       <span class="settings-label">Difficulty</span>
       <div class="segmented" data-setting="difficulty">
         <button data-value="easy">Easy</button>
@@ -2588,6 +2645,7 @@
               <span class="rivet rivet-br" aria-hidden="true"></span>
               <div class="board-frame">
                 <div class="board" id="board" role="group" aria-label="Chess board, 8 by 8"></div>
+                <svg class="intent-lines" id="intent-lines" viewBox="0 0 8 8" preserveAspectRatio="none" aria-hidden="true"></svg>
               </div>
             </div>
             <div class="files"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
@@ -2636,6 +2694,9 @@
       <h2>Combat, Not Capture</h2>
       <p>Moving onto an enemy-held square triggers a fight instead of an automatic removal. Damage rolls from the attacker's Might against the defender's Guard, with a small random swing. If the hit brings the defender to 0 HP, the square is taken exactly like a chess capture. If the defender survives, both pieces hold their ground. The attacker does <em>not</em> advance, and the defender is now wounded for next round. A weak piece can chip away at a strong one over several rounds; a strong piece can also just be worn down by numbers, the way a real skirmish goes.</p>
 
+      <h2>Reading the Enemy</h2>
+      <p>During your round, each enemy piece that means to strike carries a small badge, and the piece it is aiming for carries a crosshair. A skull in place of the crosshair means the blow could fell that piece, and a number shows how many enemies are aiming at it. A dashed outline means the enemy has more than one good target and its choice depends on how its blow would land. Tap any enemy to read its full plan, including quieter ones such as advancing, closing ranks around its Sovereign, withdrawing or promoting, with a line drawn to where it means to go. A champion's strike is always drawn on the board. These plans come from the same rules the enemy uses to choose its moves, judged against the board as it stands now: each enemy acts in turn, so what an earlier one does can change what a later one chooses. Intent can be hidden in Settings.</p>
+
       <h2>The Six Orders</h2>
       <div class="class-grid" id="codex-classes"></div>
 
@@ -2680,8 +2741,9 @@
   <div class="tutorial-card">
     <h2>Before the first clash</h2>
     <div class="tutorial-row"><span class="tutorial-key">Select</span><span>Click one of your pieces to see where it can go.</span></div>
-    <div class="tutorial-row"><span class="tutorial-key">Green</span><span>An open square it can move to.</span></div>
+    <div class="tutorial-row"><span class="tutorial-key">Gold</span><span>A glowing dot marks an open square it can move to.</span></div>
     <div class="tutorial-row"><span class="tutorial-key">Red</span><span>An enemy it can strike, with the estimated damage shown on the square.</span></div>
+    <div class="tutorial-row"><span class="tutorial-key">Intent</span><span>Badges on enemy pieces show what each will do next. A crosshair on one of yours means it is targeted; a skull means the blow could fell it. Tap an enemy to see its plan.</span></div>
     <div class="tutorial-row"><span class="tutorial-key">Round</span><span>Every living piece may act once before you end the round and the enemy replies.</span></div>
     <button class="action" id="tutorial-dismiss">Take the Field</button>
   </div>
@@ -2805,6 +2867,126 @@
     }
   }
 
+
+  // ---- Enemy intent: a read-only mirror of aiAct ----
+  // Applies the AI's own decision rules to the current board without moving anything or rolling
+  // dice. Where the AI's choice depends on a damage roll, both ends of the damage range are
+  // considered: a target that wins under every roll is "certain", otherwise "likely".
+  function intentDamage(att, def){
+    const e = estimateDamage(att, def);
+    let max = e.max, crit = false;
+    if(att.type==='knight'){ max = Math.round(e.max * (att.ascended ? 2.2 : 2)); crit = true; }
+    return { min:e.min, max, crit };
+  }
+  function bestMoveBy(pool, scoreFn){
+    let best = null, bestScore = Infinity;
+    for(const m of pool){ const s = scoreFn(m); if(s < bestScore){ bestScore = s; best = m; } }
+    return best;
+  }
+  // Non-attack branches of aiAct, in the same order. Deterministic given the board.
+  function planMovement(u, moveOpts){
+    const isKing = u.type==='king';
+    const guardTeam = 'player';
+    const king = units.find(x=>x.team===u.team && x.type==='king');
+    if(isKing && squareThreatenedBy(u.r, u.c, guardTeam) && moveOpts.length>0){
+      const safeMoves = moveOpts.filter(m=>!squareThreatenedBy(m.r, m.c, guardTeam));
+      const pool = safeMoves.length>0 ? safeMoves : moveOpts;
+      const targets = units.filter(x=>x.team===guardTeam);
+      let bestMove=null, bestDist=-Infinity;
+      for(const m of pool){
+        let d = Infinity;
+        for(const tg of targets){ d = Math.min(d, Math.abs(tg.r-m.r)+Math.abs(tg.c-m.c)); }
+        if(d>bestDist){ bestDist=d; bestMove=m; }
+      }
+      if(bestMove) return { kind:'withdraw', dest:bestMove };
+    }
+    if(!isKing && king && squareThreatenedBy(king.r, king.c, guardTeam) && moveOpts.length>0){
+      const bestMove = bestMoveBy(moveOpts, m=>Math.abs(king.r-m.r) + Math.abs(king.c-m.c));
+      if(bestMove) return { kind: (u.type==='pawn' && bestMove.r===7) ? 'promote' : 'guard', dest:bestMove };
+    }
+    const targets = units.filter(x=>x.team===guardTeam);
+    if(targets.length===0 || moveOpts.length===0) return { kind:'hold' };
+    let bestMove=null, bestDist=Infinity, bestSafe=false;
+    for(const m of moveOpts){
+      let d = Infinity;
+      for(const tg of targets){ d = Math.min(d, Math.abs(tg.r-m.r)+Math.abs(tg.c-m.c)); }
+      const safe = !squareThreatenedBy(m.r, m.c, guardTeam);
+      if(d<bestDist || (d===bestDist && safe && !bestSafe)){ bestDist=d; bestMove=m; bestSafe=safe; }
+    }
+    if(!bestMove) return { kind:'hold' };
+    return { kind: (u.type==='pawn' && bestMove.r===7) ? 'promote' : 'advance', dest:bestMove };
+  }
+  function planIntent(u){
+    if(!u || u.team!=='enemy' || u.acted) return null;
+    const moves = computeMoves(u);
+    if(moves.length===0) return { kind:'hold' };
+    const isKing = u.type==='king';
+    const king = units.find(x=>x.team===u.team && x.type==='king');
+    const attacks = moves.filter(m=>m.type==='attack');
+    const moveOpts = moves.filter(m=>m.type==='move');
+    if(attacks.length>0){
+      const opts = attacks.map(m=>{
+        const target = board[m.r][m.c];
+        const d = intentDamage(u, target);
+        const bonus = (king && computeMoves(target).some(tm=>tm.type==='attack' && tm.r===king.r && tm.c===king.c)) ? 500 : 0;
+        const lo = (d.min>=target.hp?1000:0) + d.min - target.hp*0.1 + bonus;
+        const hi = (d.max>=target.hp?1000:0) + d.max - target.hp*0.1 + bonus;
+        return { target, d, lo, hi, lethal: d.min>=target.hp ? 'certain' : d.max>=target.hp ? 'possible' : null };
+      });
+      const bestLo = Math.max(...opts.map(o=>o.lo));
+      const cands = opts.filter(o=>o.hi>=bestLo).sort((a,b)=>(b.lo+b.hi)-(a.lo+a.hi));
+      const primary = cands[0];
+      const certainty = cands.length===1 ? 'certain' : 'likely';
+      const strike = { kind:'strike', target:primary.target, dmg:primary.d, lethal:primary.lethal, certainty, alts:cands.slice(1).map(o=>o.target) };
+      if(!isKing || u.hp/u.maxHp>=0.6 || moveOpts.length===0) return strike;
+      // The Sovereign only trades blows when its (second) roll would kill; otherwise it falls through.
+      const lethalAll = cands.every(o=>o.lethal==='certain');
+      const lethalAny = cands.some(o=>o.lethal);
+      if(lethalAll) return strike;
+      if(!lethalAny) return planMovement(u, moveOpts);
+      return Object.assign(strike, { certainty:'maybe', fallback:planMovement(u, moveOpts) });
+    }
+    return planMovement(u, moveOpts);
+  }
+  // All current intents (player's turn only), keyed by enemy id, plus who is targeting whom.
+  function computeIntents(){
+    const res = { byEnemy:new Map(), onTarget:new Map() };
+    if(settings.intent==='off' || side!=='player' || gameOver || !units) return res;
+    for(const u of units){
+      if(u.team!=='enemy') continue;
+      const it = planIntent(u);
+      if(!it) continue;
+      res.byEnemy.set(u, it);
+      if(it.kind==='strike'){
+        const list = res.onTarget.get(it.target) || [];
+        list.push({ from:u, it });
+        res.onTarget.set(it.target, list);
+      }
+    }
+    return res;
+  }
+  function sqName(r,c){ return String.fromCharCode(97+c) + (8-r); }
+  function unitName(u){ return u.ascended ? ASCEND_TITLES[u.type] : CLASSES[u.type].name; }
+  function intentText(it){
+    if(!it) return '';
+    if(it.kind==='strike'){
+      const verb = it.certainty==='certain' ? 'Will strike' : it.certainty==='maybe' ? 'May strike' : 'Likely to strike';
+      let s = `${verb} your ${unitName(it.target)} on ${sqName(it.target.r,it.target.c)} for ${it.dmg.min===it.dmg.max ? it.dmg.min : `${it.dmg.min} to ${it.dmg.max}`} damage${it.dmg.crit?' (the top of that range needs a critical)':''}`;
+      if(it.lethal==='certain') s += ', a killing blow';
+      else if(it.lethal==='possible') s += ', which could kill it';
+      if(it.alts && it.alts.length) s += `. It could instead choose ${it.alts.map(a=>`your ${unitName(a)} on ${sqName(a.r,a.c)}`).join(' or ')}`;
+      if(it.certainty==='maybe') s += '. If the blow would not kill, it will withdraw instead';
+      return s + '.';
+    }
+    if(it.kind==='withdraw') return `Will withdraw to ${sqName(it.dest.r,it.dest.c)}, away from your pieces.`;
+    if(it.kind==='guard') return `Will close ranks around its Sovereign, moving to ${sqName(it.dest.r,it.dest.c)}.`;
+    if(it.kind==='promote') return `Will reach the far rank on ${sqName(it.dest.r,it.dest.c)} and promote.`;
+    if(it.kind==='advance') return `Will advance on your company, moving to ${sqName(it.dest.r,it.dest.c)}.`;
+    return 'Has no move this round and will hold its ground.';
+  }
+  const INTENT_ICON = { strike:'ii-strike', withdraw:'ii-withdraw', guard:'ii-guard', promote:'ii-promote', advance:'ii-advance', hold:'ii-hold' };
+  const INTENT_SHORT = { strike:'Strike', withdraw:'Withdraw', guard:'Guard', promote:'Promote', advance:'Advance', hold:'Hold' };
+
   function selectFromRoster(u){
     if(!u || !units.includes(u)) return;
     if(!gameOver && side==='player' && !awaitingPromotion && !u.acted){
@@ -2874,7 +3056,7 @@
   /* ---------------- Settings ---------------- */
   const SETTINGS_KEY = 'checkmateAndRuinSettings';
   const DIFFICULTY_MULT = { easy:0.82, normal:1, hard:1.22 };
-  let settings = { theme:'system', motion:'on', sound:'on', difficulty:'normal' };
+  let settings = { theme:'system', motion:'on', sound:'on', difficulty:'normal', intent:'on' };
 
   function loadSettings(){
     try{
@@ -2909,6 +3091,7 @@
       settings[group.dataset.setting] = btn.dataset.value;
       saveSettings();
       applySettings();
+      if(group.dataset.setting==='intent' && board && units && !document.getElementById('view-combat').hidden) render();
     });
   });
   document.getElementById('sound-toggle').addEventListener('click', ()=>{
@@ -3599,12 +3782,57 @@
   function loadSave(){
     try{ return JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){ return null; }
   }
+
+  // ---- Battle-save repair ----
+  // Older builds restarted unit numbering on every reload, so a saved battle could hold an enemy
+  // and one of your pieces under the same id. A pending promotion is stored only as an id, and
+  // the board was saved enemy-side first, so the lookup could land on the enemy. This repairs a
+  // saved battle without guessing:
+  //  - A pending promotion can only belong to one of your Recruits standing on the far rank (the
+  //    game blocks every other action until it is resolved, so normal play never leaves two).
+  //    If exactly one such Recruit exists, it is the one, whatever the id says. If several exist,
+  //    the saved id must single one out. Otherwise the promotion is not applied to anyone.
+  //  - Duplicate ids are renumbered, keeping your pieces' ids and changing the enemy's.
+  // Pure: takes the saved battle, returns repaired copies plus a note of what changed.
+  function repairBattleSave(battle, nextId){
+    const units = (battle.units || []).map(u=>({...u}));
+    const savedPending = battle.awaitingPromotionId != null ? battle.awaitingPromotionId : null;
+    const changes = [];
+    let pending = null, ambiguous = false;
+    if(savedPending != null){
+      const candidates = units.filter(u=>u.team==='player' && u.type==='pawn' && u.r===0 && u.hp>0);
+      const byId = candidates.filter(u=>u.id===savedPending);
+      if(candidates.length===1) pending = candidates[0];
+      else if(byId.length===1) pending = byId[0];
+      else if(candidates.length) ambiguous = true;
+      const firstMatch = units.find(u=>u.id===savedPending);
+      if(pending && firstMatch!==pending) changes.push('pending-promotion-redirected');
+      if(!pending) changes.push(candidates.length ? 'pending-promotion-ambiguous' : 'pending-promotion-invalid');
+    }
+    // Renumber duplicate ids: your pieces first, so their ids are the ones kept.
+    const seen = new Set();
+    const order = [...units.filter(u=>u.team==='player'), ...units.filter(u=>u.team!=='player')];
+    let renamed = 0;
+    for(const u of order){
+      if(seen.has(u.id)){ u.id = 'u' + (nextId++); renamed++; }
+      seen.add(u.id);
+    }
+    if(renamed) changes.push(`renumbered-${renamed}`);
+    const invalid = savedPending != null && !pending && !ambiguous;
+    return { units, pending, ambiguous, invalid, changes, nextId };
+  }
+
   function resumeCampaign(){
     const save = loadSave();
     if(!save) return false;
     region = save.region;
     persistedParty = save.party;
     currentNodeId = save.currentNodeId;
+    // Unit ids are 'u<n>'. Continue numbering after the highest saved id, so units created
+    // after a reload never share an id with a saved piece.
+    const savedIds = [...(save.party||[]), ...((save.battle && save.battle.units) || [])]
+      .map(u=>parseInt(String(u.id).slice(1),10)).filter(n=>!isNaN(n));
+    uid = Math.max(uid, ...savedIds.map(n=>n+1), 0);
     activeNode = null;
     const nodes = save.nodes;
     const layers = [];
@@ -3617,18 +3845,27 @@
     if(node && !node.cleared){
       activeNode = node;
       board = emptyBoard();
-      units = save.battle.units.map(u=>({...u}));
+      const fixed = repairBattleSave(save.battle, uid);
+      uid = fixed.nextId;
+      if(fixed.changes.length){
+        // Keep the untouched original next to the repaired save, in case it is ever needed.
+        try{ localStorage.setItem(SAVE_KEY + 'Backup', JSON.stringify(save)); }catch(e){}
+      }
+      units = fixed.units;
       units.forEach(u=> place(u.r, u.c, u));
       round = save.battle.round;
       side = save.battle.side;
       gameOver = false;
       selected = null; legalMoves = [];
-      awaitingPromotion = save.battle.awaitingPromotionId
-        ? units.find(u=>u.id===save.battle.awaitingPromotionId) || null
-        : null;
+      awaitingPromotion = fixed.pending;
       showCombat();
       render();
       log('Picking the fight back up.');
+      if(fixed.ambiguous){
+        log('This battle was saved while a Recruit awaited promotion, but the save cannot say which Recruit it was, so no promotion was applied. Your pieces are otherwise exactly as saved.');
+      } else if(fixed.invalid){
+        log('This battle was saved with a promotion waiting on a piece that is not one of your Recruits on the far rank, so it was not applied. Your pieces are otherwise exactly as saved.');
+      }
       if(side==='enemy') setTimeout(enemyRound, 500);
     } else {
       showMap();
@@ -4473,6 +4710,7 @@
         return;
       }
       selected=null; legalMoves=[];
+      if(occ && occ.team==='enemy') inspected = occ;
       render();
       return;
     }
@@ -4480,6 +4718,13 @@
       selected = {r,c,unit:occ};
       legalMoves = movesFor(occ);
       playSfx('select');
+      render();
+    } else if(occ){
+      inspected = occ;
+      playSfx('click');
+      render();
+    } else if(inspected){
+      inspected = null;
       render();
     }
   }
@@ -4630,6 +4875,9 @@
     const e = units.filter(u=>u.team==='enemy').length;
     document.getElementById('units-left').textContent = `${p} vs ${e}`;
     const threat = sovereignThreats();
+    const intents = computeIntents();
+    const pkUnit = units.find(u=>u.team==='player' && u.type==='king');
+    const onKing = pkUnit ? (intents.onTarget.get(pkUnit) || []) : [];
     const champ = units.find(u=>u.champion);
     if(champ && activeNode) championSeen = { meta:champ.champion, key:activeNode.id, id:champ.id, maxHp:champ.maxHp };
     const cb = document.getElementById('champion-bar');
@@ -4644,6 +4892,7 @@
         <div class="cb-body">
           <div class="cb-head"><span class="cb-title">${m.title}</span><span class="cb-hp">${champ ? `${champ.hp} / ${champ.maxHp}` : 'Fallen'}</span></div>
           <div class="cb-name">${m.name}</div>
+          ${champ && intents.byEnemy.get(champ) ? `<div class="cb-intent"><svg class="cb-ii" viewBox="0 0 16 16" aria-hidden="true"><use href="#${INTENT_ICON[intents.byEnemy.get(champ).kind]}"></use></svg>${intentText(intents.byEnemy.get(champ))}</div>` : ''}
           <div class="hp-bar cb-hpbar${pct<35?' low':''}">${hpBarInner('c'+(champ?champ.id:championSeen.id), pct)}</div>
         </div>`;
     } else {
@@ -4656,6 +4905,10 @@
     tp.hidden = !(threat.own || threat.foe);
     tp.dataset.kind = threat.own ? 'own' : 'foe';
     tp.textContent = threat.own ? 'Your Sovereign is threatened' : threat.foe ? 'Enemy Sovereign within reach' : '';
+    if(onKing.length){
+      tp.hidden = false; tp.dataset.kind = 'own';
+      tp.textContent = onKing.some(x=>x.it.certainty==='certain') ? 'Your Sovereign will be struck' : 'Your Sovereign may be struck';
+    }
     if(selected) inspected = null;
 
     const boardEl = document.getElementById('board');
@@ -4720,6 +4973,24 @@
             wrap.dataset.tip = `${u.champion.name}, ${u.champion.title}. ` + wrap.dataset.tip;
           }
           wrap.insertAdjacentHTML('beforeend', pieceIconHTML(u.type, u.team));
+          const myIntent = intents.byEnemy.get(u);
+          if(myIntent && (myIntent.kind==='strike' || myIntent.kind==='promote' || u.champion || inspected===u)){
+            const ib = document.createElement('span');
+            ib.className = `intent-badge ib-${myIntent.kind}${myIntent.certainty && myIntent.certainty!=='certain' ? ' ib-maybe':''}${u.champion?' ib-champ':''}`;
+            ib.setAttribute('aria-hidden','true');
+            ib.innerHTML = `<svg viewBox="0 0 16 16"><use href="#${INTENT_ICON[myIntent.kind]}"></use></svg>`;
+            sq.appendChild(ib);
+          }
+          const aimed = intents.onTarget.get(u);
+          if(aimed){
+            const lethal = aimed.some(x=>x.it.lethal==='certain' && x.it.certainty==='certain') ? 'lethal' : aimed.some(x=>x.it.lethal) ? 'danger' : 'marked';
+            const byChamp = aimed.some(x=>x.from.champion);
+            const tm = document.createElement('span');
+            tm.className = `target-mark tm-${lethal}${byChamp?' tm-champ':''}${aimed.every(x=>x.it.certainty!=='certain')?' tm-maybe':''}`;
+            tm.setAttribute('aria-hidden','true');
+            tm.innerHTML = `<svg viewBox="0 0 16 16"><use href="#${lethal==='marked'?'ii-target':'ii-lethal'}"></use></svg>${aimed.length>1?`<b>${aimed.length}</b>`:''}`;
+            sq.appendChild(tm);
+          }
           if(dealing){ sq.classList.add('deal'); sq.style.setProperty('--deal', ((u.team==='enemy' ? r : 7-r)*90 + c*22) + 'ms'); }
           if(u.team==='enemy' && u.id===lastActorId && side==='enemy') sq.classList.add('just-acted');
           if(flashPos && flashPos.from && flashPos.from.r===r && flashPos.from.c===c && !(flashPos.r===r && flashPos.c===c) && settings.motion!=='off'){
@@ -4751,6 +5022,9 @@
           if(threat.own===u) label += ', under threat';
           if(threat.foe===u) label += ', within your reach';
           if(u.champion) label += `, ${u.champion.name}, ${u.champion.title}`;
+          if(intents.byEnemy.get(u)) label += `. Intent: ${intentText(intents.byEnemy.get(u))}`;
+          const aimedAt = intents.onTarget.get(u);
+          if(aimedAt) label += `. Targeted by ${aimedAt.length} ${aimedAt.length===1?'enemy':'enemies'}${aimedAt.some(x=>x.it.lethal)?', could fall':''}`;
         } else {
           label += ', empty';
         }
@@ -4768,6 +5042,28 @@
         });
         boardEl.appendChild(sq);
       }
+    }
+
+    // Intent lines: the inspected enemy's plan, and a champion's strike, drawn over the board.
+    const lines = document.getElementById('intent-lines');
+    if(lines){
+      let svgL = '<defs><marker id="il-head-r" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#ff6b70"/></marker><marker id="il-head-g" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#ecd08a"/></marker></defs>';
+      const drawFor = (u, cls)=>{
+        const it = intents.byEnemy.get(u);
+        if(!it) return;
+        const to = it.kind==='strike' ? it.target : it.dest;
+        if(!to) return;
+        const x1=u.c+.5, y1=u.r+.5, x2=to.c+.5, y2=to.r+.5, len=Math.hypot(x2-x1,y2-y1)||1, k=Math.max(0,(len-.34)/len);
+        svgL += `<line class="il ${it.kind==='strike'?'il-strike':'il-move'}${it.certainty && it.certainty!=='certain'?' il-maybe':''} ${cls}" x1="${x1}" y1="${y1}" x2="${(x1+(x2-x1)*k).toFixed(3)}" y2="${(y1+(y2-y1)*k).toFixed(3)}" marker-end="url(#il-head-${it.kind==='strike' && cls!=='il-champ' ? 'r' : 'g'})"/>`;
+        if(it.kind==='strike' && it.alts) it.alts.forEach(a=>{
+          const ax=a.c+.5, ay=a.r+.5, al=Math.hypot(ax-x1,ay-y1)||1, ak=Math.max(0,(al-.34)/al);
+          svgL += `<line class="il il-alt ${cls}" x1="${x1}" y1="${y1}" x2="${(x1+(ax-x1)*ak).toFixed(3)}" y2="${(y1+(ay-y1)*ak).toFixed(3)}"/>`;
+        });
+      };
+      units.filter(u=>u.champion && intents.byEnemy.get(u) && intents.byEnemy.get(u).kind==='strike').forEach(u=>drawFor(u,'il-champ'));
+      const insp = inspected && inspected.team==='enemy' && units.includes(inspected) ? inspected : null;
+      if(insp) drawFor(insp, 'il-inspect');
+      lines.innerHTML = svgL;
     }
 
     if(flashPos && (flashPos.kind==='crit' || flashPos.kind==='kill') && settings.motion!=='off'){
@@ -4801,7 +5097,7 @@
     roster.innerHTML = playerUnits.map(u=>{
       const nm = u.ascended? ASCEND_TITLES[u.type] : CLASSES[u.type].name;
       const isSel = (selected && selected.unit===u) || inspected===u;
-      return `<button type="button" class="unit-card co-card${u.acted?' acted':''}${isSel?' is-selected':''}${u.ascended?' ascended':''}" data-uid="${u.id}"
+      return `<button type="button" data-idx="${playerUnits.indexOf(u)}" class="unit-card co-card${u.acted?' acted':''}${isSel?' is-selected':''}${u.ascended?' ascended':''}" data-uid="${u.id}"
         aria-label="${nm}, ${CLASSES[u.type].of}, level ${u.level}, ${u.hp} of ${u.maxHp} health, Might ${u.atk}, Guard ${u.def}${u.acted?', spent this round':''}">
         <span class="co-port">${portraitHTML(u.type)}</span>
         <span class="co-body">
@@ -4813,7 +5109,7 @@
       </button>`;
     }).join('');
     roster.querySelectorAll('.co-card').forEach(el=>{
-      el.addEventListener('click', ()=> selectFromRoster(units.find(x=>x.id===el.dataset.uid)));
+      el.addEventListener('click', ()=> selectFromRoster(playerUnits[+el.dataset.idx]));
     });
 
     // selected / inspected unit detail card
@@ -4824,19 +5120,20 @@
       const c = CLASSES[u.type];
       const nm = u.ascended? ASCEND_TITLES[u.type] : c.name;
       const statusHTML = unitStatuses(u).map(([k,l])=>`<span class="st-chip st-${k}">${l}</span>`).join('');
-      info.innerHTML = `<div class="hero-card${u.ascended?' ascended':''}">
+      info.innerHTML = `<div class="hero-card${u.ascended?' ascended':''}${u.team==='enemy'?' is-enemy':''}">
         <div class="hc-top">
           <div class="hc-port">${portraitHTML(u.type)}</div>
           <div class="hc-head">
-            <span class="hc-class">${c.name} &middot; ${c.of}</span>
+            <span class="hc-class">${u.team==='enemy' ? (u.champion ? u.champion.title : 'Enemy') + ' &middot; ' : ''}${c.name} &middot; ${c.of}</span>
             <h3 class="hc-name">${nm}</h3>
             <span class="hc-lv">Level ${u.level}</span>
           </div>
         </div>
         <div class="hc-row"><span class="hc-lbl">Health</span><span class="hc-val">${u.hp} / ${u.maxHp}</span></div>
         <div class="hp-bar big${u.hp/u.maxHp<0.35?' low':''}">${hpBarInner('s'+u.id, Math.max(0,u.hp/u.maxHp*100))}</div>
-        <div class="hc-row"><span class="hc-lbl">Experience</span><span class="hc-val">${u.xp} / ${u.xpNext}</span></div>
-        <div class="xp-bar big"><i style="width:${Math.min(100,u.xp/u.xpNext*100)}%"></i></div>
+        ${u.team==='player' ? `<div class="hc-row"><span class="hc-lbl">Experience</span><span class="hc-val">${u.xp} / ${u.xpNext}</span></div>
+        <div class="xp-bar big"><i style="width:${Math.min(100,u.xp/u.xpNext*100)}%"></i></div>` : ''}
+        ${u.team==='enemy' ? (()=>{ const it = intents.byEnemy.get(u); return `<div class="hc-intent${it && it.kind==='strike'?' is-strike':''}"><span class="hc-lbl">${u.champion ? u.champion.name : 'Enemy'} intent</span><p>${it ? `<svg class="stat-ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#${INTENT_ICON[it.kind]}"></use></svg><b>${INTENT_SHORT[it.kind]}.</b> ${intentText(it)}` : (settings.intent==='off' ? 'Enemy intent is hidden in Settings.' : side!=='player' ? 'The enemy is acting.' : 'This piece has already acted.')}</p></div>`; })() : ''}
         <div class="hc-stats">
           <div class="hc-stat">${statIcon('might')}<b>${u.atk}</b><span>Might</span></div>
           <div class="hc-stat">${statIcon('guard')}<b>${u.def}</b><span>Guard</span></div>
@@ -4844,7 +5141,8 @@
         <div class="hc-ability">
           <span class="hc-lbl">Ability</span>
           <p>${c.desc}</p>
-          ${u.ascended ? `<p class="hc-asc"><b>${ASCEND_TITLES[u.type]}:</b> ${ASCEND_TRAITS[u.type]}</p>` : `<p class="hc-next">Ascends at level ${ASCEND_LEVEL} into a ${ASCEND_TITLES[u.type]}: ${ASCEND_TRAITS[u.type]}</p>`}
+          ${u.team==='enemy' && u.type==='bishop' ? '<p class="hc-next">Enemy Clerics fight rather than heal.</p>' : ''}
+          ${u.ascended ? `<p class="hc-asc"><b>${ASCEND_TITLES[u.type]}:</b> ${ASCEND_TRAITS[u.type]}</p>` : u.team==='enemy' ? '' : `<p class="hc-next">Ascends at level ${ASCEND_LEVEL} into a ${ASCEND_TITLES[u.type]}: ${ASCEND_TRAITS[u.type]}</p>`}
         </div>
         <div class="hc-status">${statusHTML}</div>
       </div>`;

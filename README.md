@@ -27,6 +27,7 @@ Progress (your current run and your all-time Hall of Champions record) is saved 
 - **Achievements and a Hall of Champions**, tracked locally across runs.
 - **A dark-fantasy presentation**: a moonlit title screen with drifting fog and embers, an ivory-and-obsidian stone board in a gilded frame, class portraits and detailed unit cards (health, experience, Might, Guard, ability, ascension and status), an illustrated parchment campaign map with terrain for each region and a distinct token for every kind of waypoint, and warnings when either Sovereign can be struck. On a phone it uses a bottom tab bar and a pinned End Round button.
 - **Atmosphere and ceremony**: synthesized sound effects and quiet ambient beds for each screen, full-screen introductions for elite and boss encounters, a marked champion with its own health bar in those fights, title cards between scenes, and a victory scene when a region boss falls. All of it respects the Sound and Motion settings.
+- **Enemy intent**: during your round, enemies that will strike show a badge and their target is marked, with a skull when the blow could kill. Tap an enemy to read its full plan. Plans come from the enemy's own decision rules applied to the current board, never from extra knowledge, and can be hidden in Settings.
 - Light/dark themes, reduced-motion support, and keyboard/screen-reader-accessible play.
 
 ## Credits
