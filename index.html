@@ -3782,6 +3782,46 @@
   function loadSave(){
     try{ return JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){ return null; }
   }
+
+  // ---- Battle-save repair ----
+  // Older builds restarted unit numbering on every reload, so a saved battle could hold an enemy
+  // and one of your pieces under the same id. A pending promotion is stored only as an id, and
+  // the board was saved enemy-side first, so the lookup could land on the enemy. This repairs a
+  // saved battle without guessing:
+  //  - A pending promotion can only belong to one of your Recruits standing on the far rank (the
+  //    game blocks every other action until it is resolved, so normal play never leaves two).
+  //    If exactly one such Recruit exists, it is the one, whatever the id says. If several exist,
+  //    the saved id must single one out. Otherwise the promotion is not applied to anyone.
+  //  - Duplicate ids are renumbered, keeping your pieces' ids and changing the enemy's.
+  // Pure: takes the saved battle, returns repaired copies plus a note of what changed.
+  function repairBattleSave(battle, nextId){
+    const units = (battle.units || []).map(u=>({...u}));
+    const savedPending = battle.awaitingPromotionId != null ? battle.awaitingPromotionId : null;
+    const changes = [];
+    let pending = null, ambiguous = false;
+    if(savedPending != null){
+      const candidates = units.filter(u=>u.team==='player' && u.type==='pawn' && u.r===0 && u.hp>0);
+      const byId = candidates.filter(u=>u.id===savedPending);
+      if(candidates.length===1) pending = candidates[0];
+      else if(byId.length===1) pending = byId[0];
+      else if(candidates.length) ambiguous = true;
+      const firstMatch = units.find(u=>u.id===savedPending);
+      if(pending && firstMatch!==pending) changes.push('pending-promotion-redirected');
+      if(!pending) changes.push(candidates.length ? 'pending-promotion-ambiguous' : 'pending-promotion-invalid');
+    }
+    // Renumber duplicate ids: your pieces first, so their ids are the ones kept.
+    const seen = new Set();
+    const order = [...units.filter(u=>u.team==='player'), ...units.filter(u=>u.team!=='player')];
+    let renamed = 0;
+    for(const u of order){
+      if(seen.has(u.id)){ u.id = 'u' + (nextId++); renamed++; }
+      seen.add(u.id);
+    }
+    if(renamed) changes.push(`renumbered-${renamed}`);
+    const invalid = savedPending != null && !pending && !ambiguous;
+    return { units, pending, ambiguous, invalid, changes, nextId };
+  }
+
   function resumeCampaign(){
     const save = loadSave();
     if(!save) return false;
@@ -3805,18 +3845,27 @@
     if(node && !node.cleared){
       activeNode = node;
       board = emptyBoard();
-      units = save.battle.units.map(u=>({...u}));
+      const fixed = repairBattleSave(save.battle, uid);
+      uid = fixed.nextId;
+      if(fixed.changes.length){
+        // Keep the untouched original next to the repaired save, in case it is ever needed.
+        try{ localStorage.setItem(SAVE_KEY + 'Backup', JSON.stringify(save)); }catch(e){}
+      }
+      units = fixed.units;
       units.forEach(u=> place(u.r, u.c, u));
       round = save.battle.round;
       side = save.battle.side;
       gameOver = false;
       selected = null; legalMoves = [];
-      awaitingPromotion = save.battle.awaitingPromotionId
-        ? units.find(u=>u.id===save.battle.awaitingPromotionId) || null
-        : null;
+      awaitingPromotion = fixed.pending;
       showCombat();
       render();
       log('Picking the fight back up.');
+      if(fixed.ambiguous){
+        log('This battle was saved while a Recruit awaited promotion, but the save cannot say which Recruit it was, so no promotion was applied. Your pieces are otherwise exactly as saved.');
+      } else if(fixed.invalid){
+        log('This battle was saved with a promotion waiting on a piece that is not one of your Recruits on the far rank, so it was not applied. Your pieces are otherwise exactly as saved.');
+      }
       if(side==='enemy') setTimeout(enemyRound, 500);
     } else {
       showMap();
